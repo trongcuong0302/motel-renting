@@ -1,0 +1,33 @@
+<h3 nz-typography>Number of products added</h3>
+<div class="content">
+    <div class="timeStatistics">
+        <h4 nz-typography>Time</h4>
+        <nz-space>
+            <nz-select *nzSpaceItem [ngModel]="mode" (ngModelChange)="onSelectDateChange($event)">
+                <nz-option nzValue="date" nzLabel="Date"></nz-option>
+                <nz-option nzValue="month" nzLabel="Month"></nz-option>
+                <nz-option nzValue="year" nzLabel="Year"></nz-option>
+            </nz-select>
+            <nz-date-picker *nzSpaceItem [nzMode]="mode" [(ngModel)]="date" (nzOnOpenChange)="onOpenChange($event)"></nz-date-picker>
+        </nz-space>
+
+        <nz-row>
+            <nz-col>
+                <nz-statistic [nzValue]="countByTime" [nzTitle]="'Products added'"></nz-statistic>
+            </nz-col>
+        </nz-row>
+    </div>
+
+    <div class="categoryStatistics" *ngIf="categories">
+        <h4 nz-typography>Category</h4>
+        <nz-select [ngModel]="code" (ngModelChange)="onSelectCategoryChange($event)">
+            <nz-option *ngFor="let category of categories" [nzValue]="category.categoryCode" [nzLabel]="category.categoryCode!"></nz-option>
+        </nz-select>
+
+        <nz-row>
+            <nz-col>
+                <nz-statistic [nzValue]="countByCategory" [nzTitle]="'Products added'"></nz-statistic>
+            </nz-col>
+        </nz-row>
+    </div>
+</div>

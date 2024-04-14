@@ -1,0 +1,84 @@
+<div *ngIf="viewMode; else editable">
+    <div *ngIf="abc._id">
+        <nz-descriptions nzTitle="Product Detail" nzLayout="vertical" [nzColumn]="2" nzBordered [nzExtra]="extraTpl">
+            <nz-descriptions-item nzTitle="Product Code">{{abc.productCode}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Product Name">{{abc.productName}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Price">{{abc.price}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Category Code">{{abc.categoryCode}}</nz-descriptions-item>
+        </nz-descriptions>
+        <ng-template #extraTpl>
+            <button class="btn-edit" nz-button (click)="goToEdit()">Edit</button>
+        </ng-template>
+    </div>
+
+    <div *ngIf="!abc._id ">
+        <br />
+        <p nz-typography>Cannot access this product.</p>
+    </div>
+</div>
+
+<ng-template #editable>
+    <div *ngIf="abc._id ">
+        <h3 nz-typography>Edit Product</h3>
+        <form [formGroup]="validateForm" nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="11" nzRequired>Product Code</nz-form-label>
+                <div class="row">
+                    <nz-form-control nzHasFeedback [nzErrorTip]="productCodeErrorTpl">
+                        <input placeholder="Product Code" nz-input formControlName="productCode" maxlength="6" oninput="this.value = this.value.toUpperCase()" />
+                        <ng-template #productCodeErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">Please input product code!</ng-container>
+                            <ng-container *ngIf="control.hasError('pattern')">The product code has only numbers and characters!</ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </div>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="11" nzRequired>Product Name</nz-form-label>
+                <div class="row">
+                    <nz-form-control nzHasFeedback [nzErrorTip]="productNameErrorTpl">
+                        <input placeholder="Product Name" nz-input formControlName="productName" />
+                        <ng-template #productNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">Please input product name!</ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </div>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="11" nzRequired>Price</nz-form-label>
+                <div class="row">
+                    <nz-form-control nzHasFeedback [nzErrorTip]="priceErrorTpl">
+                        <nz-input-number nz-input formControlName="price"></nz-input-number>
+                        <ng-template #priceErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">Please input price!</ng-container>
+                            <ng-container *ngIf="control.hasError('min')">Please input price higher than 0!</ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </div>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="11" nzRequired>Category Code</nz-form-label>
+                <div class="row">
+                    <nz-form-control nzHasFeedback [nzErrorTip]="categoryCodeErrorTpl">
+                        <input nz-input placeholder="Category Code" formControlName="categoryCode" maxlength="6" oninput="this.value = this.value.toUpperCase()" />
+                        <ng-template #categoryCodeErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">Please input category code!</ng-container>
+                            <ng-container *ngIf="control.hasError('pattern')">The category code has only numbers and characters!</ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </div>
+            </nz-form-item>
+            <nz-form-item nz-row class="btn">
+                <nz-form-control [nzOffset]="11">
+                    <button nz-button nzType="primary" [disabled]="!validateForm.valid" (click)="confirmUpdate($event)">Update</button>
+                    <button nz-button nzDanger nzType="primary" (click)="confirmDelete()">Delete</button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+
+    <div *ngIf="!abc._id ">
+        <br />
+        <p nz-typography>Cannot access this product.</p>
+    </div>
+</ng-template>

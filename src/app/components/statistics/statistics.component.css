@@ -1,0 +1,13 @@
+.timeStatistics {
+    padding-top: 10px;
+    padding-left: 8px;
+    width: 50%;
+}
+
+.content {
+    display: flex;
+}
+
+.categoryStatistics {
+    width: 50%;
+}

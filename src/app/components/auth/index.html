@@ -1,0 +1,4 @@
+<div class="container">
+  <div *ngIf="isLoginPage" login-form (onRegister)="onChangeForm()"></div>
+  <div *ngIf="!isLoginPage" register-form (onLogin)="onChangeForm()"></div>
+</div>

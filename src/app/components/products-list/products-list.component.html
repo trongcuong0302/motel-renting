@@ -1,0 +1,48 @@
+<div>
+    <h3 nz-typography>Products List</h3>
+
+    <nz-table #productTable *ngIf="products" [nzData]="products" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading" [nzTotal]="total" [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+            <tr>
+                <th nzColumnKey="productCode" [nzSortFn]="true">Product Code</th>
+                <th nzCustomFilter>Product Name
+                    <nz-filter-trigger [(nzVisible)]="visibleProductName" [nzActive]="searchName.length > 0" [nzDropdownMenu]="menuProductName">
+                        <span nz-icon nzType="search"></span>
+                    </nz-filter-trigger>
+                </th>
+                <th nzColumnKey="price" [nzSortFn]="true" [nzFilters]="filterPrice" [nzFilterMultiple]="false" [nzFilterFn]="true">Price</th>
+                <th nzCustomFilter>Category Code
+                    <nz-filter-trigger [(nzVisible)]="visibleCategoryCode" [nzActive]="searchCode.length > 0" [nzDropdownMenu]="menuCategoryCode">
+                        <span nz-icon nzType="search"></span>
+                    </nz-filter-trigger>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of productTable.data " (click)="setActiveProduct(product) ">
+                <td>{{product.productCode}}</td>
+                <td>{{product.productName}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.categoryCode}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <nz-dropdown-menu #menuProductName="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchName" />
+                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+                <button nz-button nzSize="small" (click)="resetName()">Reset</button>
+            </div>
+        </div>
+    </nz-dropdown-menu>
+    <nz-dropdown-menu #menuCategoryCode="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+            <div class="search-box">
+                <input type="text" nz-input placeholder="Search code" [(ngModel)]="searchCode" />
+                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+                <button nz-button nzSize="small" (click)="resetCode()">Reset</button>
+            </div>
+        </div>
+    </nz-dropdown-menu>
+</div>

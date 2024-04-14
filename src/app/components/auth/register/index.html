@@ -1,0 +1,67 @@
+<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="content">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="form-container">
+    <div class="title">Sign up to StayEase</div>
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+      <ng-container *ngFor="let key of ['name']">
+        <div class="text-bold label">Full name</div>
+        <nz-form-item class="form-item">
+          <nz-form-control nzErrorTip="Please input your name!">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input [formControlName]="key" placeholder="Name" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <ng-container *ngFor="let key of ['email']">
+        <div class="text-bold label">Email</div>
+        <nz-form-item class="form-item">
+          <nz-form-control nzErrorTip="Please input your email!">
+            <nz-input-group nzPrefixIcon="mail">
+              <input type="email" nz-input [formControlName]="key" placeholder="Email" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <ng-container *ngFor="let key of ['phoneNumber']">
+        <div class="text-bold label">Phone number</div>
+        <nz-form-item class="form-item">
+          <nz-form-control nzErrorTip="Please input your phone number!">
+            <nz-input-group nzPrefixIcon="phone">
+              <input type="tel" nz-input [formControlName]="key" placeholder="Phone number" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <ng-container *ngFor="let key of ['password']">
+        <div class="text-bold">Password</div>
+        <div class="label-password">* Password should contain at least 8 characters including at least 1 capital letter, 1 number, and 1 special character</div>
+        <nz-form-item class="form-item">
+          <nz-form-control nzErrorTip="Please input your password!">
+            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" placeholder="Password" />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <ng-container *ngFor="let key of ['confirmPassword']">
+        <div class="text-bold label">Confirm password</div>
+        <nz-form-item class="form-item">
+          <nz-form-control nzErrorTip="Please input your confirm password!">
+            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" placeholder="Confirm password" />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <button nz-button class="text-bold login-form-button login-form-margin" [nzType]="'primary'">Sign up</button>
+      Or
+      <span class="register-button text-bold" (click)="onLoginBtn()">login now!</span>
+    </form>
+  </div>
+</div>

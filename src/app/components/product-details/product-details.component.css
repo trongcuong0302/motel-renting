@@ -1,0 +1,27 @@
+[nz-typography] {
+    text-align: center;
+}
+
+[nz-input] {
+    width: 200px;
+}
+
+[nz-button] {
+    margin: 0 10px;
+}
+
+.row {
+    width: 200px;
+}
+
+.btn-edit {
+    margin-top: 10px;
+    margin-right: 10px;
+    background-color: yellow;
+    height: 40px;
+    width: 60px;
+}
+
+.btn-edit:hover {
+    color: black;
+}

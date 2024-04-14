@@ -1,0 +1,27 @@
+<div class="header" *ngIf="isShowTopnav">
+  <div class="left-side">
+    <div class="brand">StayEase</div>
+    <div class="product">
+        <a nz-button nzType="link" nzGhost routerLink="products">Products</a>
+    </div>
+    <div class="add">
+        <a nz-button nzType="link" nzGhost routerLink="add">Add</a>
+    </div>
+    <div class="statistics">
+        <a nz-button nzType="link" nzGhost routerLink="statistics">Statistics</a>
+    </div>
+  </div>
+  <div class="right-side">
+    <div class="user" nz-dropdown [nzDropdownMenu]="menu" nzPlacement="bottomRight">{{getLabelUser()}}</div>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="onBtnProfile()">
+              <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>Profile
+            </li>
+            <li nz-menu-item (click)="onLogOut()">
+              <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>Logout
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+  </div>
+</div>

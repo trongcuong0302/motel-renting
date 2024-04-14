@@ -1,0 +1,55 @@
+<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="content">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="form-container">
+    <div class="title">Sign in to StayEase</div>
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+      <ng-container>
+        <div class="text-bold label">Email or phone number</div>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your email or phone number!">
+            <nz-input-group nzPrefixIcon="mail">
+              <input type="text" nz-input formControlName="email" placeholder="Email or phone number" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <ng-container>
+        <div class="text-bold label">Password</div>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your password!">
+            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+              <input [type]="isShowPassword ? 'text' : 'password'" nz-input formControlName="password" placeholder="Password" />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+      <div nz-row class="login-form-margin">
+        <div nz-col [nzSpan]="12"></div>
+        <div nz-col [nzSpan]="12">
+          <span class="login-form-forgot text-bold" (click)="onBtnForgotPassword()">Forgot password?</span>
+          
+        </div>
+      </div>
+      <button nz-button class="login-form-button login-form-margin text-bold" [nzType]="'primary'">Sign in</button>
+      <div style="margin-bottom: 16px;">
+        <span>Or </span><span class="register-button text-bold" (click)="onRegisterBtn()">register now!</span>
+      </div>
+    </form>
+    <nz-modal
+      [(nzVisible)]="isVisible"
+      nzTitle="Forgot password"
+      nzOkText="Send"
+      nzCancelText="Cancel"
+      [nzWidth]="400"
+      (nzOnOk)="handleOk()"
+      (nzOnCancel)="handleCancel()"
+    >
+      <ng-container *nzModalContent>
+        <div>Enter your email and we'll send you instructions on how to reset your password</div>
+        <input style="margin-top:8px; width: 350px;" type="text" nz-input placeholder="Email" [(ngModel)]="emailReset" />
+      </ng-container>
+    </nz-modal>
+  </div>
+</div>
