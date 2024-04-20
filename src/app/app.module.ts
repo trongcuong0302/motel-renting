@@ -34,6 +34,8 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireStorageModule } from "@angular/fire/compat/storage";
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { AgmCoreModule} from '@agm/core';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
@@ -53,6 +55,7 @@ import { TopnavComponent } from './components/topnav';
 import { ResetPasswordComponent } from './components/auth/reset-password';
 import { UserProfile } from './components/user';
 import { environment } from 'src/environment/environment';
+import { MapComponent } from './components/map-component';
 
 @NgModule({
   declarations: [
@@ -68,6 +71,7 @@ import { environment } from 'src/environment/environment';
     TopnavComponent,
     ResetPasswordComponent,
     UserProfile,
+    MapComponent
   ],
   imports: [
     BrowserModule,
@@ -100,8 +104,12 @@ import { environment } from 'src/environment/environment';
     NzNotificationModule,
     NzCascaderModule,
     NzUploadModule,
+    NzCarouselModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCaKbVhcX_22R_pRKDYuNA7vox-PtGaDkI'
+    })
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }
   ],

@@ -1,0 +1,30 @@
+export class Motel {
+    _id?: any;
+    name?: string;
+    ownerId?: string;
+    renterId?: any;
+    address?: string;
+    directions?: string;
+    deposit?: number;
+    price?: number;
+    electricPrice?: any;
+    waterPrice?: any;
+    currencyUnit?: string;
+    area?: number;
+    isRoom?: boolean;
+    numberOfFloors?: number;
+    sameHouseWithOwner?: boolean;
+    renterRequirement?: string;
+    hasParkingArea?: boolean;
+    numberOfWashingMachine?: boolean;
+    numberOfWardrobes?: number;
+    numberOfBathrooms?: number;
+    numberOfBedrooms?: number;
+    numberOfAirConditioners?: number;
+    numberOfBeds?: number;
+    numberOfWaterHeaters?: number;
+    note?: string;
+    durations?: string;
+    createdDate?: Date;
+    modifiedDate?: Date;
+}
