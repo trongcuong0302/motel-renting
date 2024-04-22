@@ -1,9 +1,10 @@
 export class Motel {
     _id?: any;
-    name?: string;
+    roomName?: string;
     ownerId?: string;
     renterId?: any;
     address?: string;
+    location?: any;
     directions?: string;
     deposit?: number;
     price?: number;
@@ -11,7 +12,7 @@ export class Motel {
     waterPrice?: any;
     currencyUnit?: string;
     area?: number;
-    isRoom?: boolean;
+    roomType?: string;
     numberOfFloors?: number;
     sameHouseWithOwner?: boolean;
     renterRequirement?: string;
@@ -24,7 +25,7 @@ export class Motel {
     numberOfBeds?: number;
     numberOfWaterHeaters?: number;
     note?: string;
-    durations?: string;
+    duration?: string;
     createdDate?: Date;
     modifiedDate?: Date;
 }

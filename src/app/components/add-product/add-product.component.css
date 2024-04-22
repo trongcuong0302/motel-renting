@@ -58,8 +58,7 @@
 
 .button {
     display: flex;
-    justify-content: space-between;
-    width: 250px;
+    justify-content: center;
 }
 
 .form-date-picker, .form-location-picker {
@@ -90,7 +89,6 @@
 .avatar-container {
     max-width: 400px;
     max-height: 400px;
-    margin: 16px 0;
 }
 
 .button-container {
@@ -104,23 +102,30 @@
 }
 
 .hidden {
-    display: none;  
+    display: none !important;  
 }
 
 .choose-image-button {
     display: flex;
     align-items: center;
+    justify-content: center;
     font-weight: 500;
-    height: 36px;
+    height: 40px;
     color: white;
     padding: 4px 16px;
     background-color: #1890FF;
     border-radius: 32px;
     cursor: pointer;
-    max-width: 125px;
+    width: 160px;
 }
 
-.image-containe {
+.danger-button {
+    background-color: #ff4d4f;
+}
+
+.image-container {
+    display: flex;
+    align-items: center;
     height: 400px;
 }
 
@@ -140,8 +145,19 @@
     justify-content: center;
 }
 
+.icon-watch-image {
+    font-size: 30px;
+    cursor: pointer;
+}
+
 .image-button {
+    height: 40px;
     max-width: 160px;
     margin-right: 16px;
     margin-bottom: 16px;
+}
+
+.login-form-button {
+    min-width: 200px;
+    height: 40px;
 }
