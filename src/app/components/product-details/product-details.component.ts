@@ -15,12 +15,7 @@ import { ProductsService } from 'src/app/services/products.service';
 export class ProductDetailsComponent implements OnInit {
   viewMode: any = true;
 
-  abc: Product = {
-    productCode: '',
-    productName: '',
-    price: 0,
-    categoryCode: ''
-  };
+  abc: any = {};
 
   validateForm : UntypedFormGroup;
 

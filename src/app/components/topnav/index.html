@@ -1,27 +1,61 @@
-<div class="header" *ngIf="isShowTopnav">
-  <div class="left-side">
-    <div class="brand">StayEase</div>
-    <div class="product">
-        <a nz-button nzType="link" nzGhost routerLink="products">Products</a>
+<div *ngIf="isShowTopnav">
+  <div *ngIf="!hideMenuIcon" class="header">
+    <div class="left-side">
+      <img class="logo" src="../../../assets/img/logo-stayease.jpg" (click)="goHomePage()">
+      <div class="menu-container" *ngFor="let item of menuList; let i = index">
+        <div class="menu-item" [ngClass]="{'background-hilight': item.isSelected}" [routerLink]="item?.link" (click)="onSelectMenuItem(i)">{{item?.label}}</div>
+      </div>
     </div>
-    <div class="add">
-        <a nz-button nzType="link" nzGhost routerLink="add">Add</a>
-    </div>
-    <div class="statistics">
-        <a nz-button nzType="link" nzGhost routerLink="statistics">Statistics</a>
+    <div class="right-side">
+      <div class="user" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
+        <img class="avatar-container" [src]="avatarUrl">
+        <span style="font-weight: 500;">{{getLabelUser()}}</span>
+      </div>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="onBtnProfile()" style="font-weight: 500;">
+            <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>Profile
+          </li>
+          <li nz-menu-item (click)="onLogOut()" style="font-weight: 500;">
+            <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>Logout
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     </div>
   </div>
-  <div class="right-side">
-    <div class="user" nz-dropdown [nzDropdownMenu]="menu" nzPlacement="bottomRight">{{getLabelUser()}}</div>
-        <nz-dropdown-menu #menu="nzDropdownMenu">
-          <ul nz-menu>
-            <li nz-menu-item (click)="onBtnProfile()">
-              <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>Profile
-            </li>
-            <li nz-menu-item (click)="onLogOut()">
-              <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>Logout
-            </li>
-          </ul>
-        </nz-dropdown-menu>
+  <div *ngIf="hideMenuIcon" class="header">
+    <div class="left-side">
+      <img class="logo" src="../../../assets/img/logo_stayease.jpg" (click)="goHomePage()">
+    </div>
+    <div class="right-side">
+      <div nz-dropdown nzTrigger="click" [(nzVisible)]="hideMenu" [nzDropdownMenu]="menuDropdown" class="icon-menu">
+        <span nz-icon nzType="unordered-list" nzTheme="outline"></span>
+      </div>
+      <nz-dropdown-menu #menuDropdown="nzDropdownMenu">
+        <div>
+          <div *ngFor="let item of menuList; let i = index">
+            <div class="menu-item-small" [routerLink]="item?.link" (click)="onSelectMenuItem(i)">{{item?.label}}</div>
+          </div>
+          <div class="user-small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
+            <img class="avatar-container" [src]="avatarUrl">
+            <span style="font-weight: 500;">{{getLabelUser()}}</span>
+          </div>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item (click)="onBtnProfile()" style="font-weight: 500;">
+                <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>Profile
+              </li>
+              <li nz-menu-item (click)="onLogOut()" style="font-weight: 500;">
+                <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>Logout
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </nz-dropdown-menu>
+      
+    </div>
   </div>
+</div>
+<div class="header" *ngIf="!isShowTopnav" style="justify-content: center; position: absolute;">
+  <img class="logo" style="margin: 0;" src="../../../assets/img/logo-stayease.jpg">
 </div>

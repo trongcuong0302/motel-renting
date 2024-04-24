@@ -17,7 +17,7 @@ import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent extends BaseComponent implements OnInit{
-
+  isEdit: boolean = true;
   isVisible = false;
   loading = false;
   userData: any = {};
@@ -93,11 +93,11 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     numberOfFloors: FormControl<number>;
     area: FormControl<number>;
     duration: FormControl<string>;
-    price: FormControl<string>;
+    price: FormControl<number>;
     currencyUnit: FormControl<string>;
-    deposit: FormControl<string>;
-    electricPrice: FormControl<string>;
-    waterPrice: FormControl<string>;
+    deposit: FormControl<number>;
+    electricPrice: FormControl<number>;
+    waterPrice: FormControl<number>;
     directions: FormControl<string>;
     sameHouseWithOwner: FormControl<string>;
     renterRequirement: FormControl<string>;
@@ -118,11 +118,11 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     numberOfFloors: [0],
     area: [0, [Validators.required]],
     duration: [''],
-    price: ['', [Validators.required]],
+    price: [0, [Validators.required]],
     currencyUnit: [''],
-    deposit: ['', [Validators.required]],
-    electricPrice: [''],
-    waterPrice: [''],
+    deposit: [0, [Validators.required]],
+    electricPrice: [0],
+    waterPrice: [0],
     directions: [''],
     sameHouseWithOwner: [''],
     renterRequirement: [''],
@@ -238,6 +238,13 @@ export class AddProductComponent extends BaseComponent implements OnInit{
         return false;
       }
     }
+    for(let key of ['area', 'price', 'deposit', 'electricPrice', 'waterPrice', 'numberOfWashingMachine', 'numberOfAirConditioners',
+    'numberOfWaterHeaters', 'numberOfWardrobes', 'numberOfBathrooms', 'numberOfBedrooms', 'numberOfBeds', 'numberOfFloors']) {
+      if(this.validateForm.get(key)?.value! < 0) {
+        this.showError("Number fields must not be negative.");
+        return false;
+      }
+    }
     if(!this.address.length) {
       this.showError("Please enter the required field.");
       return false;
@@ -310,16 +317,17 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   }
 
   onBtnSaveImage() {
+    this.loading = true;
     for(let i = 0; i < this.previews.length; i++) {
-      let filePath = `motels/${this.userData.email}_${this.selectedFiles[this.arrayIndex[i]].name}_${new Date().getTime()}`;
+      let roomName = this.validateForm.get("roomName")?.value;
+      let filePath = `motels/${this.userData.email}_${roomName}_${this.selectedFiles[this.arrayIndex[i]].name}_${new Date().getTime()}`;
       const fileRef = this.fireStorage.ref(filePath);
-      this.loading = true;
       this.fireStorage.upload(filePath, this.selectedFiles[this.arrayIndex[i]]).snapshotChanges().pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe({
             next: (url) => {
               let image = {
-                iamgeUrl: url,
+                imageUrl: url,
                 filePath: filePath
               }
               this.imageData.push(image);
@@ -341,16 +349,17 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     formData['coordinate'] = this.latLng;
     console.log(formData)
     this.isLoading = true;
-    // this.productsService.postAProduct(formData).subscribe({
-    //   next: (data) => {
-    //     this.isLoading = false;
-    //     this.showSuccess("User profile updated successfully!");
-    //   },
-    //   error: (error) => {
-    //     this.isLoading = false;
-    //     this.showError(error.error.message);
-    //   }
-    // });
+    this.productsService.postAProduct(formData).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.showSuccess("Motel upload successfully!");
+        this.isEdit = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.showError(error.error.message);
+      }
+    });
   }
 
   deleteOneImage() {
@@ -394,7 +403,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   }
 
   newProduct() {
-    
+    location.reload();
   }
 
   goList(): void {

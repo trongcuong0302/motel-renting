@@ -293,7 +293,7 @@ export class UserProfile extends BaseComponent implements OnInit {
 
   onBtnSaveImage() {
     if(!this.selectedImage || !this.selectedImage?.name) return;
-    let filePath = `avatars/${this.selectedImage.name}_${new Date().getTime()}`;
+    let filePath = `avatars/${this.userData.email}_${this.selectedImage.name}_${new Date().getTime()}`;
     const fileRef = this.fireStorage.ref(filePath);
     this.loading = true;
     this.fireStorage.upload(filePath, this.selectedImage).snapshotChanges().pipe(

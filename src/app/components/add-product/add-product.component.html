@@ -1,5 +1,5 @@
 <div>
-    <div *ngIf="true">
+    <div *ngIf="isEdit">
         <div class="container">
             <div class="header"><span>Add new room</span></div>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
@@ -56,11 +56,11 @@
                   </div>
                   <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                      <div class="label">Price<span class="mark-require">*</span></div>
+                      <div class="label">Price/month (1000000 = 1 million)<span class="mark-require">*</span></div>
                       <div *ngFor="let key of ['price']" style="display: flex;">
                         <nz-form-item style="width: 60%" >
                           <nz-form-control>
-                            <input type="text" nz-input [formControlName]="key" placeholder="Price"/>
+                            <input type="number" nz-input [formControlName]="key" placeholder="Price"/>
                           </nz-form-control>
                         </nz-form-item>
                         <nz-form-item style="width: 40%; height: 32px;">
@@ -73,11 +73,11 @@
                       </div>
                     </div>
                     <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                      <div class="label">Deposit<span class="mark-require">*</span></div>
+                      <div class="label">Deposit (1000000 = 1 million)<span class="mark-require">*</span></div>
                       <div *ngFor="let key of ['deposit']" style="display: flex;">
                         <nz-form-item style="width: 60%">
                           <nz-form-control >
-                            <input type="text" nz-input [formControlName]="key" placeholder="Deposit"/>
+                            <input type="number" nz-input [formControlName]="key" placeholder="Deposit"/>
                           </nz-form-control>
                         </nz-form-item>
                         <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
@@ -90,7 +90,7 @@
                       <div *ngFor="let key of ['electricPrice']" style="display: flex;">
                         <nz-form-item style="width: 60%">
                           <nz-form-control >
-                            <input type="text" nz-input [formControlName]="key" placeholder="Electric price" />
+                            <input type="number" nz-input [formControlName]="key" placeholder="Electric price" />
                           </nz-form-control>
                         </nz-form-item>
                         <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
@@ -103,7 +103,7 @@
                       <div *ngFor="let key of ['waterPrice']" style="display: flex;">
                         <nz-form-item style="width: 60%" >
                           <nz-form-control >
-                            <input type="text" nz-input [formControlName]="key" placeholder="Water price" />
+                            <input type="number" nz-input [formControlName]="key" placeholder="Water price" />
                           </nz-form-control>
                         </nz-form-item>
                         <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
@@ -241,7 +241,7 @@
                   </div>
                   <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                      <div class="label">Location<span class="mark-require">*</span></div>
+                      <div class="label">Location (House number, Street)<span class="mark-require">*</span></div>
                       <div *ngFor="let key of ['location']">
                         <nz-form-item>
                           <nz-form-control >
@@ -318,10 +318,10 @@
         </div>
     </div>
 
-    <div *ngIf="false">
-        <nz-result nzStatus="success" nzTitle="Successfully add a product!">
+    <div *ngIf="!isEdit">
+        <nz-result nzStatus="success" nzTitle="Successfully upload a motel!">
             <div nz-result-extra>
-                <button nz-button nzType="primary" (click)="goList()">Go Product List</button>
+                <button nz-button nzType="primary" (click)="goList()">Go to My Motels List</button>
                 <button nz-button (click)="newProduct()">Add Again</button>
             </div>
         </nz-result>

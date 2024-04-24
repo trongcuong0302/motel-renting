@@ -1,10 +1,29 @@
 <div *ngIf="viewMode; else editable">
-    <div *ngIf="abc._id">
-        <nz-descriptions nzTitle="Product Detail" nzLayout="vertical" [nzColumn]="2" nzBordered [nzExtra]="extraTpl">
-            <nz-descriptions-item nzTitle="Product Code">{{abc.productCode}}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Product Name">{{abc.productName}}</nz-descriptions-item>
+    <div *ngIf="abc._id" style="padding: 24px;">
+        <nz-descriptions nzTitle="Motel Detail" nzLayout="vertical" [nzColumn]="2" nzBordered [nzExtra]="extraTpl">
+            <nz-descriptions-item nzTitle="Room Type">{{abc.roomType}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Room Name">{{abc.roomName}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of floors">{{abc.numberOfFloors}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Area">{{abc.area}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Duration">{{abc.duration}}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Price">{{abc.price}}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Category Code">{{abc.categoryCode}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Currency Unit">{{abc.currencyUnit}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Deposit">{{abc.deposit}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Electric Price">{{abc.electricPrice}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Water Price">{{abc.waterPrice}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Directions">{{abc.directions}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Same house with owner">{{abc.sameHouseWithOwner}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Renter requirement">{{abc.renterRequirement}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Has parking area">{{abc.hasParkingArea}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of washing machines">{{abc.numberOfWashingMachine}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of air-conditioners">{{abc.numberOfAirConditioners}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of wardrobes">{{abc.numberOfWardrobes}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of bathrooms">{{abc.numberOfBathrooms}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of bedrooms">{{abc.numberOfBedrooms}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Number of beds">{{abc.numberOfBeds}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Note">{{abc.note}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Location">{{abc.location}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Address">{{abc.address.text}}</nz-descriptions-item>
         </nz-descriptions>
         <ng-template #extraTpl>
             <button class="btn-edit" nz-button (click)="goToEdit()">Edit</button>

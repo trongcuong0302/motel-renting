@@ -16,7 +16,7 @@ import { BaseComponent } from 'src/app/base/baseComponent';
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent extends BaseComponent implements OnInit {
-  products?: Product[];
+  products = [];
   currentProduct: Product = {};
   pageSize = 10;
   pageIndex = 1;
@@ -34,6 +34,9 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     { text: '<12', value: 12 },
     { text: '<11', value: 11 }
   ];
+
+  avatarUrl: string = '../../../assets/img/default-avatar.jpg';
+  moteList = [1,2,3,4,5,6,7,8,9,10]
   
   constructor(
     private productsService: ProductsService,
@@ -47,11 +50,6 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
     this.loadDataFromServer(this.pageIndex, this.pageSize, this.searchName, this.searchCode, null, null, [{key: 'price', value: this.price}]);
-  }
-
-  setActiveProduct(product: Product): void {
-    this.currentProduct = product;
-    this.router.navigate([`/products/${this.currentProduct._id}`]);
   }
 
   loadDataFromServer(pageIndex: number, pageSize: number, searchName: string, searchCode: string, sortField: string | null, sortOrder: string | null, filters: Array<{ key: string; value: number }>): void {
@@ -72,7 +70,6 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
         this.loading = false;
         this.total = data.total;
         this.products = data.data;
-        
       },
       error: (err) => this.nzMessageService.error(err.error.message)
     })
@@ -103,6 +100,28 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   resetCode() :void {
     this.searchCode = '';
     this.search();
+  }
+
+  getMotelData(key: any, item: any) {
+    switch (key) {
+      case "name":
+        return `${item?.roomName} - ${item?.location}`;
+      case "address":
+        return `${item?.address?.text}`;
+      case "price":
+        return item?.price;
+      case "deposit":
+        return item?.deposit;
+      case "image": 
+        return item?.images[0]?.imageUrl;
+      default:
+        return '';
+    }
+  }
+
+  setActiveProduct(product: any): void {
+    this.currentProduct = product;
+    this.router.navigate([`/products/${this.currentProduct._id}`]);
   }
 
 }
