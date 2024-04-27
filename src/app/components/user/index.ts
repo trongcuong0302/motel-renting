@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { ProvinceService } from "../../services/province.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -45,12 +45,12 @@ export class UserProfile extends BaseComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
-    private authService: AuthService,
+    private userService: UserService,
     private provinceService: ProvinceService,
     private fireStorage: AngularFireStorage,
     private router: Router,
     private notification: NzNotificationService) {
-    super(notification, router, authService);
+    super(notification, router, userService);
   }
 
   validateForm: FormGroup<{
@@ -75,13 +75,13 @@ export class UserProfile extends BaseComponent implements OnInit {
 
   getUserProfile() {
     this.isLoading = true;
-    this.authService.getUser().subscribe({
+    this.userService.getUser().subscribe({
       next: (data) => {
         this.userData = data.data;
         if(this.userData?.avatarInfo?.avatarUrl) this.avatarUrl = this.userData?.avatarInfo?.avatarUrl;
         this.isLoading = false;
         Object.keys(this.validateForm.controls).forEach(key => {
-          if(key == "dateOfBirth") data.data[key] = new Date(data.data[key])
+          if(key == "dateOfBirth" && data.data[key]) data.data[key] = new Date(data.data[key])
           if(key == "hometown" || key == "address") {
             this.location[key] = data.data[key]?.value;
             this.validateForm.get(key)?.setValue(data.data[key]?.text);
@@ -207,7 +207,7 @@ export class UserProfile extends BaseComponent implements OnInit {
       if (this.validateFormData()) {
         let formData = this.prepareLocationData();
         this.isLoading = true;
-        this.authService.updateUserProfile(this.userData._id, formData).subscribe({
+        this.userService.updateUserProfile(this.userData._id, formData).subscribe({
           next: (data) => {
             this.isLoading = false;
             this.showSuccess("User profile updated successfully!");
@@ -246,7 +246,7 @@ export class UserProfile extends BaseComponent implements OnInit {
       let object = this.objectChangePassword;
       object['email'] = this.validateForm.get("email")?.value;
       this.isLoading = true;
-      this.authService.changePassword(object).subscribe({
+      this.userService.changePassword(object).subscribe({
         next: (data) => {
           this.isVisible = false;
           this.isLoading = false;
@@ -267,7 +267,7 @@ export class UserProfile extends BaseComponent implements OnInit {
         return false;
       }
     }
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     if(!passwordRegex.test(this.objectChangePassword.newPassword)){
       this.showError("Invaid password! Please enter a valid password.");
       return false;
@@ -307,7 +307,7 @@ export class UserProfile extends BaseComponent implements OnInit {
               avatarUrl: this.avatarUrl,
               filePath: filePath
             }
-            this.authService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
+            this.userService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
               next: (data) => {
                 this.loading = false;
                 this.getUserProfile();
@@ -351,7 +351,7 @@ export class UserProfile extends BaseComponent implements OnInit {
     this.avatarUrl = '../../../assets/img/default-avatar.jpg';
     let avatarInfo = {};
     this.loading = true;
-    this.authService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
+    this.userService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
       next: (data) => {
         this.loading = false;
         this.getUserProfile();

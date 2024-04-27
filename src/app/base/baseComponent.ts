@@ -1,6 +1,6 @@
 import { OnInit, Component } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,8 +12,8 @@ export class BaseComponent implements OnInit {
   public isLoggedIn = false;
 
   constructor(private notify: NzNotificationService,
-    private route: Router,
-    private auth: AuthService) {
+    private rout: Router,
+    private auth: UserService) {
   }
 
   ngOnInit(): void {

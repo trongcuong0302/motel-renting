@@ -6,7 +6,7 @@ import { ProductsService } from 'src/app/services/products.service';
 import { NzTableSortFn } from 'ng-zorro-antd/table';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { AuthService } from "src/app/services/auth.service";
+import { UserService } from "src/app/services/user.service";
 import { BaseComponent } from 'src/app/base/baseComponent';
 
 
@@ -41,10 +41,10 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   constructor(
     private productsService: ProductsService,
     private nzMessageService: NzMessageService,
-    private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private notification: NzNotificationService) { 
-      super(notification, router, authService);
+      super(notification, router, userService);
     }
 
   override ngOnInit(): void {

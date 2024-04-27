@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { AuthService } from "../../../services/auth.service";
+import { UserService } from "../../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -29,10 +29,10 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private notification: NzNotificationService,) {
-    super(notification, router, authService);
+    super(notification, router, userService);
   }
 
   override ngOnInit(): void {
@@ -45,7 +45,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
         token: this.token,
         password: this.validateForm.value.password
       }
-      this.authService.resetPassword(resetObj).subscribe({
+      this.userService.resetPassword(resetObj).subscribe({
         next: (data) => {
           this.modal.success({
             nzTitle: 'Password changed successfully',
@@ -72,7 +72,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
   validateFormData() {
     if(!this.validateForm.valid) return false;
     let data = this.validateForm.value;
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     if(!data.password || !passwordRegex.test(data.password)){
       this.showError("Invaid password! Please enter a valid password.");
       return false;

@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { BaseComponent } from '../../base/baseComponent';
-import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 
@@ -31,12 +31,14 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
     if(window.innerWidth <= 685) this.hideMenuIcon = true;
-    this.authService.auth.subscribe(user => {
+    this.userService.auth.subscribe(user => {
       if(user.email){
         this.getUser();
       }
     })
-    if(this.router.url != '/login' && !this.router.url.includes('/reset')) this.getUser();
+    if(this.router.url != '/login' && !this.router.url.includes('/reset')){
+      this.getUser();
+    } 
     else if(this.isShowTopnav) {
       this.onSelectMenuItem(0);
       this.router.navigate(['/products']);
@@ -45,8 +47,8 @@ export class TopnavComponent extends BaseComponent implements OnInit {
 
   constructor(private notification: NzNotificationService,
     private router: Router,
-    private authService: AuthService) {
-      super(notification, router, authService);
+    private userService: UserService) {
+      super(notification, router, userService);
   }
 
   get isShowTopnav() {
@@ -66,12 +68,14 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   }
 
   getUser() {
-    this.authService.getUser().subscribe({
+    this.userService.getUser().subscribe({
       next: (data) => {
         this.authUser = data.data;
         if(this.authUser?.avatarInfo?.avatarUrl) this.avatarUrl = this.authUser?.avatarInfo?.avatarUrl;
+        else this.avatarUrl = '../../../assets/img/default-avatar.jpg';
         this.isLoggedIn = true;
-        this.onSelectMenuItem(0);
+        if(this.router.url == '/add') this.onSelectMenuItem(1);
+        else this.onSelectMenuItem(0);
         if(this.router.url=='/login' || this.router.url.includes('/reset')) this.router.navigate(['/products']);
       },
       error: (error) => {
@@ -83,7 +87,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   }
 
   onLogOut() {
-    this.authService.logOut().subscribe({
+    this.userService.logOut().subscribe({
       next: (data) => {
         this.isLoggedIn = false;
         this.router.navigate(['/login']);

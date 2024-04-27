@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import { BaseComponent } from '../../base/baseComponent';
-import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 
@@ -30,9 +30,9 @@ export class MapComponent extends BaseComponent implements OnInit {
 
   constructor(private notification: NzNotificationService,
     private router: Router,
-    private authService: AuthService,
+    private userService: UserService,
     private zone: NgZone) {
-      super(notification, router, authService);
+      super(notification, router, userService);
   }
 
   mapReadyHandler(map: google.maps.Map) {

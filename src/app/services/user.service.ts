@@ -8,7 +8,7 @@ const baseUrl = 'http://localhost:3000/users';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class UserService {
   user: any = {};
   auth: BehaviorSubject<any>;
 
@@ -51,4 +51,9 @@ export class AuthService {
   updateUserProfile(id: string, data: any): Observable<any> {
     return this.http.put(`${baseUrl}/${id}`, data);
   }
+
+  getUserProfile(id: string): Observable<any> {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { ProvinceService } from "../../services/province.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -78,13 +78,13 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
-    private authService: AuthService,
+    private userService: UserService,
     private provinceService: ProvinceService,
     private fireStorage: AngularFireStorage,
     private router: Router,
     private notification: NzNotificationService,
     private productsService: ProductsService) {
-    super(notification, router, authService);
+    super(notification, router, userService);
   }
 
   validateForm: FormGroup<{
@@ -141,9 +141,9 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
   getUserProfile() {
     this.isLoading = true;
-    this.authService.getUser().subscribe({
+    this.userService.getUser().subscribe({
       next: (data) => {
-        this.userData = data.data;
+        this.userData = data?.data;
         this.isLoading = false;
         this.validateForm.get('currencyUnit')?.setValue("VND");
         this.validateForm.get('duration')?.setValue("1");
@@ -322,6 +322,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
       let roomName = this.validateForm.get("roomName")?.value;
       let filePath = `motels/${this.userData.email}_${roomName}_${this.selectedFiles[this.arrayIndex[i]].name}_${new Date().getTime()}`;
       const fileRef = this.fireStorage.ref(filePath);
+      this.isLoading = true;
       this.fireStorage.upload(filePath, this.selectedFiles[this.arrayIndex[i]]).snapshotChanges().pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe({
@@ -347,7 +348,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     let formData = this.prepareLocationData();
     formData['images'] = this.imageData;
     formData['coordinate'] = this.latLng;
-    console.log(formData)
+    formData['owner'] = this.userData?._id;
     this.isLoading = true;
     this.productsService.postAProduct(formData).subscribe({
       next: (data) => {
@@ -397,7 +398,6 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   onChangeValue(type: string, value: string) {
     if(type == "currencyUnit") this.selectedCurrencyUnits = value;
     else  {
-      console.log(value)
       this.validateForm.get(type)?.setValue(value)
     }
   }

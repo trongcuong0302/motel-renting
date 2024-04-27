@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
-import { AuthService } from "../../../services/auth.service";
+import { UserService } from "../../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
@@ -24,10 +24,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
-    private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private notification: NzNotificationService) {
-    super(notification, router, authService);
+    super(notification, router, userService);
   }
 
   validateForm: FormGroup<{
@@ -41,9 +41,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
   submitForm(): void {
     if (this.validateFormData()) {
       let formData = this.validateForm.value;
-      this.authService.login(formData).subscribe({
+      this.userService.login(formData).subscribe({
         next: (data) => {
-          this.authService.nextUser(formData);
+          this.userService.nextUser(formData);
           this.router.navigate(['/products']);
         },
         error: (error) => this.showError(error.error.message)
@@ -82,7 +82,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       this.showError("Invaid email! Please enter a valid email address.");
     }
     else {
-      this.authService.sendMailResetPassword(this.emailReset).subscribe({
+      this.userService.sendMailResetPassword(this.emailReset).subscribe({
         next: (data) => {
           this.modal.success({
             nzTitle: 'Send email successfully',
