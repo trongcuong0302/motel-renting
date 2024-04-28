@@ -18,6 +18,7 @@ export class MapComponent extends BaseComponent implements OnInit {
   longitude: number = 105.8342;
 
   @Input() latLng = { lat: 21.0278, lng: 105.8342 };
+  @Input() enableClick = true;
   @Output() placeChanged = new EventEmitter();
 
   autoComplete: google.maps.places.Autocomplete | undefined;
@@ -38,6 +39,7 @@ export class MapComponent extends BaseComponent implements OnInit {
   mapReadyHandler(map: google.maps.Map) {
     this.map = map;
     this.mapClickListener = this.map.addListener('click', (e: google.maps.MouseEvent) => {
+      if(!this.enableClick) return;
       this.zone.run(() => {
         this.latitude = e.latLng.lat();
         this.longitude = e.latLng.lng();  

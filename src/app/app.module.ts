@@ -36,6 +36,7 @@ import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AgmCoreModule} from '@agm/core';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
@@ -105,6 +106,7 @@ import { MapComponent } from './components/map-component';
     NzCascaderModule,
     NzUploadModule,
     NzCarouselModule,
+    NzPopoverModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({

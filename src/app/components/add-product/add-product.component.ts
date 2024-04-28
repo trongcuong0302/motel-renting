@@ -24,9 +24,9 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   provinceList: any = [];
   address = [];
   imageData: any = [];
+  listImageFiles: any = [];
   selectedFiles: any = [];
   previews: any = [];
-  arrayIndex: any = [];
   currentIndex: number = 0;
   latLng = {
     lat: 21.0278,
@@ -297,8 +297,8 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   onChangeImage(event: any) {
     this.selectedFiles = event.target.files;
 
-    this.previews = [];
-    this.arrayIndex = [];
+    // this.previews = [];
+    // this.arrayIndex = [];
     if (this.selectedFiles && this.selectedFiles[0]) {
       const numberOfFiles = this.selectedFiles.length;
       for (let i = 0; i < numberOfFiles; i++) {
@@ -306,41 +306,30 @@ export class AddProductComponent extends BaseComponent implements OnInit{
         reader.onload = (e: any) => {
           this.previews.push(e.target.result);
         };
-        this.arrayIndex.push(i)
         reader.readAsDataURL(this.selectedFiles[i]);
       }
-      
+      this.listImageFiles = [ ...this.listImageFiles, ...this.selectedFiles];
+      this.currentIndex = 0;
     } else {
-      this.previews = [];
+      //this.previews = [];
       this.selectedFiles = [];
     }
   }
 
-  onBtnSaveImage() {
-    this.loading = true;
+  async onBtnSaveImage() {
     for(let i = 0; i < this.previews.length; i++) {
       let roomName = this.validateForm.get("roomName")?.value;
-      let filePath = `motels/${this.userData.email}_${roomName}_${this.selectedFiles[this.arrayIndex[i]].name}_${new Date().getTime()}`;
+      let filePath = `motels/${this.userData.email}_${roomName}_${this.listImageFiles[i].name}_${new Date().getTime()}`;
       const fileRef = this.fireStorage.ref(filePath);
       this.isLoading = true;
-      this.fireStorage.upload(filePath, this.selectedFiles[this.arrayIndex[i]]).snapshotChanges().pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe({
-            next: (url) => {
-              let image = {
-                imageUrl: url,
-                filePath: filePath
-              }
-              this.imageData.push(image);
-              if(i == this.previews.length - 1) this.postMotelData();
-            },
-            error: (err) => {
-              this.loading = false;
-              this.showError(err.error);
-            }
-          })
-        })
-      ).subscribe();
+      const uploadTask = await this.fireStorage.upload(filePath, this.listImageFiles[i]);
+      const url = await uploadTask.ref.getDownloadURL();
+      let image = {
+        imageUrl: url,
+        filePath: filePath
+      }
+      this.imageData.push(image);
+      if(i == this.previews.length - 1) this.postMotelData();
     }
   }
 
@@ -365,13 +354,15 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
   deleteOneImage() {
     this.previews.splice(this.currentIndex, 1);
-    this.arrayIndex.splice(this.currentIndex, 1);
+    this.listImageFiles.splice(this.currentIndex, 1);
+    this.currentIndex = 0;
   }
 
   deleteAllImages() {
     this.previews = [];
     this.selectedFiles = [];
-    this.arrayIndex = [];
+    this.listImageFiles = [];
+    this.currentIndex = 0;
   }
 
   onPlaceChange(event: any) {
@@ -384,13 +375,13 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   }
 
   nextImage() {
-    if(this.currentIndex + 1 == this.previews.length) this.currentIndex = 0;
+    if(this.currentIndex + 1 >= this.previews.length) this.currentIndex = 0;
     else this.currentIndex++;
     this.myCarousel.goTo(Number(this.currentIndex));
   }
 
   prevImage() {
-    if(this.currentIndex == 0) this.currentIndex = this.previews.length - 1;
+    if(this.currentIndex <= 0) this.currentIndex = this.previews.length - 1;
     else this.currentIndex--;
     this.myCarousel.goTo(Number(this.currentIndex));
   }

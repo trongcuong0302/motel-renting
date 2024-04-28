@@ -81,7 +81,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   imageData: any = [];
   selectedFiles: any = [];
   previews: any = [];
-  arrayIndex: any = [];
+  listImageFiles: any = [];
+  oldImages: any = [];
   currentIndex: number = 0;
   latLng = {
     lat: 21.0278,
@@ -138,6 +139,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   override ngOnInit(): void {
     if(this.viewMode) {
+      this.getProvinceList();
       this.getProduct(this.route.snapshot.params["id"]);
       if(window.innerWidth <= 768) this.showUserLarge = false;
     }
@@ -148,13 +150,38 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.motelData = data.data;
-          this.motelData.images.forEach((item: any) => {
-            this.previews.push(item.imageUrl);
-          });
+          this.clearData();
+          this.bindDataToForm();
           this.getUser();
         },
         error: (error) => this.showError(error.error.message)
       });
+  }
+
+  clearData() {
+    this.address = [];
+    this.imageData = [];
+    this.selectedFiles = [];
+    this.previews = [];
+    this.listImageFiles = [];
+    this.oldImages = [];
+    this.currentIndex = 0;
+  }
+
+  bindDataToForm() {
+    for (const key in this.motelData) {
+      this.validateForm.get(key)?.setValue(this.motelData[key]);
+      if(key == "currencyUnit") this.selectedCurrencyUnits = this.motelData[key];
+      if(key == "address") this.address = this.motelData[key]?.value;
+      if(key == "images" && this.motelData[key]?.length) {
+        this.motelData.images.forEach((item: any) => {
+          this.previews.push(item.imageUrl);
+          this.listImageFiles.push(item.imageUrl);
+          this.oldImages.push(item.imageUrl);
+        });
+      }
+      if(key == "coordinate" && this.motelData[key]) this.latLng = this.motelData.coordinate;
+    }
   }
 
   getUser() {
@@ -170,7 +197,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   goToEdit(): void {
     this.viewMode = false;
-    this.previews = [];
+    this.currentIndex = 0;
     // this.validateForm.setValue({
     //   productCode: this.abc.productCode, 
     //   productName: this.abc.productName, 
@@ -178,6 +205,11 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     //   categoryCode: this.abc.categoryCode
     // });
     // this.validateForm.get('productCode')?.disable();    
+  }
+
+  cancelEdit() {
+    this.viewMode = true;
+    this.getProduct(this.route.snapshot.params["id"]);
   }
 
   confirmUpdate(event:any) : void {
@@ -191,18 +223,94 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     }
   }
 
+  validateFormData() {
+    for(let key of ['roomName', 'price', 'deposit', 'location', 'area']) {
+      if(!this.validateForm.get(key)?.value) {
+        this.showError("Please enter the required field.");
+        return false;
+      }
+    }
+    for(let key of ['area', 'price', 'deposit', 'electricPrice', 'waterPrice', 'numberOfWashingMachine', 'numberOfAirConditioners',
+    'numberOfWaterHeaters', 'numberOfWardrobes', 'numberOfBathrooms', 'numberOfBedrooms', 'numberOfBeds', 'numberOfFloors']) {
+      if(this.validateForm.get(key)?.value! < 0) {
+        this.showError("Number fields must not be negative.");
+        return false;
+      }
+    }
+    if(!this.address.length) {
+      this.showError("Please enter the required field.");
+      return false;
+    }
+    if(this.previews.length == 0) {
+      this.showError("You must upload at least 1 image.");
+      return false;
+    }
+    return true;
+  }
+
+  prepareLocationData() {
+    let formData: any = this.validateForm.value;
+    if(this.address) {
+      let province = this.provinceList.find((province:any) => province.value == this.address[0]);
+      let district = province.children?.length > 0 ? province.children.find((district:any) => district.value == this.address[1]) : null;
+      let ward = district.children?.length > 0 ? district.children.find((ward:any) => ward.value == this.address[2]) : null;
+      let location = "";
+      location += `${ward ? ward.label + ', ' : ''}`;
+      location += `${district ? district.label + ', ' : ''}`;
+      location += `${province ? province.label : ''}`;
+      formData['address'] = {
+        value: this.address,
+        text: location
+      }
+      this.validateForm.get('address')?.setValue(location);
+    }
+    
+    return formData;
+  }
+
+  updateMotelData() {
+    let formData = this.prepareLocationData();
+    formData['images'] = [ ...this.motelData.images,  ...this.imageData];
+    formData['coordinate'] = this.latLng;
+    this.isLoading = true;
+    this.productsService.updateProductById(this.motelData._id, formData).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.showSuccess("Motel upload successfully!");
+        this.getProduct(this.route.snapshot.params["id"]);
+        this.viewMode = true;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.showError(error.error.message);
+      }
+    });
+  }
+
   updateProduct() : void {
-    let dataUpdate = this.validateForm.value;
-    //delete dataUpdate.productCode;
-    this.productsService.updateProductById(this.motelData._id, dataUpdate)
-      .subscribe({
-        next: (res) => {
-          //console.log(res);
-          this.showSuccess('Update product successfully');
-          this.router.navigate(['/products']);
-        },
-        error: (error) => this.showError(error.error.message)
+    if (this.validateFormData()) {
+      this.onBtnSaveImage();
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
       });
+      return;
+    }
+  }
+
+  confirmDeleteImage(type: any) : void {
+    let title = type == 'all' ? 'Do you want to delete all images?' : 'Do you want to delete this image?';
+    this.modal.confirm({
+      nzTitle: title,
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'No',
+      nzOnOk: () => type == 'all' ? this.deleteAllImages() : this.deleteOneImage()
+    });
   }
 
   confirmDelete() : void {
@@ -232,6 +340,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     this.isLoading = true;
     this.provinceService.getAllProvince([{}]).subscribe({
       next: (data) => {
+        this.isLoading = false;
         this.provinceList = data.data;
         this.processProvinceList();
       },
@@ -305,23 +414,25 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   deleteOneImage() {
     this.previews.splice(this.currentIndex, 1);
-    this.arrayIndex.splice(this.currentIndex, 1);
+    this.listImageFiles.splice(this.currentIndex, 1);
+    this.currentIndex = 0;
   }
 
   deleteAllImages() {
     this.previews = [];
     this.selectedFiles = [];
-    this.arrayIndex = [];
+    this.listImageFiles = [];
+    this.currentIndex = 0;
   }
 
   nextImage() {
-    if(this.currentIndex + 1 == this.previews.length) this.currentIndex = 0;
+    if(this.currentIndex + 1 >= this.previews.length) this.currentIndex = 0;
     else this.currentIndex++;
     this.myCarousel.goTo(Number(this.currentIndex));
   }
 
   prevImage() {
-    if(this.currentIndex == 0) this.currentIndex = this.previews.length - 1;
+    if(this.currentIndex <= 0) this.currentIndex = this.previews.length - 1;
     else this.currentIndex--;
     this.myCarousel.goTo(Number(this.currentIndex));
   }
@@ -329,8 +440,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   onChangeImage(event: any) {
     this.selectedFiles = event.target.files;
 
-    this.previews = [];
-    this.arrayIndex = [];
+    //this.previews = [];
     if (this.selectedFiles && this.selectedFiles[0]) {
       const numberOfFiles = this.selectedFiles.length;
       for (let i = 0; i < numberOfFiles; i++) {
@@ -338,32 +448,108 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         reader.onload = (e: any) => {
           this.previews.push(e.target.result);
         };
-        this.arrayIndex.push(i)
         reader.readAsDataURL(this.selectedFiles[i]);
       }
-      
+      this.listImageFiles = [ ...this.listImageFiles, ...this.selectedFiles];
+      this.currentIndex = 0;
     } else {
-      this.previews = [];
+      //this.previews = [];
       this.selectedFiles = [];
     }
+  }
+
+  async onBtnSaveImage() {
+    this.getListImageUpload();
+    if(this.listImageFiles.length == 0) {
+      this.updateMotelData();
+      return;
+    }
+    for(let i = 0; i < this.listImageFiles.length; i++) {
+      let roomName = this.validateForm.get("roomName")?.value;
+      let filePath = `motels/${this.userData.email}_${roomName}_${this.listImageFiles[i].name}_${new Date().getTime()}`;
+      const fileRef = this.fireStorage.ref(filePath);
+      this.isLoading = true;
+      const uploadTask = await this.fireStorage.upload(filePath, this.listImageFiles[i]);
+      const url = await uploadTask.ref.getDownloadURL();
+      let image = {
+        imageUrl: url,
+        filePath: filePath
+      }
+      this.imageData.push(image);
+      if(i == this.listImageFiles.length - 1) this.updateMotelData();
+        
+    }
+  }
+
+  getListImageUpload() {
+    this.oldImages.forEach((item: any) => {
+      let find = this.previews.findIndex((it: any) => it == item);
+      if(find < 0) {
+        let deleteImage = this.motelData?.images.findIndex((image: any) => image.imageUrl == item);
+        if(deleteImage >= 0) {
+          this.deleteOldImage(this.motelData?.images[deleteImage]?.filePath);
+          this.motelData?.images.splice(deleteImage, 1);
+        } 
+      } else {
+        this.previews[find] = '';
+      }
+    })
+    this.previews = this.previews.filter((item: any) => item != '');
+    this.listImageFiles = this.listImageFiles.filter((item: any) => item.name);
+  }
+
+  deleteOldImage(filePath: any) {
+    this.isLoading = true;
+    const fileRef = this.fireStorage.ref(filePath);
+    if(!filePath || !fileRef) return;
+    fileRef.delete().subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        console.log("Old image deleted successfully!");
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.showError(error.error);
+      } 
+    })
   }
 
   onChangeImageIndex(event: any) {
     this.currentIndex = event.to;
   }
 
-  getLabelFromList(type: string, value: any) {
-    switch (type) {
-      case "roomType":
-        return this.roomTypeList.find(item => item.value === value)?.label;
-      default:
-        return '';
-    }
-  }
-
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if(window.innerWidth <= 768) this.showUserLarge = false;
     else this.showUserLarge = true;
+  }
+
+  getMotelDetail(key: string) {
+    let findItem: any = null;
+    switch(key) {
+      case "roomType":
+        findItem = this.roomTypeList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
+      case "directions":
+        findItem = this.directionList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
+      case "sameHouseWithOwner":
+        findItem = this.yesNoList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
+      case "renterRequirement":
+        findItem = this.renterRequirementList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
+      case "hasParkingArea":
+        findItem = this.yesNoList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
+      case "electricPrice":
+        if(this.motelData[key] == 0) return "Giá Nhà nước";
+        return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
+      case "waterPrice":
+        if(this.motelData[key] == 0) return "Giá Nhà nước";
+        return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
+      default:
+        return;
+    }
   }
 }

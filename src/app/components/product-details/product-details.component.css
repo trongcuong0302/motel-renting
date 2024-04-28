@@ -194,3 +194,25 @@
 .item-detail-container {
     padding-left: 36px !important;
 }
+
+.btn-cancel {
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #000;
+    margin-right: 16px;
+}
+
+.user-more-info {
+    display: flex;
+}
+
+.user-avatar-info {
+    height: 120px;
+    width: 120px;
+    margin-right: 16px;
+}
+
+.icon-copy {
+    margin-left: 8px;
+    cursor: pointer;
+}

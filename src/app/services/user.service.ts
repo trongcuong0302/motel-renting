@@ -56,4 +56,10 @@ export class UserService {
     return this.http.get(`${baseUrl}/${id}`);
   }
 
+  getAllUser(filter: object): Observable<any> {
+    let params = new HttpParams()
+      .append('filter', JSON.stringify(filter));
+    return this.http.get(baseUrl, {params});
+  }
+
 }

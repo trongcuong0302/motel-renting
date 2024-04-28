@@ -1,8 +1,23 @@
 <div class="header">
     <span>Motel Detail</span>
     <div class="button-container">
-        <div class="btn-edit" (click)="goToEdit()">Edit</div>
-        <div class="btn-delete" (click)="goToEdit()">Delete</div>
+        <div *ngIf="!viewMode" class="btn-edit btn-cancel" (click)="cancelEdit()">
+            <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
+            Cancel
+        </div>
+        <div *ngIf="viewMode" class="btn-edit" (click)="goToEdit()">
+            <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
+            Edit
+        </div>
+        <div *ngIf="!viewMode" class="btn-edit" (click)="confirmUpdate($event)">
+            <span nz-icon nzType="save" nzTheme="outline" style="margin-right: 8px;"></span>
+            Save
+            <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+        </div>
+        <div class="btn-delete" (click)="goToEdit()">
+            <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
+            Delete
+        </div>
     </div>
 </div>
 <div class="content">
@@ -12,13 +27,34 @@
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                         <div class="group-label">{{motelData.roomName}}</div>
-                        <div class="label">{{getLabelFromList('roomType', motelData.roomType)}}</div>
+                        <div class="label">{{getMotelDetail('roomType')}}</div>
                     </div>
                     <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" [ngClass]="{'user-large': showUserLarge}">
-                        <div class="user-small">
+                        <div class="user-small" nz-popover nzPopoverPlacement="topRight" [nzPopoverContent]="contentTemplate">
                             <img class="avatar-container" [src]="avatarUrl">
                             <span style="font-weight: 500;">{{userData.name}}</span>
                         </div>
+                        <ng-template #contentTemplate>
+                            <div class="user-more-info">
+                                <div>
+                                    <img class="user-avatar-info" [src]="avatarUrl">
+                                </div>
+                                <div>
+                                    <div style="margin-bottom: 10px;">
+                                        <span style="font-weight: 500;">{{userData.name}}</span>
+                                        <span nz-icon nzType="copy" class="icon-copy"></span>
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <span style="font-weight: 500;">Email: </span><span>{{userData.email}}</span>
+                                        <span nz-icon nzType="copy" class="icon-copy"></span>
+                                    </div>
+                                    <div>
+                                        <span style="font-weight: 500;">Phone number: </span><span>{{userData.phoneNumber}}</span>
+                                        <span nz-icon nzType="copy" class="icon-copy"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
                         <div class="label">Uploader</div>
                     </div>
                 </div>
@@ -47,66 +83,87 @@
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="item item-detail-container" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                         <div class="item-detail">
-                            <span nz-icon nzType="environment" style="margin-right: 8px;"></span><span class="bold">Location: </span><span>70 Trương Định</span>
+                            <span nz-icon nzType="environment" style="margin-right: 8px;"></span>
+                            <span class="bold">Location: </span><span>{{motelData?.location}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="environment" style="margin-right: 8px;"></span><span class="bold">Address: </span><span>Phường Trương Định, Quận Hai Bà Trưng, Hà Nội</span>
+                            <span nz-icon nzType="environment" style="margin-right: 8px;"></span>
+                            <span class="bold">Address: </span><span>{{motelData?.address?.text}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="drag" style="margin-right: 8px;"></span><span class="bold">Directon: </span><span>Bắc</span>
+                            <span nz-icon nzType="drag" style="margin-right: 8px;"></span>
+                            <span class="bold">Direction: </span><span>{{getMotelDetail('directions')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Same house with owner: </span><span>Không</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Same house with owner: </span><span>{{getMotelDetail('sameHouseWithOwner')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Requirements for renters: </span><span>Không</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Requirements for renters: </span><span>{{getMotelDetail('renterRequirement')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Parking area: </span><span>Có</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Parking area: </span><span>{{getMotelDetail('hasParkingArea')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Number of air-conditioners: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of air-conditioners: </span><span>{{motelData.numberOfAirConditioners}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Number of water-heaters: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of water-heaters: </span><span>{{motelData.numberOfWaterHeaters}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Number of washing machines: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of washing machines: </span><span>{{motelData.numberOfWashingMachine}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="form" style="margin-right: 8px;"></span><span class="bold">Note: </span><span>Nhà ở an ninh tốt</span>
+                            <span nz-icon nzType="form" style="margin-right: 8px;"></span>
+                            <span class="bold">Note: </span><span>{{motelData.note}}</span>
                         </div>
                     </div>
                     <div class="item item-detail-container" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                         <div class="item-detail">
-                            <span nz-icon nzType="expand" style="margin-right: 8px;"></span><span class="bold">Area (each floor): </span><span>15m<sup>2</sup></span> 
+                            <span nz-icon nzType="expand" style="margin-right: 8px;"></span>
+                            <span class="bold">Area (each floor): </span>
+                            <span>{{motelData.area}}m<sup>2</sup></span> 
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="schedule" style="margin-right: 8px;"></span><span class="bold">Duration: </span><span>12 tháng</span>
+                            <span nz-icon nzType="schedule" style="margin-right: 8px;"></span>
+                            <span class="bold">Duration: </span><span>{{getMotelDetail('duration')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span><span class="bold">Price/month: </span><span>3000000 VND</span>
+                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>
+                            <span class="bold">Price/month: </span><span>{{motelData.price}} {{motelData.currencyUnit}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span><span class="bold">Deposit: </span><span>3000000 VND</span>
+                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>
+                            <span class="bold">Deposit: </span><span>{{motelData.deposit}} {{motelData.currencyUnit}}</span>
                         </div >
                         <div class="item-detail">
-                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span><span class="bold">Electric price/kWh: </span><span>Giá dân</span>
+                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>
+                            <span class="bold">Electric price/kWh: </span><span>{{getMotelDetail('electricPrice')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span><span class="bold">Water Price/m<sup>3</sup>: </span><span>Giá dân</span>
+                            <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>
+                            <span class="bold">Water Price/m<sup>3</sup>: </span><span>{{getMotelDetail('waterPrice')}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Number of wardrobes: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of wardrobes: </span><span>{{motelData.numberOfWardrobes}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Number of bathrooms: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of bathrooms: </span><span>{{motelData.numberOfBathrooms}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span><span class="bold">Number of bedrooms: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of bedrooms: </span><span>{{motelData.numberOfBedrooms}}</span>
                         </div>
                         <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span> <span class="bold">Number of beds: </span><span>1</span>
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span> 
+                            <span class="bold">Number of beds: </span><span>{{motelData.numberOfBeds}}</span>
                         </div>
                     </div>
                 </div>
@@ -114,9 +171,9 @@
             <div class="seperator"></div>
             <div class="group-detail" >
                 <div class="group-label" style="margin-bottom: 16px;"><span nz-icon nzType="environment" style="margin-right: 8px;"></span>Motel Location</div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }">
                     <div class="item" nz-col nzXs="24">
-                        <div map-component [latLng]="latLng"></div>
+                        <div map-component [latLng]="latLng" [enableClick]="false"></div>
                     </div>
                 </div>
             </div>
@@ -224,7 +281,7 @@
                             <nz-form-item style="width: 40%; height: 32px;">
                             <nz-form-control >
                                 <nz-select formControlName="currencyUnit" nzPlaceHolder="Unit" (ngModelChange)="onChangeValue('currencyUnit', $event)">
-                                <nz-option *ngFor="let unit of currencyUnits" [nzValue]="unit" [nzLabel]="unit"></nz-option>
+                                    <nz-option *ngFor="let unit of currencyUnits" [nzValue]="unit" [nzLabel]="unit"></nz-option>
                                 </nz-select>
                             </nz-form-control>
                             </nz-form-item>
@@ -239,12 +296,12 @@
                             </nz-form-control>
                             </nz-form-item>
                             <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
-                            <nz-option [nzValue]="selectedCurrencyUnits" [nzLabel]="selectedCurrencyUnits"></nz-option>
+                                <nz-option [nzValue]="selectedCurrencyUnits" [nzLabel]="selectedCurrencyUnits"></nz-option>
                             </nz-select>
                         </div>
                         </div>
                         <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Electric price/kWh (leave emtpy if standard price)</div>
+                        <div class="label">Electric price/kWh (leave 0 if standard price)</div>
                         <div *ngFor="let key of ['electricPrice']" style="display: flex;">
                             <nz-form-item style="width: 60%">
                             <nz-form-control >
@@ -252,12 +309,12 @@
                             </nz-form-control>
                             </nz-form-item>
                             <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
-                            <nz-option [nzValue]="selectedCurrencyUnits" [nzLabel]="selectedCurrencyUnits"></nz-option>
+                                <nz-option [nzValue]="selectedCurrencyUnits" [nzLabel]="selectedCurrencyUnits"></nz-option>
                             </nz-select>
                         </div>
                         </div>
                         <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Water price/m3 (leave emtpy if standard price)</div>
+                        <div class="label">Water price/m3 (leave 0 if standard price)</div>
                         <div *ngFor="let key of ['waterPrice']" style="display: flex;">
                             <nz-form-item style="width: 60%" >
                             <nz-form-control >
@@ -265,7 +322,7 @@
                             </nz-form-control>
                             </nz-form-item>
                             <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
-                            <nz-option [nzValue]="selectedCurrencyUnits" [nzLabel]="selectedCurrencyUnits"></nz-option>
+                                <nz-option [nzValue]="selectedCurrencyUnits" [nzLabel]="selectedCurrencyUnits"></nz-option>
                             </nz-select>
                         </div>
                         </div>
@@ -465,12 +522,12 @@
                                 <input type="file" id="many-files" class="hidden" accept="image/png, image/jpeg" multiple (change)="onChangeImage($event)">
                                 </div>
                                 <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                                <div class="choose-image-button danger-button label" (click)="deleteOneImage()">
+                                <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('one')">
                                     <span>Delete this image</span>
                                 </div>
                                 </div>
                                 <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                                <div class="choose-image-button danger-button label" (click)="deleteAllImages()">
+                                <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('all')">
                                     <span>Delete all images</span>
                                 </div>
                                 </div>
