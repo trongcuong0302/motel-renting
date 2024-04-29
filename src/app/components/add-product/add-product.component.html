@@ -255,22 +255,22 @@
                     <div class="group-label"><span nz-icon nzType="environment" style="margin-right: 8px;"></span>Motel Location</div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Location (House number, Street)<span class="mark-require">*</span></div>
-                        <div *ngFor="let key of ['location']">
+                        <div class="label">Address (House number, Street)<span class="mark-require">*</span></div>
+                        <div *ngFor="let key of ['address']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="text" nz-input [formControlName]="key" placeholder="Location" />
+                              <input type="text" nz-input [formControlName]="key" placeholder="Address" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Address<span class="mark-require">*</span></div>
-                        <div *ngFor="let key of ['address']">
+                        <div class="label">Location<span class="mark-require">*</span></div>
+                        <div *ngFor="let key of ['location']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="address" [nzShowSearch]="true"
-                                class="form-location-picker" nzPlaceHolder="Address"></nz-cascader>
+                              <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="location" [nzShowSearch]="true"
+                                class="form-location-picker" nzPlaceHolder="Location"></nz-cascader>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -312,12 +312,12 @@
                             <input type="file" id="many-files" class="hidden" accept="image/png, image/jpeg" multiple (change)="onChangeImage($event)">
                           </div>
                           <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                            <div class="choose-image-button danger-button label" (click)="deleteOneImage()">
+                            <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('one')">
                               <span>Delete this image</span>
                             </div>
                           </div>
                           <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                            <div class="choose-image-button danger-button label" (click)="deleteAllImages()">
+                            <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('all')">
                               <span>Delete all images</span>
                             </div>
                           </div>

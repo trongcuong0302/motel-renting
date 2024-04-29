@@ -4,6 +4,7 @@ import { UserService } from "../../services/user.service";
 import { ProvinceService } from "../../services/province.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { finalize } from 'rxjs';
@@ -74,10 +75,11 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   });
 
   showUserLarge = true;
+  showSettingButton = false;
   avatarUrl = '../../../assets/img/default-avatar.jpg';
   userData: any = {};
   provinceList: any = [];
-  address = [];
+  location = [];
   imageData: any = [];
   selectedFiles: any = [];
   previews: any = [];
@@ -127,6 +129,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
+    private message: NzMessageService,
     private userService: UserService,
     private provinceService: ProvinceService,
     private fireStorage: AngularFireStorage,
@@ -142,6 +145,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       this.getProvinceList();
       this.getProduct(this.route.snapshot.params["id"]);
       if(window.innerWidth <= 768) this.showUserLarge = false;
+      if(window.innerWidth <= 550) this.showSettingButton = true;
     }
   }
 
@@ -159,7 +163,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   }
 
   clearData() {
-    this.address = [];
+    this.location = [];
     this.imageData = [];
     this.selectedFiles = [];
     this.previews = [];
@@ -172,7 +176,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     for (const key in this.motelData) {
       this.validateForm.get(key)?.setValue(this.motelData[key]);
       if(key == "currencyUnit") this.selectedCurrencyUnits = this.motelData[key];
-      if(key == "address") this.address = this.motelData[key]?.value;
+      if(key == "location") this.location = this.motelData[key]?.value;
       if(key == "images" && this.motelData[key]?.length) {
         this.motelData.images.forEach((item: any) => {
           this.previews.push(item.imageUrl);
@@ -193,6 +197,40 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       },
       error: (error) => this.showError(error.error.message)
     });
+  }
+
+  getUserData(key: string) {
+    switch (key) {
+      case 'dateOfBirth':
+        if(!this.userData[key]) return '';
+        let date = new Date(this.userData[key]);
+        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+      case 'hometown':
+      case 'address':
+        return this.userData[key]?.text ?? '';
+      case 'job':
+      case 'linkFacebook':
+        return this.userData[key] ?? '';
+      default: 
+        return '';
+    }
+  }
+
+  getUserDataLabel(key: string) {
+    switch (key) {
+      case 'dateOfBirth':
+        return 'Date of Birth';
+      case 'hometown':
+        return 'Hometown';
+      case 'address':
+        return 'Address';
+      case 'job':
+        return 'Job';
+      case 'linkFacebook':
+        return 'Link Facebook';
+      default: 
+        return '';
+    }
   }
 
   goToEdit(): void {
@@ -237,7 +275,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         return false;
       }
     }
-    if(!this.address.length) {
+    if(!this.location.length) {
       this.showError("Please enter the required field.");
       return false;
     }
@@ -250,19 +288,19 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   prepareLocationData() {
     let formData: any = this.validateForm.value;
-    if(this.address) {
-      let province = this.provinceList.find((province:any) => province.value == this.address[0]);
-      let district = province.children?.length > 0 ? province.children.find((district:any) => district.value == this.address[1]) : null;
-      let ward = district.children?.length > 0 ? district.children.find((ward:any) => ward.value == this.address[2]) : null;
+    if(this.location) {
+      let province = this.provinceList.find((province:any) => province.value == this.location[0]);
+      let district = province.children?.length > 0 ? province.children.find((district:any) => district.value == this.location[1]) : null;
+      let ward = district.children?.length > 0 ? district.children.find((ward:any) => ward.value == this.location[2]) : null;
       let location = "";
       location += `${ward ? ward.label + ', ' : ''}`;
       location += `${district ? district.label + ', ' : ''}`;
       location += `${province ? province.label : ''}`;
-      formData['address'] = {
-        value: this.address,
+      formData['location'] = {
+        value: this.location,
         text: location
       }
-      this.validateForm.get('address')?.setValue(location);
+      this.validateForm.get('location')?.setValue(location);
     }
     
     return formData;
@@ -276,7 +314,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     this.productsService.updateProductById(this.motelData._id, formData).subscribe({
       next: (data) => {
         this.isLoading = false;
-        this.showSuccess("Motel upload successfully!");
+        this.showSuccess("Motel updated successfully!");
         this.getProduct(this.route.snapshot.params["id"]);
         this.viewMode = true;
       },
@@ -315,7 +353,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   confirmDelete() : void {
     this.modal.confirm({
-      nzTitle: 'Do you want to delete this product?',
+      nzTitle: 'Do you want to delete this motel?',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
@@ -329,7 +367,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (res) => {
           //console.log(res);
-          this.showSuccess('Delete product successfully');
+          this.showSuccess('Delete motel successfully');
           this.router.navigate(['/products']);
         },
         error: (error) => this.showError(error.error.message)
@@ -522,6 +560,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   onResize(event: any) {
     if(window.innerWidth <= 768) this.showUserLarge = false;
     else this.showUserLarge = true;
+    if(window.innerWidth <= 550) this.showSettingButton = true;
+    else this.showSettingButton = false;
   }
 
   getMotelDetail(key: string) {
@@ -551,5 +591,15 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       default:
         return;
     }
+  }
+
+  onBtnCopy(value: string) {
+    navigator.clipboard.writeText(value);
+    this.showSuccess('Copied to clipboard successfully!');
+  }
+
+  copyMessage(value: string): void {
+    navigator.clipboard.writeText(value);
+    this.message.create('success', 'Copied to clipboard successfully!');
   }
 }

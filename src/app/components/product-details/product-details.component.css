@@ -204,11 +204,18 @@
 
 .user-more-info {
     display: flex;
+    margin-bottom: 16px;
 }
 
 .user-avatar-info {
     height: 120px;
     width: 120px;
+    margin-right: 16px;
+}
+
+.user-avatar-info-large {
+    height: 240px;
+    width: 240px;
     margin-right: 16px;
 }
 

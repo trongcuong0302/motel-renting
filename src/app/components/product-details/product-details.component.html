@@ -1,22 +1,52 @@
 <div class="header">
     <span>Motel Detail</span>
-    <div class="button-container">
-        <div *ngIf="!viewMode" class="btn-edit btn-cancel" (click)="cancelEdit()">
-            <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
-            Cancel
+    <div >
+        <div *ngIf="!showSettingButton" class="button-container">
+            <div *ngIf="!viewMode" class="btn-edit btn-cancel" (click)="cancelEdit()">
+                <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
+                Cancel
+            </div>
+            <div *ngIf="viewMode" class="btn-edit" (click)="goToEdit()">
+                <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
+                Edit
+            </div>
+            <div *ngIf="!viewMode" class="btn-edit" (click)="confirmUpdate($event)">
+                <span nz-icon nzType="save" nzTheme="outline" style="margin-right: 8px;"></span>
+                Save
+                <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </div>
+            <div class="btn-delete" (click)="confirmDelete()">
+                <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
+                Delete
+            </div>
         </div>
-        <div *ngIf="viewMode" class="btn-edit" (click)="goToEdit()">
-            <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
-            Edit
-        </div>
-        <div *ngIf="!viewMode" class="btn-edit" (click)="confirmUpdate($event)">
-            <span nz-icon nzType="save" nzTheme="outline" style="margin-right: 8px;"></span>
-            Save
-            <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
-        </div>
-        <div class="btn-delete" (click)="goToEdit()">
-            <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
-            Delete
+        <div *ngIf="showSettingButton" class="button-container">
+            <div *ngIf="!viewMode" class="btn-edit btn-cancel" style="height: 22px; margin-right:8px; font-size: 14px;" (click)="cancelEdit()">
+                <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
+                Cancel
+            </div>
+            <div nz-dropdown [nzDropdownMenu]="menu" style="font-size: 14px; cursor: pointer;">
+                <span nz-icon nzType="setting" nzTheme="outline" style="margin-right: 8px;"></span>
+                Settting
+                <span nz-icon nzType="down"></span>
+            </div>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+                <li nz-menu-item *ngIf="!viewMode" (click)="confirmUpdate($event)">
+                    <span nz-icon nzType="save" nzTheme="outline" style="margin-right: 8px;"></span>
+                    Save
+                    <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+                </li>
+                <li nz-menu-item *ngIf="viewMode" (click)="goToEdit()">
+                    <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
+                    Edit
+                </li>
+                <li nz-menu-item nzDanger (click)="confirmDelete()">
+                    <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
+                    Delete
+                </li>
+            </ul>
+            </nz-dropdown-menu>
         </div>
     </div>
 </div>
@@ -42,15 +72,15 @@
                                 <div>
                                     <div style="margin-bottom: 10px;">
                                         <span style="font-weight: 500;">{{userData.name}}</span>
-                                        <span nz-icon nzType="copy" class="icon-copy"></span>
+                                        <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(userData.name)"></span>
                                     </div>
                                     <div style="margin-bottom: 10px;">
                                         <span style="font-weight: 500;">Email: </span><span>{{userData.email}}</span>
-                                        <span nz-icon nzType="copy" class="icon-copy"></span>
+                                        <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(userData.email)"></span>
                                     </div>
                                     <div>
                                         <span style="font-weight: 500;">Phone number: </span><span>{{userData.phoneNumber}}</span>
-                                        <span nz-icon nzType="copy" class="icon-copy"></span>
+                                        <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(userData.phoneNumber)"></span>
                                     </div>
                                 </div>
                             </div>
@@ -84,11 +114,11 @@
                     <div class="item item-detail-container" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
                         <div class="item-detail">
                             <span nz-icon nzType="environment" style="margin-right: 8px;"></span>
-                            <span class="bold">Location: </span><span>{{motelData?.location}}</span>
+                            <span class="bold">Address: </span><span>{{motelData?.location?.text}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="environment" style="margin-right: 8px;"></span>
-                            <span class="bold">Address: </span><span>{{motelData?.address?.text}}</span>
+                            <span class="bold">Location: </span><span>{{motelData?.address}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="drag" style="margin-right: 8px;"></span>
@@ -177,31 +207,41 @@
                     </div>
                 </div>
             </div>
-            <!-- <nz-descriptions nzTitle="Motel Detail" nzLayout="vertical" [nzColumn]="2" nzBordered [nzExtra]="extraTpl">
-                <nz-descriptions-item nzTitle="Room Type">{{abc.roomType}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Room Name">{{abc.roomName}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of floors">{{abc.numberOfFloors}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Area">{{abc.area}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Duration">{{abc.duration}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Price">{{abc.price}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Currency Unit">{{abc.currencyUnit}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Deposit">{{abc.deposit}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Electric Price">{{abc.electricPrice}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Water Price">{{abc.waterPrice}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Directions">{{abc.directions}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Same house with owner">{{abc.sameHouseWithOwner}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Renter requirement">{{abc.renterRequirement}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Has parking area">{{abc.hasParkingArea}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of washing machines">{{abc.numberOfWashingMachine}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of air-conditioners">{{abc.numberOfAirConditioners}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of wardrobes">{{abc.numberOfWardrobes}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of bathrooms">{{abc.numberOfBathrooms}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of bedrooms">{{abc.numberOfBedrooms}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Number of beds">{{abc.numberOfBeds}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Note">{{abc.note}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Location">{{abc.location}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Address">{{abc.address.text}}</nz-descriptions-item>
-            </nz-descriptions> -->
+            <div class="seperator"></div>
+            <div class="group-detail">
+                <div class="group-label" style="margin-bottom: 16px;"><span nz-icon nzType="profile" style="margin-right: 8px;"></span>Uploader Information</div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                    <div class="item" nz-col nzXs="24" nzLg="12">
+                        <div class="user-more-info">
+                            <div>
+                                <img class="user-avatar-info-large" [src]="avatarUrl">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" nz-col nzXs="24" nzLg="12">
+                        <div>
+                            <div style="margin-bottom: 10px;">
+                                <span style="font-weight: 500;">Name: </span><span>{{userData.name}}</span>
+                                <span nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(userData.name)"></span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <span style="font-weight: 500;">Email: </span><span>{{userData.email}}</span>
+                                <span nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(userData.email)"></span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <span style="font-weight: 500;">Phone number: </span><span>{{userData.phoneNumber}}</span>
+                                <span nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(userData.phoneNumber)"></span>
+                            </div>
+                            <div *ngFor="let key of ['dateOfBirth', 'hometown', 'address', 'job', 'linkFacebook']">
+                                <div *ngIf="getUserData(key)" style="margin-bottom: 10px;">
+                                    <span style="font-weight: 500;">{{getUserDataLabel(key)}}: </span><span>{{getUserData(key)}}</span>
+                                    <span *ngIf="key == 'linkFacebook'" nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(getUserData(key))"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     
         <div *ngIf="!motelData._id ">
@@ -464,22 +504,22 @@
                     <div class="group-label"><span nz-icon nzType="environment" style="margin-right: 8px;"></span>Motel Location</div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                         <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Location (House number, Street)<span class="mark-require">*</span></div>
-                        <div *ngFor="let key of ['location']">
+                        <div class="label">Address (House number, Street)<span class="mark-require">*</span></div>
+                        <div *ngFor="let key of ['address']">
                             <nz-form-item>
                             <nz-form-control >
-                                <input type="text" nz-input [formControlName]="key" placeholder="Location" />
+                                <input type="text" nz-input [formControlName]="key" placeholder="Address" />
                             </nz-form-control>
                             </nz-form-item>
                         </div>
                         </div>
                         <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Address<span class="mark-require">*</span></div>
-                        <div *ngFor="let key of ['address']">
+                        <div class="label">Location<span class="mark-require">*</span></div>
+                        <div *ngFor="let key of ['location']">
                             <nz-form-item>
                             <nz-form-control >
-                                <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="address" [nzShowSearch]="true"
-                                class="form-location-picker" nzPlaceHolder="Address"></nz-cascader>
+                                <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="location" [nzShowSearch]="true"
+                                class="form-location-picker" nzPlaceHolder="Location"></nz-cascader>
                             </nz-form-control>
                             </nz-form-item>
                         </div>

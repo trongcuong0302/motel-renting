@@ -53,7 +53,7 @@
             <div nz-col class="gutter-row" nzXs="24" nzMd="12" nzXl="8" nzXXl="6" (click)="setActiveProduct(products[0])">
                 <img class="avatar-container" [src]="getMotelData('image', products[0])">
                 <div>Name: {{getMotelData('name', products[0])}}</div>
-                <div>Address: {{getMotelData('address', products[0])}}</div>
+                <div>Address: {{getMotelData('location', products[0])}}</div>
                 <div>Price: {{getMotelData('price', products[0])}} - Deposit: {{getMotelData('deposit', products[0])}}</div>
             </div>
         </ng-container>

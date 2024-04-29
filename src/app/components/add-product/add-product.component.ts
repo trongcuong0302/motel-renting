@@ -22,7 +22,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   loading = false;
   userData: any = {};
   provinceList: any = [];
-  address = [];
+  location = [];
   imageData: any = [];
   listImageFiles: any = [];
   selectedFiles: any = [];
@@ -232,7 +232,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   }
 
   validateFormData() {
-    for(let key of ['roomName', 'price', 'deposit', 'location', 'area']) {
+    for(let key of ['roomName', 'price', 'deposit', 'address', 'area']) {
       if(!this.validateForm.get(key)?.value) {
         this.showError("Please enter the required field.");
         return false;
@@ -245,7 +245,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
         return false;
       }
     }
-    if(!this.address.length) {
+    if(!this.location.length) {
       this.showError("Please enter the required field.");
       return false;
     }
@@ -258,19 +258,19 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
   prepareLocationData() {
     let formData: any = this.validateForm.value;
-    if(this.address) {
-      let province = this.provinceList.find((province:any) => province.value == this.address[0]);
-      let district = province.children?.length > 0 ? province.children.find((district:any) => district.value == this.address[1]) : null;
-      let ward = district.children?.length > 0 ? district.children.find((ward:any) => ward.value == this.address[2]) : null;
+    if(this.location) {
+      let province = this.provinceList.find((province:any) => province.value == this.location[0]);
+      let district = province.children?.length > 0 ? province.children.find((district:any) => district.value == this.location[1]) : null;
+      let ward = district.children?.length > 0 ? district.children.find((ward:any) => ward.value == this.location[2]) : null;
       let location = "";
       location += `${ward ? ward.label + ', ' : ''}`;
       location += `${district ? district.label + ', ' : ''}`;
       location += `${province ? province.label : ''}`;
-      formData['address'] = {
-        value: this.address,
+      formData['location'] = {
+        value: this.location,
         text: location
       }
-      this.validateForm.get('address')?.setValue(location);
+      this.validateForm.get('location')?.setValue(location);
     }
     
     return formData;
@@ -363,6 +363,18 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     this.selectedFiles = [];
     this.listImageFiles = [];
     this.currentIndex = 0;
+  }
+
+  confirmDeleteImage(type: any) : void {
+    let title = type == 'all' ? 'Do you want to delete all images?' : 'Do you want to delete this image?';
+    this.modal.confirm({
+      nzTitle: title,
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'No',
+      nzOnOk: () => type == 'all' ? this.deleteAllImages() : this.deleteOneImage()
+    });
   }
 
   onPlaceChange(event: any) {

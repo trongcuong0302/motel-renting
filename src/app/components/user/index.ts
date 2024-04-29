@@ -362,4 +362,9 @@ export class UserProfile extends BaseComponent implements OnInit {
       }
     });
   }
+
+  cancelEdit() {
+    this.isEdit = false;
+    this.getUserProfile();
+  }
 }

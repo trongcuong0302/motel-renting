@@ -105,9 +105,9 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   getMotelData(key: any, item: any) {
     switch (key) {
       case "name":
-        return `${item?.roomName} - ${item?.location}`;
-      case "address":
-        return `${item?.address?.text}`;
+        return `${item?.roomName} - ${item?.address}`;
+      case "location":
+        return `${item?.location?.text}`;
       case "price":
         return item?.price;
       case "deposit":

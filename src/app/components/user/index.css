@@ -1,16 +1,26 @@
 .container {
   margin: 0 !important;
   padding: 24px;
+  min-height: calc(100vh - 108px);
+  background-color: #f1f5f9;
 }
 
 .header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 20px;
   font-weight: 600;
-  margin-bottom: 24px;
+  height: 48px;
+  padding: 0 24px;
+  background-color: #fff;
 }
 
 .main-content{
   display: flex;
+  background-color: #fff;
+  padding: 24px 0px;
+  margin: 0 !important;
 }
 
 .login-form {
@@ -50,17 +60,16 @@
 
 .item {
   margin-bottom: 16px;
-  height: 32px;
+  height: 48px;
 }
 
 .label {
   font-weight: 500;
+  font-size: 16px;
 }
 
 .button {
   display: flex;
-  justify-content: space-between;
-  width: 250px;
 }
 
 .form-date-picker, .form-location-picker {
@@ -97,7 +106,6 @@
 .button-container {
   display: flex;
   justify-content: space-between;
-  max-width: 400px;
 }
 
 .save-image-button {
@@ -118,5 +126,25 @@
   background-color: #1890FF;
   border-radius: 32px;
   cursor: pointer;
-  max-width: 125px;
+  max-width: 136px;
+}
+
+.btn-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  height: 32px;
+  padding: 4px 16px;
+  border-radius: 32px;
+  cursor: pointer;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #000;
+  max-width: 92px;
+}
+
+.login-form-button {
+  display: flex;
+  align-items: center;
 }

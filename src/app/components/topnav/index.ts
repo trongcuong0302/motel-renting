@@ -19,7 +19,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     {
       label: 'Motels List',
       link: 'products',
-      isSelected: true,
+      isSelected: false,
     },
     {
       label: 'Add Motel',
@@ -75,8 +75,13 @@ export class TopnavComponent extends BaseComponent implements OnInit {
         else this.avatarUrl = '../../../assets/img/default-avatar.jpg';
         this.isLoggedIn = true;
         if(this.router.url == '/add') this.onSelectMenuItem(1);
-        else this.onSelectMenuItem(0);
-        if(this.router.url=='/login' || this.router.url.includes('/reset')) this.router.navigate(['/products']);
+        else if(this.router.url=='/login' || this.router.url.includes('/reset')) {
+          this.onSelectMenuItem(0);
+          this.router.navigate(['/products']);
+        } 
+        else if (this.router.url.includes('products')) {
+          this.onSelectMenuItem(0);
+        }
       },
       error: (error) => {
         this.isLoggedIn = false;
@@ -90,6 +95,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     this.userService.logOut().subscribe({
       next: (data) => {
         this.isLoggedIn = false;
+        this.onSelectMenuItem(0);
         this.router.navigate(['/login']);
       },
       error: (error) => this.showError(error.error.message)
