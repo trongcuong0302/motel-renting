@@ -1,0 +1,73 @@
+.add-container {
+    margin-top: 16px;
+}
+
+.icon-delete {
+    cursor: pointer;
+    color: #8d8d8d;
+}
+
+.user-avatar-info {
+    height: 120px;
+    width: 120px;
+}
+
+.user-more-info {
+    display: flex;
+    margin: 8px 0 !important;
+    padding: 8px !important;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    position: relative;
+}
+
+.btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 8px;
+    top: 25%;
+}
+
+.btn-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;   
+    height: 36px;
+    color: white;
+    padding: 4px 16px;
+    border-radius: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #1890FF;
+    width: 111px;
+}
+
+.user-list {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0px !important;
+    padding-right: 24px;
+}
+
+.avatar-container {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.user-selected {
+    width: 100%;
+    margin-bottom: 8px;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-delete-user {
+    cursor: pointer;
+    color: #ff4d4f;
+    font-size: 16px;
+}

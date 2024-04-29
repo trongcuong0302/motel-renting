@@ -234,6 +234,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   }
 
   goToEdit(): void {
+    if(this.isLoading) return;
     this.viewMode = false;
     this.currentIndex = 0;
     // this.validateForm.setValue({
@@ -246,11 +247,13 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   }
 
   cancelEdit() {
+    if(this.isLoading) return;
     this.viewMode = true;
     this.getProduct(this.route.snapshot.params["id"]);
   }
 
   confirmUpdate(event:any) : void {
+    if(this.isLoading) return;
     if(event.ctrlKey==true) {
       this.modal.confirm({
         nzTitle: 'Do you want to update this product?',
@@ -352,6 +355,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   }
 
   confirmDelete() : void {
+    if(this.isLoading) return;
     this.modal.confirm({
       nzTitle: 'Do you want to delete this motel?',
       nzOkText: 'Yes',
@@ -363,14 +367,23 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   }
 
   deleteProduct() : void {
+    let imageArr = this.motelData?.images ?? [];
+    imageArr.forEach((image: any) => {
+      this.deleteOldImage(image.filePath)
+    })
+    this.isLoading = true;
     this.productsService.deleteProductById(this.motelData._id)
       .subscribe({
         next: (res) => {
           //console.log(res);
+          this.isLoading = false;
           this.showSuccess('Delete motel successfully');
           this.router.navigate(['/products']);
         },
-        error: (error) => this.showError(error.error.message)
+        error: (error) => {
+          this.isLoading = false;
+          this.showError(error.error.message)
+        } 
       }); 
   }
 

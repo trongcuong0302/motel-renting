@@ -20,6 +20,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   isEdit: boolean = true;
   isVisible = false;
   loading = false;
+  newRoom: any = {};
   userData: any = {};
   provinceList: any = [];
   location = [];
@@ -42,6 +43,12 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     { label: 'Chung cư mini', value: 'apartment' },
     { label: 'Nhà nguyên căn', value: 'house' },
     { label: 'Phòng trọ', value: 'room' }
+  ];
+  roomStatusList = [
+    { label: 'Còn trống', value: 'available' },
+    { label: 'Cho ở ghép', value: 'combined' },
+    { label: 'Đã cho thuê', value: 'rented' },
+    { label: 'Không cho thuê', value: 'closed' }
   ];
   durationList = [
     { label: '1 tháng', value: '1' },
@@ -89,6 +96,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
   validateForm: FormGroup<{
     roomType: FormControl<string>;
+    roomStatus: FormControl<string>;
     roomName: FormControl<string>;
     numberOfFloors: FormControl<number>;
     area: FormControl<number>;
@@ -114,6 +122,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     address: FormControl<string>;
   }> = this.fb.group({
     roomType: ['', [Validators.required]],
+    roomStatus: ['', [Validators.required]],
     roomName: ['', [Validators.required]],
     numberOfFloors: [0],
     area: [0, [Validators.required]],
@@ -152,6 +161,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
         this.validateForm.get('renterRequirement')?.setValue("4");
         this.validateForm.get('hasParkingArea')?.setValue("1");
         this.validateForm.get('roomType')?.setValue("room");
+        this.validateForm.get('roomStatus')?.setValue("available");
       },
       error: (error) => {
         this.isLoading = false;
@@ -341,6 +351,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     this.isLoading = true;
     this.productsService.postAProduct(formData).subscribe({
       next: (data) => {
+        this.newRoom = data.data;
         this.isLoading = false;
         this.showSuccess("Motel upload successfully!");
         this.isEdit = false;
@@ -410,7 +421,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   }
 
   goList(): void {
-    this.router.navigate(['/products']);
+     window.open("http://localhost:4200/products/" + this.newRoom._id);
   }
   
 }

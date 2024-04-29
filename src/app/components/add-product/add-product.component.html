@@ -13,6 +13,11 @@
                         <nz-select ngModel="room" [nzOptions]="roomTypeList" [ngModelOptions]="{standalone: true}" 
                           style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomType', $event)"></nz-select>
                       </div>
+                      <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+                        <div class="label">Room status<span class="mark-require">*</span></div>
+                        <nz-select ngModel="available" [nzOptions]="roomStatusList" [ngModelOptions]="{standalone: true}" 
+                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomStatus', $event)"></nz-select>
+                      </div>
                     </div>                                                 
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
@@ -325,6 +330,15 @@
                       </div>
                     </div>
                   </div>
+                  <div class="seperator"></div>
+                  <div class="group-content" style="padding-bottom: 16px;">
+                    <div class="group-label">
+                      <span nz-icon nzType="user-add" style="margin-right: 8px;"></span>
+                      Add renters
+                    </div>
+                    <div>You can ignore this field if the room has not been rented yet.</div>
+                    <div add-renter-component></div>
+                  </div>
                 </form>
                 <div class="seperator"></div>
                 <div class="button">
@@ -341,8 +355,8 @@
     <div *ngIf="!isEdit">
         <nz-result nzStatus="success" nzTitle="Successfully upload a motel!">
             <div nz-result-extra>
-                <button nz-button nzType="primary" (click)="goList()">Go to My Motels List</button>
-                <button nz-button (click)="newProduct()">Add Again</button>
+                <button nz-button nzType="primary" (click)="goList()">View my motel detail</button>
+                <button nz-button (click)="newProduct()">Add other motel</button>
             </div>
         </nz-result>
     </div>

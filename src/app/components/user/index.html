@@ -153,7 +153,7 @@
               </div>
               <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12">
                 <button nz-button class="save-image-button label" [disabled]="loading"
-                  [nzShape]="'round'" nzDanger [nzType]="'primary'" (click)="onDeleteImage()">
+                  [nzShape]="'round'" nzDanger [nzType]="'primary'" (click)="confirmDelete()">
                   <span>Delete image</span>
                   <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                 </button>
@@ -203,7 +203,7 @@
         </ng-container>
         <ng-container *ngFor="let key of ['newPassword']">
           <div class="text-bold label">New password</div>
-          <div class="label-password">* Password should contain at least 8 characters including at least 1 capital letter, 1 number, and 1 special character</div>
+          <div class="label-password">* Password should contain at least 8 characters including at least 1 lowercase letter, 1 capital letter, 1 number, and 1 special character</div>
           <nz-form-item class="form-item">
             <nz-form-control>
               <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">

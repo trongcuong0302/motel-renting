@@ -310,8 +310,8 @@ export class UserProfile extends BaseComponent implements OnInit {
             this.userService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
               next: (data) => {
                 this.loading = false;
-                this.getUserProfile();
                 this.showSuccess("Avatar changed successfully!");
+                window.location.reload();
               },
               error: (error) => {
                 this.loading = false;
@@ -344,8 +344,19 @@ export class UserProfile extends BaseComponent implements OnInit {
     })
   }
 
-  onDeleteImage() {
+  confirmDelete() : void {
     if(this.avatarUrl == '../../../assets/img/default-avatar.jpg') return;
+    this.modal.confirm({
+      nzTitle: 'Do you want to delete this avatar?',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'No',
+      nzOnOk: () => this.onDeleteImage()
+    });
+  }
+
+  onDeleteImage() {
     this.deleteOldAvatar();
     this.selectedImage = null;
     this.avatarUrl = '../../../assets/img/default-avatar.jpg';
@@ -354,7 +365,7 @@ export class UserProfile extends BaseComponent implements OnInit {
     this.userService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
       next: (data) => {
         this.loading = false;
-        this.getUserProfile();
+        window.location.reload();
       },
       error: (error) => {
         this.loading = false;

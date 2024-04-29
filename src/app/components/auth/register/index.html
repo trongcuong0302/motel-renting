@@ -34,7 +34,7 @@
       </ng-container>
       <ng-container *ngFor="let key of ['password']">
         <div class="text-bold">Password</div>
-        <div class="label-password">* Password should contain at least 8 characters including at least 1 capital letter, 1 number, and 1 special character</div>
+        <div class="label-password">* Password should contain at least 8 characters including at least 1 lowercase letter, 1 capital letter, 1 number, and 1 special character</div>
         <nz-form-item class="form-item">
           <nz-form-control nzErrorTip="Please input your password!">
             <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">

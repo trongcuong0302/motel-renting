@@ -1,0 +1,53 @@
+<div class="add-container">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+        <div class="item" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
+            <div *ngFor="let user of selectedUserList; let i = index" class="user-selected">
+                <div>
+                    <img class="avatar-container" [src]="getUserAvt(user)">
+                    <span style="font-weight: 500;">{{user.name}}</span>
+                </div>
+                <div>
+                    <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Remove renter" (click)="confirmDelete(i)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+        <div class="item" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
+            <div class="label">Search your renter</div>
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Search by name, email or phone number" 
+                [(ngModel)]="searchInput" (keyup.enter)="onSearch()"/>
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <span *ngIf="searchInput" nz-icon nzType="close-circle" class="icon-delete" (click)="onClearInput()"></span>
+                <span nz-icon nzType="search" style="cursor: pointer" (click)="onSearch()"></span>
+            </ng-template>
+        </div>
+    </div>
+    <div *ngIf="userList.length" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="user-list">
+        <div *ngFor="let user of userList" class="user-more-info" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
+            <div>
+                <div style="margin: 10px 0; width: 120px;">
+                    <img class="user-avatar-info" [src]="getUserAvt(user)">
+                </div>
+                <div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-weight: 500;">{{user.name}}</span>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>
+                    </div>
+                    <div>
+                        <span style="font-weight: 500;">Phone number: </span><span>{{user.phoneNumber}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <div class="btn-add" (click)="addRenter(user)">
+                    Add renter
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
