@@ -12,13 +12,15 @@ import { Router } from '@angular/router';
 })
 export class AddRenterComponent extends BaseComponent implements OnInit {
 
-  @Input() latLng = { lat: 21.0278, lng: 105.8342 };
-  @Input() enableClick = true;
-  @Output() placeChanged = new EventEmitter();
+  @Input() selectedUserList: any = [];
+  @Output() renterListChanged = new EventEmitter();
 
   searchInput: string = "";
   userList: any = [];
-  selectedUserList: any = [];
+  
+  pageSize: number = 6;
+  pageIndex: number = 1;
+  total: number = 0;
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -35,11 +37,19 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
 
   onSearch() {
     let filter = [
+      {field: "pageIndex", value: this.pageIndex, operator: "pagination"},
+      {field: "pageSize", value: this.pageSize, operator: "pagination"},
       {field: "", value: this.searchInput, operator: "includes"},
+      {field: "status", value: "active", operator: "matches"},
     ];
+    this.isLoading = true;
     this.userService.getAllUser(filter).subscribe({
       next: (data) => {
+        this.total = data.total;
         this.userList = data.data;
+        this.userList.forEach((item: any) => {
+          item.isSelected = false;
+        })
         this.isLoading = false;
       },
       error: (err) => {
@@ -59,12 +69,16 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
   }
 
   addRenter(user: any) {
+    user.isSelected = true;
     let item = this.selectedUserList.filter((item: any) => item.name == user.name && item.email == user.email && item.phoneNumber == user.phoneNumber);
-    if(!item.length) this.selectedUserList.push(user); 
+    if(!item.length) {
+      this.selectedUserList.push(user); 
+      this.renterListChanged.emit(this.selectedUserList);
+    } 
     else this.showError('User has already been selected!');
   }
 
-  confirmDelete(i: number) : void {
+  confirmDelete(user: any, i: number) : void {
     if(this.isLoading) return;
     this.modal.confirm({
       nzTitle: 'Do you want to delete this user?',
@@ -72,11 +86,18 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzCancelText: 'No',
-      nzOnOk: () => this.deleteUser(i)
+      nzOnOk: () => this.deleteUser(user, i)
     });
   }
 
-  deleteUser(i: number) {
+  deleteUser(user: any, i: number) {
+    let userData = this.userList.find((it: any) => it._id === user._id);
+    userData.isSelected = false;
     this.selectedUserList.splice(i, 1); 
+    this.renterListChanged.emit(this.selectedUserList);
+  }
+
+  onChangePageIndex() {
+    this.onSearch();
   }
 }

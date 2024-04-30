@@ -29,6 +29,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   selectedFiles: any = [];
   previews: any = [];
   currentIndex: number = 0;
+  renterList: any = [];
   latLng = {
     lat: 21.0278,
     lng: 105.8342
@@ -348,6 +349,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     formData['images'] = this.imageData;
     formData['coordinate'] = this.latLng;
     formData['owner'] = this.userData?._id;
+    formData['renters'] = this.renterList;
     this.isLoading = true;
     this.productsService.postAProduct(formData).subscribe({
       next: (data) => {
@@ -424,4 +426,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
      window.open("http://localhost:4200/products/" + this.newRoom._id);
   }
   
+  onRenterListChanged(renterList: any) {
+    this.renterList = renterList;
+  }
 }

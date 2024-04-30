@@ -18,6 +18,7 @@
             <div class="btn-delete" (click)="confirmDelete()">
                 <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
                 Delete
+                <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
             </div>
         </div>
         <div *ngIf="showSettingButton" class="button-container">
@@ -44,6 +45,7 @@
                 <li nz-menu-item nzDanger (click)="confirmDelete()">
                     <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
                     Delete
+                    <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                 </li>
             </ul>
             </nz-dropdown-menu>
@@ -237,6 +239,31 @@
                                     <span style="font-weight: 500;">{{getUserDataLabel(key)}}: </span><span>{{getUserData(key)}}</span>
                                     <span *ngIf="key == 'linkFacebook'" nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(getUserData(key))"></span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="seperator"></div>
+            <div class="group-detail">
+                <div class="group-label" style="margin-bottom: 16px;"><span nz-icon nzType="profile" style="margin-right: 8px;"></span>Renter Information</div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                    <div class="user-selected" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngFor="let user of motelData.renters; let i = index">
+                        <div style="display: flex; align-items: center;">
+                            <img class="user-avatar-info" [src]="getUserAvt(user)">
+                            <div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight: 500;">Name: </span><span>{{user.name}}</span>
+                                    <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.name)"></span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>
+                                    <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.email)"></span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span style="font-weight: 500;">Phone number: </span><span>{{user.phoneNumber}}</span>
+                                    <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.phoneNumber)"></span>
+                                </div> 
                             </div>
                         </div>
                     </div>

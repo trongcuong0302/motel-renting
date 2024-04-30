@@ -337,7 +337,7 @@
                       Add renters
                     </div>
                     <div>You can ignore this field if the room has not been rented yet.</div>
-                    <div add-renter-component></div>
+                    <div add-renter-component (renterListChanged)="onRenterListChanged($event)"></div>
                   </div>
                 </form>
                 <div class="seperator"></div>
@@ -355,7 +355,7 @@
     <div *ngIf="!isEdit">
         <nz-result nzStatus="success" nzTitle="Successfully upload a motel!">
             <div nz-result-extra>
-                <button nz-button nzType="primary" (click)="goList()">View my motel detail</button>
+                <button nz-button nzType="primary" (click)="goList()" style="margin-bottom: 8px;">View my motel detail</button>
                 <button nz-button (click)="newProduct()">Add other motel</button>
             </div>
         </nz-result>

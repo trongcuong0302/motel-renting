@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { UserService } from "../../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/baseComponent';
 
@@ -32,7 +33,8 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   constructor(private fb: NonNullableFormBuilder,
     private userService: UserService,
     private router: Router,
-    private notification: NzNotificationService) {
+    private notification: NzNotificationService,
+    private modal: NzModalService) {
     super(notification, router, userService);
   }
 
@@ -45,10 +47,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
       this.userService.register(formData).subscribe({
         next: (data) => {
           this.showSuccess("Successfully registered!");
-          delete formData.password;
-          delete formData.confirmPassword;
-          this.userService.nextUser(formData);
-          this.router.navigate(['/products']);
+          this.info();
         },
         error: (error) => this.showError(error.error.message)
       });
@@ -60,6 +59,19 @@ export class RegisterComponent extends BaseComponent implements OnInit {
         }
       });
     }
+  }
+
+  info(): void {
+    this.modal.info({
+      nzTitle: 'Account Verification',
+      nzContent: '<p>An account verification message has been sent to your email</p><p>Please check your email and follow the instructions to verify your account to sign in our website.</p>',
+      nzOnOk: () => {
+        this.onLoginBtn();
+      },
+      nzOnCancel: () => {
+        this.onLoginBtn();
+      }
+    });
   }
 
   onLoginBtn() {

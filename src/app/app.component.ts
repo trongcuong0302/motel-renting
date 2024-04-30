@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  isLoading = false;
+
+  onGetUser() {
+    this.isLoading = true;
+  }
+
+  onGetUserDone() {
+    this.isLoading = false;
+  }
 }

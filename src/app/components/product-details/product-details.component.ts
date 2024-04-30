@@ -154,6 +154,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.motelData = data.data;
+          console.log(this.motelData)
           this.clearData();
           this.bindDataToForm();
           this.getUser();
@@ -614,5 +615,9 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   copyMessage(value: string): void {
     navigator.clipboard.writeText(value);
     this.message.create('success', 'Copied to clipboard successfully!');
+  }
+
+  getUserAvt(user: any) {
+    return user?.avatarInfo?.avatarUrl ?? '../../../assets/img/default-avatar.jpg';
   }
 }

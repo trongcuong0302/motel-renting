@@ -38,6 +38,8 @@ import { AgmCoreModule} from '@agm/core';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
@@ -59,6 +61,7 @@ import { UserProfile } from './components/user';
 import { environment } from 'src/environment/environment';
 import { MapComponent } from './components/map-component';
 import { AddRenterComponent } from './components/add-renter-component';
+import { VerifyAccountComponent } from './components/auth/verify-account';
 
 @NgModule({
   declarations: [
@@ -75,7 +78,8 @@ import { AddRenterComponent } from './components/add-renter-component';
     ResetPasswordComponent,
     UserProfile,
     MapComponent,
-    AddRenterComponent
+    AddRenterComponent,
+    VerifyAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -111,6 +115,8 @@ import { AddRenterComponent } from './components/add-renter-component';
     NzCarouselModule,
     NzPopoverModule,
     NzToolTipModule,
+    NzPaginationModule,
+    NzSpinModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({

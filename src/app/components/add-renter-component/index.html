@@ -7,7 +7,7 @@
                     <span style="font-weight: 500;">{{user.name}}</span>
                 </div>
                 <div>
-                    <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Remove renter" (click)="confirmDelete(i)"></span>
+                    <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Remove renter" (click)="confirmDelete(user, i)"></span>
                 </div>
             </div>
         </div>
@@ -25,29 +25,41 @@
             </ng-template>
         </div>
     </div>
-    <div *ngIf="userList.length" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="user-list">
-        <div *ngFor="let user of userList" class="user-more-info" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
-            <div>
-                <div style="margin: 10px 0; width: 120px;">
-                    <img class="user-avatar-info" [src]="getUserAvt(user)">
-                </div>
+    <div *ngIf="!isLoading">
+        <div *ngIf="userList.length" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="user-list">
+            <div *ngFor="let user of userList" class="user-more-info" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
                 <div>
-                    <div style="margin-bottom: 10px;">
-                        <span style="font-weight: 500;">{{user.name}}</span>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>
+                    <div style="margin: 10px 0; width: 120px;">
+                        <img class="user-avatar-info" [src]="getUserAvt(user)">
                     </div>
                     <div>
-                        <span style="font-weight: 500;">Phone number: </span><span>{{user.phoneNumber}}</span>
+                        <div style="margin-bottom: 10px;">
+                            <span style="font-weight: 500;">{{user.name}}</span>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>
+                        </div>
+                        <div>
+                            <span style="font-weight: 500;">Phone number: </span><span>{{user.phoneNumber}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!user.isSelected" class="btn-container">
+                    <div class="btn-add" (click)="addRenter(user)">
+                        Add renter
                     </div>
                 </div>
             </div>
-            <div class="btn-container">
-                <div class="btn-add" (click)="addRenter(user)">
-                    Add renter
-                </div>
-            </div>
+            
         </div>
+    </div>
+    <div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>
+
+    <div class="pagination" *ngIf="userList.length">
+        <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+        (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
+        <ng-template #rangeTemplate let-range="range" let-total>
+            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+        </ng-template>  
     </div>
 </div>

@@ -44,6 +44,10 @@ export class UserService {
     return this.http.post(`${baseUrl}/reset-password`, resetObj);
   }
 
+  verifyEmail(changeObj: object): Observable<any> {
+    return this.http.post(`${baseUrl}/verify-email`, changeObj);
+  }
+
   changePassword(changeObj: object): Observable<any> {
     return this.http.post(`${baseUrl}/change-password`, changeObj);
   }

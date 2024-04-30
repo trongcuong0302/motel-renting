@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { BaseComponent } from '../../base/baseComponent';
 import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -28,6 +28,9 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     }
   ]
 
+  @Output() onGetUser: EventEmitter<any> = new EventEmitter();
+  @Output() onGetUserDone: EventEmitter<any> = new EventEmitter();
+
   override ngOnInit(): void {
     super.ngOnInit();
     if(window.innerWidth <= 685) this.hideMenuIcon = true;
@@ -36,7 +39,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
         this.getUser();
       }
     })
-    if(this.router.url != '/login' && !this.router.url.includes('/reset')){
+    if(!window.location.href.includes('/login') && !window.location.href.includes('/reset') && !window.location.href.includes('/verify')){
       this.getUser();
     } 
     else if(this.isShowTopnav) {
@@ -68,12 +71,14 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   }
 
   getUser() {
+    this.onGetUser.emit();
     this.userService.getUser().subscribe({
       next: (data) => {
         this.authUser = data.data;
         if(this.authUser?.avatarInfo?.avatarUrl) this.avatarUrl = this.authUser?.avatarInfo?.avatarUrl;
         else this.avatarUrl = '../../../assets/img/default-avatar.jpg';
         this.isLoggedIn = true;
+        this.onGetUserDone.emit();
         if(this.router.url == '/add') this.onSelectMenuItem(1);
         else if(this.router.url=='/login' || this.router.url.includes('/reset')) {
           this.onSelectMenuItem(0);
@@ -85,6 +90,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
       },
       error: (error) => {
         this.isLoggedIn = false;
+        this.onGetUserDone.emit();
         if(!this.router.url.includes('/reset')) this.router.navigate(['/login']);
         if(this.router.url != '/login' && !this.router.url.includes('/reset')) this.showError(error.error.message);
       }

@@ -1,5 +1,5 @@
-<div topnav></div>
-
-<div>
+<div topnav (onGetUser)="onGetUser()" (onGetUserDone)="onGetUserDone()"></div>
+<div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>
+<div *ngIf="!isLoading">
     <router-outlet></router-outlet>
 </div>

@@ -6,12 +6,14 @@ import { ProductsListComponent } from './components/products-list/products-list.
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { AuthComponent } from './components/auth';
 import { ResetPasswordComponent } from './components/auth/reset-password';
+import { VerifyAccountComponent } from './components/auth/verify-account';
 import { UserProfile } from './components/user';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: AuthComponent },
   { path: 'reset/:token', component: ResetPasswordComponent },
+  { path: 'verify/:token', component: VerifyAccountComponent },
   { path: 'profile', component: UserProfile },
   { path: 'products', component: ProductsListComponent },
   { path: 'products/:id', component: ProductDetailsComponent },
