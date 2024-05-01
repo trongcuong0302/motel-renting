@@ -120,7 +120,7 @@
 .button-container {
     display: flex;
     justify-content: space-between;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .save-image-button {

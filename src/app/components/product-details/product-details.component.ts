@@ -80,6 +80,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   showSettingButton = false;
   avatarUrl = '../../../assets/img/default-avatar.jpg';
   userData: any = {};
+  accountData: any = {};
   provinceList: any = [];
   location = [];
   imageData: any = [];
@@ -153,8 +154,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     if(this.viewMode) {
       this.getProvinceList();
       this.getProduct(this.route.snapshot.params["id"]);
-      if(window.innerWidth <= 768) this.showUserLarge = false;
-      if(window.innerWidth <= 550) this.showSettingButton = true;
+      if(window.innerWidth <= 769) this.showUserLarge = false;
+      if(window.innerWidth <= 685) this.showSettingButton = true;
     }
   }
 
@@ -165,7 +166,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
           this.motelData = data.data;
           this.clearData();
           this.bindDataToForm();
-          this.getUser();
+          this.getUser('owner');
+          this.getUser('renter');
         },
         error: (error) => this.showError(error.error.message)
       });
@@ -199,15 +201,34 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  getUser() {
-    this.userService.getUserProfile(this.motelData.owner).subscribe({
-      next: (data) => {
-        this.userData = data.data;
-        if(this.userData?.avatarInfo?.avatarUrl) this.avatarUrl = this.userData?.avatarInfo?.avatarUrl;
-        else this.avatarUrl = '../../../assets/img/default-avatar.jpg';
-      },
-      error: (error) => this.showError(error.error.message)
-    });
+  getUser(type: string) {
+    if(type == 'owner') {
+      this.isLoading = true;
+      this.userService.getUserProfile(this.motelData.owner).subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          this.userData = data.data;
+          if(this.userData?.avatarInfo?.avatarUrl) this.avatarUrl = this.userData?.avatarInfo?.avatarUrl;
+          else this.avatarUrl = '../../../assets/img/default-avatar.jpg';
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.showError(error.error.message)
+        } 
+      });
+    }
+    if(type == 'renter') {
+      this.userService.getUser().subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          this.accountData = data.data;
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.log(error.error.message);
+        }
+      });
+    }
   }
 
   getUserData(key: string) {
@@ -583,9 +604,9 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if(window.innerWidth <= 768) this.showUserLarge = false;
+    if(window.innerWidth <= 769) this.showUserLarge = false;
     else this.showUserLarge = true;
-    if(window.innerWidth <= 550) this.showSettingButton = true;
+    if(window.innerWidth <= 685) this.showSettingButton = true;
     else this.showSettingButton = false;
   }
 
@@ -647,5 +668,45 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       case 'closed': return 'error';
       default: return 'default';
     }
+  }
+
+  confirmQuitMotel() : void {
+    this.modal.confirm({
+      nzTitle: 'Are you sure you want to leave this motel?',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'No',
+      nzOnOk: () => this.quitMotel()
+    });
+  }
+
+  quitMotel() {
+    let index = this.renterList.findIndex((item: any) => item._id === this.accountData._id);
+    if(index >= 0) this.renterList.splice(index, 1);
+
+    let formData = { renters : this.renterList }
+    this.isLoading = true;
+    this.productsService.updateProductById(this.motelData._id, formData).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.showSuccess("Motel updated successfully!");
+        this.getProduct(this.route.snapshot.params["id"]);
+        this.viewMode = true;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.showError(error.error.message);
+      }
+    });
+  }
+
+  get isRenter() {
+    let index = this.renterList.findIndex((item: any) => item._id === this.accountData._id);
+    return index >= 0;
+  }
+
+  get isOwner() {
+    return this.motelData.owner === this.accountData._id;
   }
 }

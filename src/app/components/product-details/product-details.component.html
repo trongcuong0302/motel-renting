@@ -6,7 +6,7 @@
                 <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
                 Cancel
             </div>
-            <div *ngIf="viewMode" class="btn-edit" (click)="goToEdit()">
+            <div *ngIf="viewMode && isOwner" class="btn-edit" (click)="goToEdit()">
                 <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
                 Edit
             </div>
@@ -15,9 +15,14 @@
                 Save
                 <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
             </div>
-            <div class="btn-delete" (click)="confirmDelete()">
+            <div *ngIf="isOwner" class="btn-delete" (click)="confirmDelete()">
                 <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
                 Delete
+                <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </div>
+            <div *ngIf="isRenter" class="btn-delete" (click)="confirmQuitMotel()">
+                <span nz-icon nzType="rollback" nzTheme="outline" style="margin-right: 8px;"></span>
+                Quit
                 <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
             </div>
         </div>
@@ -26,7 +31,7 @@
                 <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
                 Cancel
             </div>
-            <div nz-dropdown [nzDropdownMenu]="menu" style="font-size: 14px; cursor: pointer;">
+            <div *ngIf="isOwner" nz-dropdown [nzDropdownMenu]="menu" style="font-size: 14px; cursor: pointer;">
                 <span nz-icon nzType="setting" nzTheme="outline" style="margin-right: 8px;"></span>
                 Settting
                 <span nz-icon nzType="down"></span>
@@ -45,6 +50,11 @@
                 <li nz-menu-item nzDanger (click)="confirmDelete()">
                     <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
                     Delete
+                    <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+                </li>
+                <li *ngIf="isRenter" nz-menu-item nzDanger (click)="confirmQuitMotel()">
+                    <span nz-icon nzType="rollback" nzTheme="outline" style="margin-right: 8px;"></span>
+                    Quit
                     <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                 </li>
             </ul>
@@ -250,8 +260,8 @@
             <div class="seperator"></div>
             <div class="group-detail">
                 <div class="group-label" style="margin-bottom: 16px;"><span nz-icon nzType="profile" style="margin-right: 8px;"></span>Renter Information</div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
-                    <div class="user-selected" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngFor="let user of motelData.renters; let i = index">
+                <div *ngIf="isOwner || isRenter" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                    <div class="user-selected" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngFor="let user of renterList; let i = index">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;" class="user-selected-container">
                             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8"><img class="user-avatar-info" [src]="getUserAvt(user)"></div>
                             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="16">
@@ -269,6 +279,11 @@
                                 </div> 
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div *ngIf="!isOwner && !isRenter" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                    <div class="user-selected" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <span style="font-size: 16px;">{{renterList.length}} {{renterList.length == 1 ? 'renter' : 'renters'}}</span>
                     </div>
                 </div>
             </div>

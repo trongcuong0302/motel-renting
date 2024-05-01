@@ -3,11 +3,28 @@
 <div class="container">
   <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="main-content">
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="14">
+      <div class="button">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+          <div class="item" nz-col nzXs="12" nzSm="6" nzMd="6" nzLg="6">
+            <button nz-button class="login-form-button label" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnEdit()">
+              <span nz-icon [nzType]="isEdit ? 'save' : 'edit'" nzTheme="outline"></span>
+              {{isEdit ? 'Save' : 'Edit'}}
+              <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+          </div>
+          <div class="item" nz-col nzXs="12" nzSm="6" nzMd="6" nzLg="6">
+            <div *ngIf="isEdit" class="btn-cancel" (click)="cancelEdit()">
+              <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
+              Cancel
+            </div>
+          </div>
+        </div>
+      </div>
       <form nz-form [formGroup]="validateForm">
         <div class="item" nz-col nzXs="24">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
             <div class="label" nz-col nzXs="24" nzSm="5">Name<span *ngIf="isEdit" class="mark-require">*</span>:</div>
-            <div *ngFor="let key of ['name']" nz-col nzXs="24" nzSm="19" style="max-width: 600px;">
+            <div *ngFor="let key of ['name']" nz-col nzXs="24" nzSm="19" >
               <nz-form-item *ngIf="isEdit">
                 <nz-form-control >
                   <input type="text" nz-input [formControlName]="key" placeholder="Full name" />
@@ -20,7 +37,7 @@
         <div class="item" nz-col nzXs="24">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
             <div class="label" nz-col nzXs="24" nzSm="5">Email:</div>
-            <div *ngFor="let key of ['email']" nz-col nzXs="24" nzSm="19" style="max-width: 600px;">
+            <div *ngFor="let key of ['email']" nz-col nzXs="24" nzSm="19" >
               <nz-form-item *ngIf="isEdit">
                 <nz-form-control >
                   <input type="text" nz-input [formControlName]="key" placeholder="Email" />
@@ -33,7 +50,7 @@
         <div class="item" nz-col nzXs="24">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
             <div class="label" nz-col nzXs="24" nzSm="5">Date of birth:</div>
-            <div *ngFor="let key of ['dateOfBirth']" nz-col nzXs="24" nzSm="19" style="max-width: 600px;">
+            <div *ngFor="let key of ['dateOfBirth']" nz-col nzXs="24" nzSm="19" >
               <nz-form-item *ngIf="isEdit">
                 <nz-form-control >
                   <nz-date-picker class="form-date-picker" [formControlName]="key" nzFormat="dd/MM/yyyy" nzPlaceHolder="Date of birth">
@@ -47,7 +64,7 @@
         <div class="item" nz-col nzXs="24">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
             <div class="label" nz-col nzXs="24" nzSm="5">Phone<span *ngIf="isEdit" class="mark-require">*</span>:</div>
-            <div *ngFor="let key of ['phoneNumber']" nz-col nzXs="24" nzSm="19" style="max-width: 600px;">
+            <div *ngFor="let key of ['phoneNumber']" nz-col nzXs="24" nzSm="19" >
               <nz-form-item *ngIf="isEdit">
                 <nz-form-control >
                   <input type="text" nz-input [formControlName]="key" placeholder="Phone number" />
@@ -88,7 +105,7 @@
         <div class="item" nz-col nzXs="24">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
             <div class="label" nz-col nzXs="24" nzSm="5">Job:</div>
-            <div *ngFor="let key of ['job']" nz-col nzXs="24" nzSm="19" style="max-width: 600px;">
+            <div *ngFor="let key of ['job']" nz-col nzXs="24" nzSm="19" >
               <nz-form-item *ngIf="isEdit">
                 <nz-form-control >
                   <input type="text" nz-input [formControlName]="key" placeholder="Job" />
@@ -101,7 +118,7 @@
         <div class="item" nz-col nzXs="24">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
             <div class="label" nz-col nzXs="24" nzSm="5">Link Facebook:</div>
-            <div *ngFor="let key of ['linkFacebook']" nz-col nzXs="24" nzSm="19" style="max-width: 600px;">
+            <div *ngFor="let key of ['linkFacebook']" nz-col nzXs="24" nzSm="19" >
               <nz-form-item *ngIf="isEdit">
                 <nz-form-control >
                   <input type="text" nz-input [formControlName]="key" placeholder="Link Facebook" />
@@ -114,19 +131,6 @@
       </form>
       <div class="button">
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
-          <div class="item" nz-col nzXs="12" nzSm="6" nzMd="6" nzLg="6">
-            <button nz-button class="login-form-button label" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnEdit()">
-              <span nz-icon [nzType]="isEdit ? 'save' : 'edit'" nzTheme="outline"></span>
-              {{isEdit ? 'Save' : 'Edit'}}
-              <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
-            </button>
-          </div>
-          <div class="item" nz-col nzXs="12" nzSm="6" nzMd="6" nzLg="6">
-            <div *ngIf="isEdit" class="btn-cancel" (click)="cancelEdit()">
-              <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
-              Cancel
-            </div>
-          </div>
           <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
             <button nz-button class="login-form-button label" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnChangePassword()">
               <span nz-icon nzType="lock" nzTheme="outline"></span>
@@ -139,36 +143,34 @@
     
     <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="10">
       <div class="item-avatar">
-        <div class="label"><span nz-icon nzType="file-image" style="margin-right: 8px;" ></span>Avatar</div>
+        <div style="display: flex; align-items: center;">
+          <div class="label"><span nz-icon nzType="file-image" style="margin-right: 8px;" ></span>Avatar</div>
+          <div style="margin-left: 16px;">
+            <label for="files">
+              <div class="choose-image-button label">
+                <span>Choose image</span>
+              </div>
+            </label>
+            <input type="file" id="files" class="hidden" accept="image/png, image/jpeg" (change)="onChangeImage($event)">
+          </div>
+        </div>
         <div style="width: 100%;">
-          <img class="avatar-container" [src]="avatarUrl">
+          <div style="display: flex; justify-content: center;"><img class="avatar-container" [src]="avatarUrl"></div>
           <div class="button-container">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 75%;">
-              <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+              <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12" style="display: flex; justify-content: center;">
                 <button nz-button class="save-image-button label" [disabled]="loading"
                   [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnSaveImage()">
                   <span>Save image</span>
                   <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                 </button>
               </div>
-              <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12">
+              <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12" style="display: flex; justify-content: center;">
                 <button nz-button class="save-image-button label" [disabled]="loading"
                   [nzShape]="'round'" nzDanger [nzType]="'primary'" (click)="confirmDelete()">
                   <span>Delete image</span>
                   <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                 </button>
-              </div>
-              <div class="item" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
-                <nz-form-item style="margin-bottom: 16px;">
-                  <nz-form-control>
-                    <label for="files">
-                      <div class="choose-image-button label">
-                        <span>Choose image</span>
-                      </div>
-                    </label>
-                    <input type="file" id="files" class="hidden" accept="image/png, image/jpeg" (change)="onChangeImage($event)">
-                  </nz-form-control>
-                </nz-form-item>
               </div>
             </div>
           </div>

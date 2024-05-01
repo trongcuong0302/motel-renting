@@ -20,6 +20,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   override ngOnInit(): void {
       super.ngOnInit();
+      this.getUser();
   }
 
   constructor(private fb: NonNullableFormBuilder,
@@ -37,6 +38,19 @@ export class LoginComponent extends BaseComponent implements OnInit {
     email: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
+
+  getUser() {
+    this.userService.getUser().subscribe({
+      next: (data) => {
+        this.router.navigate(['/products']);
+        this.userService.nextUser(data.data);
+      },
+      error: (error) => {
+        this.isLoggedIn = false;
+        console.log(error.error.message);
+      }
+    });
+  }
 
   submitForm(): void {
     if (this.validateFormData()) {
