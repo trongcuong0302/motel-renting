@@ -30,6 +30,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireStorageModule } from "@angular/fire/compat/storage";
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
@@ -117,6 +118,7 @@ import { VerifyAccountComponent } from './components/auth/verify-account';
     NzToolTipModule,
     NzPaginationModule,
     NzSpinModule,
+    NzTagModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({

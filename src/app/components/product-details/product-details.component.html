@@ -57,8 +57,11 @@
         <div *ngIf="motelData._id" style="padding: 24px;">
             <div class="group-detail" >
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
-                    <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
-                        <div class="group-label">{{motelData.roomName}}</div>
+                    <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" style="margin-bottom: 10px;">
+                        <div class="group-label">
+                            <span style="margin-right: 16px;">{{motelData.roomName}}</span>
+                            <nz-tag class="tag-status" [nzColor]="getTagColor()">{{getMotelDetail('roomStatus')}}</nz-tag>
+                        </div>
                         <div class="label">{{getMotelDetail('roomType')}}</div>
                     </div>
                     <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" [ngClass]="{'user-large': showUserLarge}">
@@ -249,9 +252,9 @@
                 <div class="group-label" style="margin-bottom: 16px;"><span nz-icon nzType="profile" style="margin-right: 8px;"></span>Renter Information</div>
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="user-selected" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngFor="let user of motelData.renters; let i = index">
-                        <div style="display: flex; align-items: center;">
-                            <img class="user-avatar-info" [src]="getUserAvt(user)">
-                            <div>
+                        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;" class="user-selected-container">
+                            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8"><img class="user-avatar-info" [src]="getUserAvt(user)"></div>
+                            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="16">
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight: 500;">Name: </span><span>{{user.name}}</span>
                                     <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.name)"></span>
@@ -278,7 +281,7 @@
     </div>
     
     <ng-template #editable>
-        <div *ngIf="motelData._id ">
+        <div *ngIf="motelData._id" style="padding: 24px;">
             <form nz-form [formGroup]="validateForm">
                 <div class="seperator"></div>
                 <div class="group-content">
@@ -286,8 +289,29 @@
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                         <div class="label">Room type<span class="mark-require">*</span></div>
-                        <nz-select ngModel="room" [nzOptions]="roomTypeList" [ngModelOptions]="{standalone: true}" 
-                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomType', $event)"></nz-select>
+                        <div *ngFor="let key of ['roomType']">
+                            <nz-form-item>
+                            <nz-form-control >
+                                <nz-select [formControlName]="key" [nzOptions]="roomTypeList" style="width:100%;" placeholder="Room type"
+                                ></nz-select>
+                            </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <!-- <nz-select ngModel="room" [nzOptions]="roomTypeList" [ngModelOptions]="{standalone: true}" 
+                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomType', $event)"></nz-select> -->
+                      </div>
+                      <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
+                        <div class="label">Room status<span class="mark-require">*</span></div>
+                        <div *ngFor="let key of ['roomStatus']">
+                            <nz-form-item>
+                            <nz-form-control >
+                                <nz-select [formControlName]="key" [nzOptions]="roomStatusList" style="width:100%;" placeholder="Room status"
+                                ></nz-select>
+                            </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <!-- <nz-select ngModel="available" [nzOptions]="roomStatusList" [ngModelOptions]="{standalone: true}" 
+                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomStatus', $event)"></nz-select> -->
                       </div>
                     </div>                                                 
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
@@ -601,6 +625,15 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="seperator"></div>
+                <div class="group-content" style="padding-bottom: 16px;">
+                    <div class="group-label">
+                        <span nz-icon nzType="user-add" style="margin-right: 8px;"></span>
+                        Add renters
+                    </div>
+                    <div>You can ignore this field if the room has not been rented yet.</div>
+                    <div add-renter-component [selectedUserList]="renterList" (renterListChanged)="onRenterListChanged($event)"></div>
                 </div>
             </form>
         </div>

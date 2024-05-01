@@ -10,13 +10,27 @@
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                         <div class="label">Room type<span class="mark-require">*</span></div>
-                        <nz-select ngModel="room" [nzOptions]="roomTypeList" [ngModelOptions]="{standalone: true}" 
-                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomType', $event)"></nz-select>
+                        <div *ngFor="let key of ['roomType']">
+                          <nz-form-item>
+                            <nz-form-control >
+                              <nz-select [formControlName]="key" [nzOptions]="roomTypeList" style="width:100%;" placeholder="Room type"></nz-select>
+                            </nz-form-control>
+                          </nz-form-item>
+                        </div>
+                        <!-- <nz-select ngModel="room" [nzOptions]="roomTypeList" [ngModelOptions]="{standalone: true}" 
+                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomType', $event)"></nz-select> -->
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                         <div class="label">Room status<span class="mark-require">*</span></div>
-                        <nz-select ngModel="available" [nzOptions]="roomStatusList" [ngModelOptions]="{standalone: true}" 
-                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomStatus', $event)"></nz-select>
+                        <div *ngFor="let key of ['roomStatus']">
+                          <nz-form-item>
+                            <nz-form-control >
+                              <nz-select [formControlName]="key" [nzOptions]="roomStatusList" style="width:100%;" placeholder="Room status"></nz-select>
+                            </nz-form-control>
+                          </nz-form-item>
+                        </div>
+                        <!-- <nz-select ngModel="available" [nzOptions]="roomStatusList" [ngModelOptions]="{standalone: true}" 
+                          style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomStatus', $event)"></nz-select> -->
                       </div>
                     </div>                                                 
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">

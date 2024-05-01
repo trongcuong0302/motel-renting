@@ -41,7 +41,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     { label: 'Không', value: '0' },
   ];
   roomTypeList = [
-    { label: 'Chung cư mini', value: 'apartment' },
+    { label: 'Chung cư mini / Chung cư', value: 'apartment' },
     { label: 'Nhà nguyên căn', value: 'house' },
     { label: 'Phòng trọ', value: 'room' }
   ];

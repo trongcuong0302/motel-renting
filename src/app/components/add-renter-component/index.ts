@@ -48,7 +48,8 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
         this.total = data.total;
         this.userList = data.data;
         this.userList.forEach((item: any) => {
-          item.isSelected = false;
+          let find = this.selectedUserList.find((it: any) => item.name == it.name && item.email == it.email && item.phoneNumber == it.phoneNumber);
+          item.isSelected = find ? true : false;
         })
         this.isLoading = false;
       },

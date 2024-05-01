@@ -34,10 +34,10 @@
       <nz-dropdown-menu #menuDropdown="nzDropdownMenu">
         <div>
           <div *ngFor="let item of menuList; let i = index">
-            <div class="menu-item-small" [routerLink]="item?.link" (click)="onSelectMenuItem(i)">{{item?.label}}</div>
+            <div class="menu-item-small" [ngClass]="{'background-hilight': item.isSelected}" [routerLink]="item?.link" (click)="onSelectMenuItem(i)">{{item?.label}}</div>
           </div>
           <div class="user-small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
-            <img class="avatar-container" [src]="avatarUrl">
+            <img class="avatar-container-small" [src]="avatarUrl">
             <span style="font-weight: 500;">{{getLabelUser()}}</span>
           </div>
           <nz-dropdown-menu #menu="nzDropdownMenu">

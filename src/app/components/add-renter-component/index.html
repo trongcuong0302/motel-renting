@@ -56,10 +56,10 @@
     <div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>
 
     <div class="pagination" *ngIf="userList.length">
-        <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+        <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" [nzSize]="'small'"
         (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
         <ng-template #rangeTemplate let-range="range" let-total>
-            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+            {{ range[0] }}-{{ range[1] }} of {{ total }} users
         </ng-template>  
     </div>
 </div>

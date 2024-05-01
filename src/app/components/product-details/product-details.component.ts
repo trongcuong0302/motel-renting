@@ -24,6 +24,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   validateForm: FormGroup<{
     roomType: FormControl<string>;
+    roomStatus: FormControl<string>;
     roomName: FormControl<string>;
     numberOfFloors: FormControl<number>;
     area: FormControl<number>;
@@ -49,6 +50,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     address: FormControl<string>;
   }> = this.fb.group({
     roomType: ['', [Validators.required]],
+    roomStatus: ['', [Validators.required]],
     roomName: ['', [Validators.required]],
     numberOfFloors: [0],
     area: [0, [Validators.required]],
@@ -86,6 +88,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   listImageFiles: any = [];
   oldImages: any = [];
   currentIndex: number = 0;
+  renterList: any = [];
   latLng = {
     lat: 21.0278,
     lng: 105.8342
@@ -97,9 +100,15 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     { label: 'Không', value: '0' },
   ];
   roomTypeList = [
-    { label: 'Chung cư mini', value: 'apartment' },
+    { label: 'Chung cư mini / Chung cư', value: 'apartment' },
     { label: 'Nhà nguyên căn', value: 'house' },
     { label: 'Phòng trọ', value: 'room' }
+  ];
+  roomStatusList = [
+    { label: 'Còn trống', value: 'available' },
+    { label: 'Cho ở ghép', value: 'combined' },
+    { label: 'Đã cho thuê', value: 'rented' },
+    { label: 'Không cho thuê', value: 'closed' }
   ];
   durationList = [
     { label: '1 tháng', value: '1' },
@@ -154,7 +163,6 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.motelData = data.data;
-          console.log(this.motelData)
           this.clearData();
           this.bindDataToForm();
           this.getUser();
@@ -171,6 +179,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     this.listImageFiles = [];
     this.oldImages = [];
     this.currentIndex = 0;
+    this.renterList = [];
   }
 
   bindDataToForm() {
@@ -186,6 +195,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         });
       }
       if(key == "coordinate" && this.motelData[key]) this.latLng = this.motelData.coordinate;
+      if(key == "renters") this.renterList = this.motelData.renters;
     }
   }
 
@@ -314,6 +324,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     let formData = this.prepareLocationData();
     formData['images'] = [ ...this.motelData.images,  ...this.imageData];
     formData['coordinate'] = this.latLng;
+    formData['renters'] = this.renterList;
     this.isLoading = true;
     this.productsService.updateProductById(this.motelData._id, formData).subscribe({
       next: (data) => {
@@ -584,6 +595,9 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       case "roomType":
         findItem = this.roomTypeList.find(d => d.value === this.motelData[key]);
         return findItem?.label;
+      case "roomStatus":
+        findItem = this.roomStatusList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
       case "directions":
         findItem = this.directionList.find(d => d.value === this.motelData[key]);
         return findItem?.label;
@@ -619,5 +633,19 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   getUserAvt(user: any) {
     return user?.avatarInfo?.avatarUrl ?? '../../../assets/img/default-avatar.jpg';
+  }
+
+  onRenterListChanged(renterList: any) {
+    this.renterList = renterList;
+  }
+
+  getTagColor() {
+    switch(this.validateForm.get('roomStatus')?.value) {
+      case 'available': return 'processing';
+      case 'combined': return 'warning';
+      case 'rented': return 'success';
+      case 'closed': return 'error';
+      default: return 'default';
+    }
   }
 }
