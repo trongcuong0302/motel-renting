@@ -41,6 +41,9 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzCommentModule } from 'ng-zorro-antd/comment';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
@@ -119,6 +122,9 @@ import { VerifyAccountComponent } from './components/auth/verify-account';
     NzPaginationModule,
     NzSpinModule,
     NzTagModule,
+    NzRateModule,
+    NzCommentModule,
+    NzAvatarModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({

@@ -287,6 +287,70 @@
                     </div>
                 </div>
             </div>
+            <div class="seperator"></div>
+            <div class="group-detail">
+                <div class="group-label" style="margin-bottom: 16px;">
+                    <span nz-icon nzType="comment" style="margin-right: 8px;"></span>
+                    <span>Reviews</span>
+                    <div>
+                        <nz-rate [ngModel]="totalRate" nzAllowHalf style="pointer-events: none; margin-right: 16px;"></nz-rate>
+                        <span>{{totalRate}}/5</span>
+                    </div>
+                </div>
+                <div *ngIf="isShowCommentInput">
+                    <div class="group-label">Your review:</div>
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                        <div style=" margin-left: 16px;">
+                            <nz-rate [(ngModel)]="rateScore" nzAllowHalf></nz-rate>
+                        </div>
+                    </div>
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                        <nz-comment style="width:100%; margin-left: 16px;">
+                            <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="avatarAccount"></nz-avatar>
+                            <nz-comment-content>
+                              <nz-form-item>
+                                <textarea [(ngModel)]="inputComment" nz-input rows="4"></textarea>
+                              </nz-form-item>
+                              <nz-form-item>
+                                <button nz-button nzType="primary" [nzLoading]="isLoading" [disabled]="!inputComment" (click)="handleSubmit()">
+                                  Add Comment
+                                </button>
+                              </nz-form-item>
+                            </nz-comment-content>
+                        </nz-comment>
+                    </div>
+                </div>
+                <ng-container *ngFor="let comment of listCommentsPagination; let i = index">
+                    <nz-comment [nzAuthor]="author" [nzDatetime]="dateTime">
+                        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="comment.userAvatar"></nz-avatar>
+                        <nz-comment-content>
+                          <p style="font-size: 16px;">{{ comment.content }}</p>
+                        </nz-comment-content>   
+                    </nz-comment>
+                    <ng-template #author>
+                        <span style="font-size: 16px; margin-right: 8px;">{{comment.userName}}</span>
+                        <nz-rate [(ngModel)]="comment.rate" nzAllowHalf style="pointer-events: none; line-height: 10px;"></nz-rate>
+                    </ng-template>
+                    <ng-template #dateTime>
+                        <span style="font-size: 16px;">{{comment.time}}</span>
+                    </ng-template>
+                    <div *ngIf="isShowUpdateCommentButton(i)" class="button-container" style="justify-content:left; margin-left: 42px;">
+                        <div style="cursor: pointer; margin-right: 16px;" (click)="onEditComment(i)">
+                            <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>Edit
+                        </div>
+                        <div style="cursor: pointer; color: #ff4d4f" (click)="confirmDeleteComment(i)">
+                            <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>Delete
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="pagination" *ngIf="listComments.length">
+                    <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="listComments.length" [nzPageSize]="5" [nzShowTotal]="rangeTemplate" nzSize="small"
+                    (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
+                    <ng-template #rangeTemplate let-range="range" let-total>
+                        {{ range[0] }}-{{ range[1] }} of {{ total }} comments
+                    </ng-template>  
+                </div>
+            </div>
         </div>
     
         <div *ngIf="!motelData._id ">

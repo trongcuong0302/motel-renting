@@ -250,6 +250,11 @@ export class UserProfile extends BaseComponent implements OnInit {
         next: (data) => {
           this.isVisible = false;
           this.isLoading = false;
+          this.objectChangePassword = {
+            oldPassword: '',
+            newPassword: '',
+            confirmPassword: '',
+          }
           this.showSuccess("Password changed successfully!");
         },
         error: (error) => {

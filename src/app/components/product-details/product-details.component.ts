@@ -78,6 +78,14 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   showUserLarge = true;
   showSettingButton = false;
+  showEditComment = true;
+  inputComment: string = '';
+  listComments: any = [];
+  listCommentsPagination: any = [];
+  rateScore: number = 5;
+  totalRate: number = 5;
+  pageIndex: number = 1;
+  avatarAccount = '../../../assets/img/default-avatar.jpg';
   avatarUrl = '../../../assets/img/default-avatar.jpg';
   userData: any = {};
   accountData: any = {};
@@ -197,7 +205,34 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         });
       }
       if(key == "coordinate" && this.motelData[key]) this.latLng = this.motelData.coordinate;
-      if(key == "renters") this.renterList = this.motelData.renters;
+      if(key == "renters") {
+        let list = this.motelData.renters;
+        list.forEach((renter: any) => {
+          this.isLoading = true;
+          this.userService.getUserProfile(renter._id).subscribe({
+            next: (data) => {
+              this.isLoading = false;
+              this.renterList.push(data.data);
+            },
+            error: (error) => {
+              this.isLoading = false;
+              this.showError(error.error.message)
+            } 
+          });
+        })
+      } 
+      if(key == "listComments") {
+        this.listComments = this.motelData.listComments;
+        if(this.listComments.length == 0) this.totalRate = 5;
+        else {
+          let score = 0;
+          this.listComments.forEach((item: any) => {
+            score += item.rate;
+          })
+          this.totalRate = Math.round(score / this.listComments.length * 2) / 2;
+          this.onChangePageIndex();
+        }
+      }
     }
   }
 
@@ -222,6 +257,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         next: (data) => {
           this.isLoading = false;
           this.accountData = data.data;
+          this.avatarAccount = this.accountData?.avatarInfo?.avatarUrl ?? '../../../assets/img/default-avatar.jpg';
         },
         error: (error) => {
           this.isLoading = false;
@@ -346,19 +382,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     formData['images'] = [ ...this.motelData.images,  ...this.imageData];
     formData['coordinate'] = this.latLng;
     formData['renters'] = this.renterList;
-    this.isLoading = true;
-    this.productsService.updateProductById(this.motelData._id, formData).subscribe({
-      next: (data) => {
-        this.isLoading = false;
-        this.showSuccess("Motel updated successfully!");
-        this.getProduct(this.route.snapshot.params["id"]);
-        this.viewMode = true;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.showError(error.error.message);
-      }
-    });
+    
+    this.updateMotel(formData);
   }
 
   updateProduct() : void {
@@ -686,6 +711,10 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     if(index >= 0) this.renterList.splice(index, 1);
 
     let formData = { renters : this.renterList }
+    this.updateMotel(formData);
+  }
+
+  updateMotel(formData: any) {
     this.isLoading = true;
     this.productsService.updateProductById(this.motelData._id, formData).subscribe({
       next: (data) => {
@@ -708,5 +737,68 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   get isOwner() {
     return this.motelData.owner === this.accountData._id;
+  }
+
+  get isShowCommentInput() {
+    if(!this.showEditComment) return false;
+    if(this.isOwner || !this.isRenter) return false;
+    let index = this.listComments.findIndex((item: any) => item.userId === this.accountData._id);
+    return index >= 0 ? false : true;
+  }
+
+  isShowUpdateCommentButton(i: number) {
+    i = i + this.pageIndex*5-5;
+    return this.listComments[i].userId === this.accountData._id && this.isRenter;
+  }
+
+  handleSubmit() {
+    let date = new Date();
+    let comment = {
+      userId: this.accountData._id,
+      content: this.inputComment,
+      rate: this.rateScore,
+      userName: this.accountData.name,
+      userAvatar: this.accountData?.avatarInfo?.avatarUrl ?? '../../../assets/img/default-avatar.jpg',
+      time: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+    }
+
+    this.listComments.unshift(comment);
+    this.showEditComment = false;
+    let formData = { listComments : this.listComments }
+    this.updateMotel(formData);
+  }
+
+  onEditComment(i: number) {
+    i = i + this.pageIndex*5-5;
+    this.inputComment = this.listComments[i].content;
+    this.rateScore = this.listComments[i].rate;
+    this.listComments.splice(i, 1);
+    this.showEditComment = true;
+  }
+
+  confirmDeleteComment(i: number) {
+    this.modal.confirm({
+      nzTitle: 'Do you want to delete your comment?',
+      nzOnOk: () => this.onDeleteComment(i)
+    })
+  }
+
+  onDeleteComment(i: number) {
+    i = i + this.pageIndex*5-5;
+    this.inputComment = '';
+    this.rateScore = 5;
+    this.listComments.splice(i, 1);
+    this.showEditComment = true;
+    let formData = { listComments : this.listComments }
+    this.updateMotel(formData);
+  }
+
+  onChangePageIndex() {
+    let start = this.pageIndex*5 - 5;
+    this.listCommentsPagination = [];
+    for(let i = start; i < start + 5; i++) {
+      this.listCommentsPagination.push(this.listComments[i]);
+      if(i == this.listComments.length-1) break;
+    }
   }
 }
