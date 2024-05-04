@@ -218,7 +218,7 @@
                 <div class="group-label" style="margin-bottom: 16px;"><span nz-icon nzType="environment" style="margin-right: 8px;"></span>Motel Location</div>
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }">
                     <div class="item" nz-col nzXs="24">
-                        <div map-component [latLng]="latLng" [enableClick]="false"></div>
+                        <div map-component [latLng]="latLng" [zoom]="16" [enableClick]="false"></div>
                     </div>
                 </div>
             </div>
@@ -660,7 +660,7 @@
                         <div style="margin-bottom: 10px;">Click in the map to choose the location of your room</div>
                             <nz-form-item>
                             <nz-form-control >
-                                <div map-component [latLng]="latLng" (placeChanged)="onPlaceChange($event)"></div>
+                                <div map-component [zoom]="16" [latLng]="latLng" (placeChanged)="onPlaceChange($event)"></div>
                             </nz-form-control>
                             </nz-form-item>
                         </div>

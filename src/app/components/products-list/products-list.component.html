@@ -47,15 +47,36 @@
     </nz-dropdown-menu>
 </div> -->
 
-<div style="padding: 24px;">
+<div class="header"><span>Motels List</span></div>
+<div class="seperator"></div>
+<div form-filter></div>
+<div class="seperator"></div>
+<div class="content">
+    
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 16, lg: 16 }" class="result">
-        <ng-container *ngFor="let motel of moteList">
-            <div nz-col class="gutter-row" nzXs="24" nzMd="12" nzXl="8" nzXXl="6" (click)="setActiveProduct(products[0])">
-                <img class="avatar-container" [src]="getMotelData('image', products[0])">
-                <div>Name: {{getMotelData('name', products[0])}}</div>
-                <div>Address: {{getMotelData('location', products[0])}}</div>
-                <div>Price: {{getMotelData('price', products[0])}} - Deposit: {{getMotelData('deposit', products[0])}}</div>
+        <ng-container *ngFor="let motel of products">
+            <div nz-col class="gutter-row" nzXs="24" nzMd="12" nzXl="8" nzXXl="6" (click)="setActiveProduct(motel)">
+                <img class="avatar-container" [src]="getMotelData('image', motel)">
+                <div><span class="label">Name: </span>{{getMotelData('name', motel)}}</div>
+                <div>
+                    <span class="label">Status: </span>
+                    <nz-tag class="tag-status" [nzColor]="getTagColor(motel)">{{getMotelData('roomStatus', motel)}}</nz-tag>
+                </div>
+                <div><span class="label">Type: </span>{{getMotelData('roomType', motel)}}</div>
+                <div><span class="label">Address: </span>{{getMotelData('location', motel)}}</div>
+                <div><span class="label">Price: </span>{{getMotelData('price', motel)}}</div>
+                <div><span class="label">Rate: </span>{{getMotelData('rate', motel)}}</div>
             </div>
         </ng-container>
+    </div>
+
+    <div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>
+
+    <div class="pagination" *ngIf="products.length">
+        <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" [nzSize]="'small'"
+        (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
+        <ng-template #rangeTemplate let-range="range" let-total>
+            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+        </ng-template>  
     </div>
 </div>

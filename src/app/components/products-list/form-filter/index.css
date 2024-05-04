@@ -1,0 +1,195 @@
+.container {
+    margin: 0 !important;
+    padding: 24px;
+}
+  
+.header{
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    height: 48px;
+    padding-left: 24px;
+    background-color: #fff;
+}
+  
+.main-content{
+    display: flex;
+}
+
+.login-form {
+    min-width: 300px;
+}
+
+.login-form-margin {
+    margin-bottom: 16px;
+}
+
+.login-form-forgot {
+    float: right;
+    cursor: pointer;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    max-height: 360px;
+    border-radius: 8px;
+    padding: 24px !important;
+}
+
+.register-button {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+
+.item {
+    width: 100%;
+}
+
+.label {
+    color: #8d8d8d;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
+.form-date-picker, .form-location-picker {
+    width: 100%;
+}
+
+.mark-require{
+    width: 10px;
+    display: inline-block;
+    line-height: 1;
+    margin: 0 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+}
+
+.label-password {
+    font-style: italic;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.item-avatar {
+    width: 100%; 
+    display: flex; 
+    flex-direction: column;
+}
+
+.image-preview {
+    max-width: 800px;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 400px;
+}
+
+.save-image-button {
+    height: 36px;
+}
+
+.hidden {
+    display: none !important;  
+}
+
+.choose-image-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    height: 40px;
+    color: white;
+    padding: 4px 16px;
+    background-color: #1890FF;
+    border-radius: 32px;
+    cursor: pointer;
+    width: 160px;
+}
+
+.danger-button {
+    background-color: #ff4d4f;
+}
+
+.image-container {
+    display: flex;
+    align-items: center;
+    height: 400px;
+}
+
+[nz-carousel-content] {
+    text-align: center;
+    height: 400px;
+    color: #fff;
+    overflow: hidden;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-image-container {
+    display: flex;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+.icon-watch-image {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.image-button {
+    height: 40px;
+    max-width: 160px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+}
+
+.login-form-button {
+    min-width: 200px;
+    height: 40px;
+    font-weight: 500;
+}
+
+.group-content {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 16px 0 0 24px;
+}
+
+.group-label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.seperator {
+    height: 16px;
+}
+
+.form-label {
+    margin-bottom: 5px;
+}
+
+.clear-button {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #1890FF;
+}

@@ -155,9 +155,9 @@
           </div>
         </div>
         <div style="width: 100%;">
-          <div style="display: flex; justify-content: center;"><img class="avatar-container" [src]="avatarUrl"></div>
+          <div style="display: flex;"><img class="avatar-container" [src]="avatarUrl"></div>
           <div class="button-container">
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }">
               <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12" style="display: flex; justify-content: center;">
                 <button nz-button class="save-image-button label" [disabled]="loading"
                   [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnSaveImage()">

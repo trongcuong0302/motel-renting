@@ -13,11 +13,12 @@ export class MapComponent extends BaseComponent implements OnInit {
 
   map: google.maps.Map | undefined;
   mapClickListener: any;
-  zoom: number = 12;
+  
   latitude: number = 21.0278;
   longitude: number = 105.8342;
 
   @Input() latLng = { lat: 21.0278, lng: 105.8342 };
+  @Input() zoom: number = 12;
   @Input() enableClick = true;
   @Output() placeChanged = new EventEmitter();
 

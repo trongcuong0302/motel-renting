@@ -44,6 +44,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
@@ -66,6 +67,7 @@ import { environment } from 'src/environment/environment';
 import { MapComponent } from './components/map-component';
 import { AddRenterComponent } from './components/add-renter-component';
 import { VerifyAccountComponent } from './components/auth/verify-account';
+import { FormFilter } from './components/products-list/form-filter';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,8 @@ import { VerifyAccountComponent } from './components/auth/verify-account';
     UserProfile,
     MapComponent,
     AddRenterComponent,
-    VerifyAccountComponent
+    VerifyAccountComponent,
+    FormFilter
   ],
   imports: [
     BrowserModule,
@@ -125,6 +128,7 @@ import { VerifyAccountComponent } from './components/auth/verify-account';
     NzRateModule,
     NzCommentModule,
     NzAvatarModule,
+    NzRadioModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({

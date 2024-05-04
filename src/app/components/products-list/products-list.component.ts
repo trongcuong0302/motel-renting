@@ -16,12 +16,11 @@ import { BaseComponent } from 'src/app/base/baseComponent';
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent extends BaseComponent implements OnInit {
-  products = [];
+  products: any = [];
   currentProduct: Product = {};
-  pageSize = 10;
+  pageSize = 12;
   pageIndex = 1;
   total = 1;
-  loading = true;
   visibleProductName = false;
   visibleCategoryCode = false;
   searchName = '';
@@ -33,6 +32,18 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     { text: '<13', value: 13 },
     { text: '<12', value: 12 },
     { text: '<11', value: 11 }
+  ];
+
+  roomTypeList = [
+    { label: 'Chung cư mini / Chung cư', value: 'apartment' },
+    { label: 'Nhà nguyên căn', value: 'house' },
+    { label: 'Phòng trọ', value: 'room' }
+  ];
+  roomStatusList = [
+    { label: 'Còn trống', value: 'available' },
+    { label: 'Cho ở ghép', value: 'combined' },
+    { label: 'Đã cho thuê', value: 'rented' },
+    { label: 'Không cho thuê', value: 'closed' }
   ];
 
   avatarUrl: string = '../../../assets/img/default-avatar.jpg';
@@ -53,7 +64,7 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   }
 
   loadDataFromServer(pageIndex: number, pageSize: number, searchName: string, searchCode: string, sortField: string | null, sortOrder: string | null, filters: Array<{ key: string; value: number }>): void {
-    this.loading = true;
+    this.isLoading = true;
     let filter = [
       {field: "pageIndex", value: pageIndex, operator: "pagination"},
       {field: "pageSize", value: pageSize, operator: "pagination"},
@@ -67,11 +78,14 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     });
     this.productsService.getAllProduct(filter).subscribe({
       next: (data) => {
-        this.loading = false;
+        this.isLoading = false;
         this.total = data.total;
         this.products = data.data;
       },
-      error: (err) => this.nzMessageService.error(err.error.message)
+      error: (err) => {
+        this.isLoading = false;
+        this.nzMessageService.error(err.error.message)
+      } 
     })
   }
 
@@ -103,19 +117,42 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   }
 
   getMotelData(key: any, item: any) {
+    let findItem: any = null;
     switch (key) {
       case "name":
         return `${item?.roomName} - ${item?.address}`;
       case "location":
         return `${item?.location?.text}`;
       case "price":
-        return item?.price;
-      case "deposit":
-        return item?.deposit;
+        return `${item?.price} ${item?.currencyUnit}`;
+      case "roomType":
+        findItem = this.roomTypeList.find(d => d.value === item[key]);
+        return findItem?.label;
+      case "roomStatus":
+        findItem = this.roomStatusList.find(d => d.value === item[key]);
+        return findItem?.label;
       case "image": 
         return item?.images[0]?.imageUrl;
+      case "rate":
+        if(!item?.listComments || !item?.listComments.length) return `5/5`;
+        let score = 0;
+        item.listComments.forEach((item: any) => {
+          score += item.rate;
+        })
+        score = Math.round(score / item.listComments.length * 2) / 2;
+        return `${score}/5`;
       default:
         return '';
+    }
+  }
+
+  getTagColor(item: any) {
+    switch(item?.roomStatus) {
+      case 'available': return 'processing';
+      case 'combined': return 'warning';
+      case 'rented': return 'success';
+      case 'closed': return 'error';
+      default: return 'default';
     }
   }
 
@@ -124,4 +161,7 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     this.router.navigate([`/products/${this.currentProduct._id}`]);
   }
 
+  onChangePageIndex() {
+    this.search();
+  }
 }

@@ -227,6 +227,16 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         else {
           let score = 0;
           this.listComments.forEach((item: any) => {
+            this.userService.getUserProfile(item.userId).subscribe({
+              next: (data) => {
+                this.isLoading = false;
+                item.userAvatar = data?.data?.avatarInfo?.avatarUrl ?? item.userAvatar;
+              },
+              error: (error) => {
+                this.isLoading = false;
+                this.showError(error.error.message)
+              } 
+            });
             score += item.rate;
           })
           this.totalRate = Math.round(score / this.listComments.length * 2) / 2;
@@ -643,6 +653,9 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         return findItem?.label;
       case "roomStatus":
         findItem = this.roomStatusList.find(d => d.value === this.motelData[key]);
+        return findItem?.label;
+      case "duration":
+        findItem = this.durationList.find(d => d.value === this.motelData[key]);
         return findItem?.label;
       case "directions":
         findItem = this.directionList.find(d => d.value === this.motelData[key]);
