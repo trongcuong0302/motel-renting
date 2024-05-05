@@ -27,11 +27,12 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   searchCode = '';
   price = 100;
   sortField: string | null = '';
-  sortOrder: string | null = '';
-  filterPrice = [
-    { text: '<13', value: 13 },
-    { text: '<12', value: 12 },
-    { text: '<11', value: 11 }
+  filters: any = [];
+  filterData: any = {};
+  sortOrder: string = 'ascend';
+  sortList = [
+    { label: 'Giá tăng dần', value: 'ascend' },
+    { label: 'Giá giảm dần', value: 'descend' },
   ];
 
   roomTypeList = [
@@ -47,7 +48,6 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   ];
 
   avatarUrl: string = '../../../assets/img/default-avatar.jpg';
-  moteList = [1,2,3,4,5,6,7,8,9,10]
   
   constructor(
     private productsService: ProductsService,
@@ -60,60 +60,9 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.loadDataFromServer(this.pageIndex, this.pageSize, this.searchName, this.searchCode, null, null, [{key: 'price', value: this.price}]);
-  }
-
-  loadDataFromServer(pageIndex: number, pageSize: number, searchName: string, searchCode: string, sortField: string | null, sortOrder: string | null, filters: Array<{ key: string; value: number }>): void {
-    this.isLoading = true;
-    let filter = [
-      {field: "pageIndex", value: pageIndex, operator: "pagination"},
-      {field: "pageSize", value: pageSize, operator: "pagination"},
-      {field: "productName", value: searchName, operator: "includes"},
-      {field: "categoryCode", value: searchCode, operator: "includes"},
-      {field: sortField, value: sortOrder, operator: "sort"},
-    ];
-    
-    filters.forEach(item => {
-      filter.push({field: item.key, value: item.value, operator: "less"});
-    });
-    this.productsService.getAllProduct(filter).subscribe({
-      next: (data) => {
-        this.isLoading = false;
-        this.total = data.total;
-        this.products = data.data;
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.nzMessageService.error(err.error.message)
-      } 
-    })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    const {pageIndex, pageSize, sort, filter} = params;
-    const searchName = this.searchName;
-    const searchCode = this.searchCode;
-    const currentSort = sort.find(item => item.value !== null);
-    this.sortField = (currentSort && currentSort.key) || null;
-    this.sortOrder = (currentSort && currentSort.value) || null;
-    this.price = filter[0].value;
-    this.loadDataFromServer(pageIndex, pageSize, searchName, searchCode, this.sortField, this.sortOrder, filter);
-  }
-
-  search() :void {
-    this.visibleProductName = false;
-    this.visibleCategoryCode = false;
-    this.loadDataFromServer(this.pageIndex, this.pageSize, this.searchName, this.searchCode, this.sortField, this.sortOrder, [{key: 'price', value: this.price}]);
-  }
-
-  resetName() :void {
-    this.searchName = '';
-    this.search();
-  }
-
-  resetCode() :void {
-    this.searchCode = '';
-    this.search();
+    this.filterData = { search: "", price: [0, 0] };
+    this.onSearchEvent(this.filterData);
+    //this.loadDataFromServer(this.pageIndex, this.pageSize, this.searchName, this.searchCode, null, null, [{key: 'price', value: this.price}]);
   }
 
   getMotelData(key: any, item: any) {
@@ -134,13 +83,7 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
       case "image": 
         return item?.images[0]?.imageUrl;
       case "rate":
-        if(!item?.listComments || !item?.listComments.length) return `5/5`;
-        let score = 0;
-        item.listComments.forEach((item: any) => {
-          score += item.rate;
-        })
-        score = Math.round(score / item.listComments.length * 2) / 2;
-        return `${score}/5`;
+        return `${item?.rate}/5`;
       default:
         return '';
     }
@@ -162,6 +105,96 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   }
 
   onChangePageIndex() {
-    this.search();
+    this.onSearchEvent(this.filterData, this.pageIndex);
+  }
+
+  onSearchEvent(data: any, pageIndex: any = null) {
+    this.pageIndex = pageIndex ? pageIndex : 1;
+    this.filterData = data;
+    let filter = [
+      {field: "pageIndex", value: this.pageIndex, operator: "pagination"},
+      {field: "pageSize", value: this.pageSize, operator: "pagination"},
+      {field: "search", value: data.search, operator: "includes"},
+      {field: "price", value: this.sortOrder, operator: "sort"},
+    ];
+    for(let key of ["roomType", "roomStatus", "sameHouseWithOwner", "renterRequirement", "hasParkingArea", "directions", "location"]) {
+      if(data[key]) {
+        filter.push({field: key, value: data[key], operator: "matches"});
+      }
+    }
+
+    for(let key of ["rate", "numberOfAirConditioners", "numberOfWaterHeaters", "numberOfBathrooms", "numberOfBedrooms"]) {
+      if(data[key]) {
+        filter.push({field: key, value: Number(data[key]), operator: "more"});
+      }
+    }
+
+    if(data?.area) {
+      let range: any = [];
+      switch (data.area) {
+        case "0":
+          range = [0, 20];
+          break;
+        case "1": 
+          range = [20, 30];
+          break;
+        case "2": 
+          range = [30, 50];
+          break;
+        case "3": 
+          range = [50, 70];
+          break;
+        case "4": 
+          range = [70, 90];
+          break;
+        case "5": 
+          range = [90, 100000];
+          break;
+        default:
+          break;
+      }
+      filter.push({field: 'area', value: range, operator: "range"});
+    }
+
+    if(data?.price[1] == data.price[0]) {
+      let priceValue = data.price[0] * 1000000;
+      if(data.price[0] == 15) {
+        filter.push({field: 'price', value: priceValue, operator: "more"});
+      }
+      if(data.price[0] != 0 && data.price[0] != 15) {
+        filter.push({field: 'price', value: priceValue, operator: "matches"});
+      }
+    } else {
+      let start, end;
+      if(data?.price[1] == 15) {
+        end = 10**100;
+      }
+      start = data?.price[0] * 1000000;
+      end = data?.price[1] * 1000000;
+      filter.push({field: 'price', value: [start, end], operator: "range"});
+    }
+    this.filterMotel(filter);
+  }
+
+  filterMotel(filter: any) {
+    this.isLoading = true;
+    this.filters = filter;
+    this.productsService.getAllProduct(filter).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.total = data.total;
+        this.products = data.data;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.nzMessageService.error(err.error.message)
+      } 
+    })
+  }
+
+  onChangeSortOrder() {
+    let sortFilter = this.filters.find((item:any) => item.operator == "sort");
+    sortFilter.value = this.sortOrder;
+    this.filterMotel(this.filters);
   }
 }

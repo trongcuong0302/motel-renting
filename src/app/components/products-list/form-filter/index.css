@@ -1,3 +1,7 @@
+.ant-form-item {
+    margin: 0 !important;
+}
+
 .container {
     margin: 0 !important;
     padding: 24px;
@@ -193,3 +197,38 @@
     text-decoration: underline;
     color: #1890FF;
 }
+
+.list-container {
+    max-height: 160px;
+    overflow: auto;
+    box-shadow: none !important;
+    border: solid 1px #eee;
+}
+
+.list-button-container {
+    background-color: #fff;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.list-button {
+    background-color: #fff;
+    cursor: pointer;
+    border-bottom: solid 1px #eee;
+    padding: 9px 12px;
+    height: 40px;
+}
+
+.list-button:hover {
+    background-color: #eeeeee;
+}
+
+.filter-item {
+    display: flex;
+    justify-content: space-between;
+}
+

@@ -80,3 +80,17 @@ h3 {
     align-items: center;
     justify-content: center;
 }
+
+.sort {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 8px;
+}
+
+.sort-label {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex; 
+    align-items: center;
+}

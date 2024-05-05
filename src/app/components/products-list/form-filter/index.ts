@@ -8,8 +8,10 @@ import { Router } from '@angular/router';
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { finalize } from 'rxjs';
 import { ProductsService } from 'src/app/services/products.service';
+import { FilterService } from 'src/app/services/filters.service';
 import { BaseComponent } from 'src/app/base/baseComponent';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
+import { NzMarks } from 'ng-zorro-antd/slider';
 
 @Component({
   selector: '[form-filter]',
@@ -18,26 +20,19 @@ import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
 })
 export class FormFilter extends BaseComponent implements OnInit{
   searchKeyword: string = '';
-  radioValue = 'A';
-  isEdit: boolean = true;
+  filterName: string = 'Filter number ';
+  isClear: boolean = false;
   isVisible = false;
-  loading = false;
-  newRoom: any = {};
-  userData: any = {};
+  isBtnAddFilter: boolean = false;
+  isBtnSaveFilter: boolean = false;
+  filterListExist: boolean = false;
+  clearData: any = {};
   provinceList: any = [];
   location = [];
-  imageData: any = [];
-  listImageFiles: any = [];
-  selectedFiles: any = [];
-  previews: any = [];
-  currentIndex: number = 0;
-  renterList: any = [];
-  latLng = {
-    lat: 21.0278,
-    lng: 105.8342
-  }
-  selectedCurrencyUnits: string = 'VND';
-  currencyUnits: string[] = ['VND', 'USD'];
+  listFilterData: any = {};
+  accountData: any = {}
+  roomType: string = '';
+  countFilter: number = 0;
   yesNoList = [
     { label: 'Có', value: '1' },
     { label: 'Không', value: '0' },
@@ -52,13 +47,6 @@ export class FormFilter extends BaseComponent implements OnInit{
     { label: 'Cho ở ghép', value: 'combined' },
     { label: 'Đã cho thuê', value: 'rented' },
     { label: 'Không cho thuê', value: 'closed' }
-  ];
-  durationList = [
-    { label: '1 tháng', value: '1' },
-    { label: '3 tháng', value: '3' },
-    { label: '6 tháng', value: '6' },
-    { label: '12 tháng', value: '12' },
-    { label: 'Trên 12 tháng', value: 'other' },
   ];
   directionList = [
     { label: 'Bắc', value: 'north' },
@@ -76,73 +64,109 @@ export class FormFilter extends BaseComponent implements OnInit{
     { label: 'Cho nam thuê', value: '3' },
     { label: 'Không', value: '4' }
   ];
+  rateOptionList = [
+    { label: 'Từ 0 trở lên', value: '0' },
+    { label: 'Từ 1 trở lên', value: '1' },
+    { label: 'Từ 2 trở lên', value: '2' },
+    { label: 'Từ 3 trở lên', value: '3' },
+    { label: 'Từ 4 trở lên', value: '4' },
+    { label: 'Từ 5 trở lên', value: '5' }
+  ]
+  areaOptionList = [
+    { label: 'Dưới 20', value: '0' },
+    { label: 'Từ 20 - 30', value: '1' },
+    { label: 'Từ 30 - 50', value: '2' },
+    { label: 'Từ 50 - 70', value: '3' },
+    { label: 'Từ 70 - 90', value: '4' },
+    { label: 'Trên 90', value: '5' }
+  ]
+  numberOptionList = [
+    { label: 'Từ 0 trở lên', value: '0' },
+    { label: 'Từ 1 trở lên', value: '1' },
+    { label: 'Từ 2 trở lên', value: '2' },
+    { label: 'Từ 3 trở lên', value: '3' },
+    { label: 'Từ 4 trở lên', value: '4' },
+    { label: 'Từ 5 trở lên', value: '5' }
+  ]
+  marks: NzMarks = {
+    0: '0',
+    15: '15'
+  };
 
-  @Output() onRegister: EventEmitter<any> = new EventEmitter();
-  @ViewChild(NzCarouselComponent, { static: false }) myCarousel!: NzCarouselComponent;
+  @Output() onSearchEvent: EventEmitter<any> = new EventEmitter();
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.getUserProfile();
     this.getProvinceList();
+    
+    this.isLoading = true;
+    this.userService.getUser().subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.accountData = data.data;
+        this.getFilterList();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.log(error.error.message);
+      }
+    });
   }
 
   constructor(private fb: NonNullableFormBuilder,
-    private modal: NzModalService,
     private userService: UserService,
     private provinceService: ProvinceService,
-    private fireStorage: AngularFireStorage,
     private router: Router,
     private notification: NzNotificationService,
-    private productsService: ProductsService) {
+    private filterService: FilterService) {
     super(notification, router, userService);
   }
 
   validateForm: FormGroup<{
+    roomType: FormControl<string>;
     roomStatus: FormControl<string>;
-    area: FormControl<number>;
-    price: FormControl<number>;
-    currencyUnit: FormControl<string>;
+    area: FormControl<string>;
+    rate: FormControl<string>;
+    price: FormControl<any>;
     directions: FormControl<string>;
     sameHouseWithOwner: FormControl<string>;
     renterRequirement: FormControl<string>;
     hasParkingArea: FormControl<string>;
-    numberOfAirConditioners: FormControl<number>;
-    numberOfWaterHeaters: FormControl<number>;
-    numberOfBathrooms: FormControl<number>;
-    numberOfBedrooms: FormControl<number>;
+    numberOfAirConditioners: FormControl<string>;
+    numberOfWaterHeaters: FormControl<string>;
+    numberOfBathrooms: FormControl<string>;
+    numberOfBedrooms: FormControl<string>;
     location: FormControl<string>;
   }> = this.fb.group({
-    roomStatus: ['', [Validators.required]],
-    area: [0, [Validators.required]],
-    price: [0, [Validators.required]],
-    currencyUnit: [''],
+    roomType: [''],
+    roomStatus: [''],
+    area: [''],
+    rate: [''],
+    price: [[0, 0]],
     directions: [''],
     sameHouseWithOwner: [''],
     renterRequirement: [''],
     hasParkingArea: [''],
-    numberOfAirConditioners: [0],
-    numberOfWaterHeaters: [0],
-    numberOfBathrooms: [0],
-    numberOfBedrooms: [0],
-    location: ['', [Validators.required]],
+    numberOfAirConditioners: [''],
+    numberOfWaterHeaters: [''],
+    numberOfBathrooms: [''],
+    numberOfBedrooms: [''],
+    location: [''],
   });
 
-  getUserProfile() {
+  getFilterList() {
     this.isLoading = true;
-    this.userService.getUser().subscribe({
+    this.filterService.getAFilter(this.accountData?._id).subscribe({
       next: (data) => {
-        this.userData = data?.data;
         this.isLoading = false;
-        this.validateForm.get('currencyUnit')?.setValue("VND");
-        this.validateForm.get('directions')?.setValue("north");
-        this.validateForm.get('sameHouseWithOwner')?.setValue("1");
-        this.validateForm.get('renterRequirement')?.setValue("4");
-        this.validateForm.get('hasParkingArea')?.setValue("1");
-        this.validateForm.get('roomStatus')?.setValue("available");
+        this.filterListExist = true;
+        this.listFilterData = data?.data;
       },
-      error: (error) => {
+      error: (err) => {
+        this.filterListExist = false;
+        this.listFilterData = { list: []};
         this.isLoading = false;
-        this.showError(error.error.message);
+        console.log(err.error.message);
       }
     });
   }
@@ -218,37 +242,12 @@ export class FormFilter extends BaseComponent implements OnInit{
     return this.validateForm.get(key)?.value;
   }
 
-  validateFormData() {
-    for(let key of ['roomName', 'price', 'deposit', 'address', 'area']) {
-      if(!this.validateForm.get(key)?.value) {
-        this.showError("Please enter the required field.");
-        return false;
-      }
-    }
-    for(let key of ['area', 'price', 'deposit', 'electricPrice', 'waterPrice', 'numberOfWashingMachine', 'numberOfAirConditioners',
-    'numberOfWaterHeaters', 'numberOfWardrobes', 'numberOfBathrooms', 'numberOfBedrooms', 'numberOfBeds', 'numberOfFloors']) {
-      if(this.validateForm.get(key)?.value! < 0) {
-        this.showError("Number fields must not be negative.");
-        return false;
-      }
-    }
-    if(!this.location.length) {
-      this.showError("Please enter the required field.");
-      return false;
-    }
-    if(this.previews.length == 0) {
-      this.showError("You must upload at least 1 image.");
-      return false;
-    }
-    return true;
-  }
-
   prepareLocationData() {
     let formData: any = this.validateForm.value;
     if(this.location) {
       let province = this.provinceList.find((province:any) => province.value == this.location[0]);
-      let district = province.children?.length > 0 ? province.children.find((district:any) => district.value == this.location[1]) : null;
-      let ward = district.children?.length > 0 ? district.children.find((ward:any) => ward.value == this.location[2]) : null;
+      let district = province?.children?.length > 0 ? province?.children.find((district:any) => district.value == this.location[1]) : null;
+      let ward = district?.children?.length > 0 ? district?.children.find((ward:any) => ward.value == this.location[2]) : null;
       let location = "";
       location += `${ward ? ward.label + ', ' : ''}`;
       location += `${district ? district.label + ', ' : ''}`;
@@ -263,166 +262,140 @@ export class FormFilter extends BaseComponent implements OnInit{
     return formData;
   }
 
-  onBtnAdd() {
-    if (this.validateFormData()) {
-      this.onBtnSaveImage();
-    } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
+  onSearch(i:any = null) {
+    this.prepareLocationData();
+    this.validateForm.get('roomType')?.setValue(this.roomType);
+    let formData: any = this.validateForm.value;
+    formData['search'] = this.searchKeyword;
+    this.onSearchEvent.emit(formData);
+    this.getNumberOfFilter();
+    if(this.isBtnAddFilter) this.addFilter(formData);
+    if(this.isBtnSaveFilter) this.saveFilter(formData, i);
+  }
+
+  saveFilter(formData: any, i: number) {
+    this.isBtnSaveFilter = false;
+    this.listFilterData.list[i] = {name: this.filterName, formData: formData};
+    this.isLoading = true;
+    this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        console.log(data.data);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.log(err.error.message);
+      }
+    });
+  }
+
+  addFilter(formData: any) {
+    this.isBtnAddFilter = false;
+    if(this.filterListExist) {
+      this.listFilterData.list.push({name: this.filterName, formData: formData});
+      this.isLoading = true;
+      this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          console.log(data.data);
+          this.showSuccess("Filter added successfully")
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.log(err.error.message);
         }
       });
-      return;
-    }
-  }
-
-  onBtnChangePassword() {
-    this.isVisible = true;
-  }
-
-  onChangeImage(event: any) {
-    this.selectedFiles = event.target.files;
-
-    // this.previews = [];
-    // this.arrayIndex = [];
-    if (this.selectedFiles && this.selectedFiles[0]) {
-      const numberOfFiles = this.selectedFiles.length;
-      for (let i = 0; i < numberOfFiles; i++) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.previews.push(e.target.result);
-        };
-        reader.readAsDataURL(this.selectedFiles[i]);
-      }
-      this.listImageFiles = [ ...this.listImageFiles, ...this.selectedFiles];
-      this.currentIndex = 0;
     } else {
-      //this.previews = [];
-      this.selectedFiles = [];
-    }
-  }
-
-  async onBtnSaveImage() {
-    for(let i = 0; i < this.previews.length; i++) {
-      let roomName = this.validateForm.get("roomName")?.value;
-      let filePath = `motels/${this.userData.email}_${roomName}_${this.listImageFiles[i].name}_${new Date().getTime()}`;
-      const fileRef = this.fireStorage.ref(filePath);
+      this.listFilterData.list.push({name: this.filterName, formData: formData});
+      this.listFilterData['userId'] = this.accountData._id;
       this.isLoading = true;
-      const uploadTask = await this.fireStorage.upload(filePath, this.listImageFiles[i]);
-      const url = await uploadTask.ref.getDownloadURL();
-      let image = {
-        imageUrl: url,
-        filePath: filePath
-      }
-      this.imageData.push(image);
-      if(i == this.previews.length - 1) this.postMotelData();
+      this.filterService.postAFilter(this.listFilterData).subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          console.log(data.data);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.log(err.error.message);
+        }
+      });
     }
-  }
-
-  postMotelData() {
-    let formData = this.prepareLocationData();
-    formData['images'] = this.imageData;
-    formData['coordinate'] = this.latLng;
-    formData['owner'] = this.userData?._id;
-    formData['renters'] = this.renterList;
-    this.isLoading = true;
-    this.productsService.postAProduct(formData).subscribe({
-      next: (data) => {
-        this.newRoom = data.data;
-        this.isLoading = false;
-        this.showSuccess("Motel upload successfully!");
-        this.isEdit = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.showError(error.error.message);
-      }
-    });
-  }
-
-  deleteOneImage() {
-    this.previews.splice(this.currentIndex, 1);
-    this.listImageFiles.splice(this.currentIndex, 1);
-    this.currentIndex = 0;
-  }
-
-  deleteAllImages() {
-    this.previews = [];
-    this.selectedFiles = [];
-    this.listImageFiles = [];
-    this.currentIndex = 0;
-  }
-
-  confirmDeleteImage(type: any) : void {
-    let title = type == 'all' ? 'Do you want to delete all images?' : 'Do you want to delete this image?';
-    this.modal.confirm({
-      nzTitle: title,
-      nzOkText: 'Yes',
-      nzOkType: 'primary',
-      nzOkDanger: true,
-      nzCancelText: 'No',
-      nzOnOk: () => type == 'all' ? this.deleteAllImages() : this.deleteOneImage()
-    });
-  }
-
-  onPlaceChange(event: any) {
-    let mapData = event;
-    this.latLng = mapData;
-  }
-
-  onChangeImageIndex(event: any) {
-    this.currentIndex = event.to;
-  }
-
-  nextImage() {
-    if(this.currentIndex + 1 >= this.previews.length) this.currentIndex = 0;
-    else this.currentIndex++;
-    this.myCarousel.goTo(Number(this.currentIndex));
-  }
-
-  prevImage() {
-    if(this.currentIndex <= 0) this.currentIndex = this.previews.length - 1;
-    else this.currentIndex--;
-    this.myCarousel.goTo(Number(this.currentIndex));
-  }
-
-  onChangeValue(type: string, value: string) {
-    if(type == "currencyUnit") this.selectedCurrencyUnits = value;
-    else  {
-      this.validateForm.get(type)?.setValue(value)
-    }
-  }
-
-  newProduct() {
-    location.reload();
-  }
-
-  goList(): void {
-     window.open("http://localhost:4200/products/" + this.newRoom._id);
-  }
-  
-  onRenterListChanged(renterList: any) {
-    this.renterList = renterList;
-  }
-
-  onSearch() {
-
+    
   }
 
   onClearInput() {
-
+    this.isClear = true;
+    this.clearData = this.validateForm.value;
+    this.clearData['search'] = this.searchKeyword;
+    this.clearData['locationSelect'] = this.location;
+    for(let key in this.validateForm.controls) {
+      if(key == 'price') this.validateForm.get(key)?.setValue([0, 0]);
+      else this.validateForm.get(key)?.setValue('');
+    }
+    this.searchKeyword = '';
+    this.roomType = '';
+    this.location = [];
   }
 
   showModal(): void {
+    this.isClear = false;
     this.isVisible = true;
   }
 
   handleOk(): void {
     this.isVisible = false;
+    this.onSearch();
   }
 
   handleCancel(): void {
+    if(this.isClear) {
+      this.searchKeyword = this.clearData['search'];
+      this.roomType = this.clearData['roomType'];
+      this.location = this.clearData['locationSelect'];
+      for(let key in this.validateForm.controls) {
+        this.validateForm.get(key)?.setValue(this.clearData[key]);
+      }
+    }
     this.isVisible = false;
+  }
+
+  formatter(value: number): string {
+    return `${value} triệu VND`;
+  }
+
+  onClearSearch() {
+    this.searchKeyword = '';
+    this.onSearch();
+  }
+
+  getNumberOfFilter() {
+    this.countFilter = 0;
+    for(let key in this.validateForm.controls) {
+      if(key != 'roomType' && key != 'price') {
+        if(this.validateForm.get(key)?.value) this.countFilter++;
+      }
+      if(key == 'price' && (this.validateForm.get('price')?.value[0] != 0 || this.validateForm.get('price')?.value[1] != 0)) this.countFilter++;
+    }
+    return this.countFilter;
+  }
+
+  onBtnClearRadio(key: any) {
+    this.validateForm.get(key)?.setValue('');
+  }
+
+  onBtnAddFilter() {
+    this.isBtnAddFilter = true;
+    this.filterName = `Filter number ${this.listFilterData.list.length + 1}`;
+    this.showModal();
+  }
+
+  onBtnSaveFilter(i: number) {
+    this.isBtnSaveFilter = true;
+    this.onSearch(i);
+  }
+
+  onDefaultFilter() {
+    this.onClearInput();
+    this.onSearch();
   }
 }

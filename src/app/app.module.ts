@@ -45,6 +45,7 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
@@ -129,6 +130,7 @@ import { FormFilter } from './components/products-list/form-filter';
     NzCommentModule,
     NzAvatarModule,
     NzRadioModule,
+    NzSliderModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({

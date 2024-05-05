@@ -49,10 +49,18 @@
 
 <div class="header"><span>Motels List</span></div>
 <div class="seperator"></div>
-<div form-filter></div>
+<div form-filter (onSearchEvent)="onSearchEvent($event)"></div>
 <div class="seperator"></div>
 <div class="content">
-    
+    <div class="sort">
+        <div class="sort-label">Total: {{total}}</div>
+        <div class="sort-label">
+            <span style="width: 80px;">Sort by</span>
+            <nz-select [(ngModel)]="sortOrder" [nzOptions]="sortList" style="width:100%;" nzPlaceHolder="Price sort" 
+                (ngModelChange)="onChangeSortOrder()"></nz-select>
+        </div>
+    </div>
+
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 16, lg: 16 }" class="result">
         <ng-container *ngFor="let motel of products">
             <div nz-col class="gutter-row" nzXs="24" nzMd="12" nzXl="8" nzXXl="6" (click)="setActiveProduct(motel)">
@@ -63,11 +71,16 @@
                     <nz-tag class="tag-status" [nzColor]="getTagColor(motel)">{{getMotelData('roomStatus', motel)}}</nz-tag>
                 </div>
                 <div><span class="label">Type: </span>{{getMotelData('roomType', motel)}}</div>
-                <div><span class="label">Address: </span>{{getMotelData('location', motel)}}</div>
+                <div><span class="label">Location: </span>{{getMotelData('location', motel)}}</div>
                 <div><span class="label">Price: </span>{{getMotelData('price', motel)}}</div>
                 <div><span class="label">Rate: </span>{{getMotelData('rate', motel)}}</div>
             </div>
         </ng-container>
+        <div *ngIf="!total" style="display: flex; justify-content: center; width: 100%;">
+            <nz-result nzStatus="404" nzTitle="Found no items" 
+            nzSubTitle="Sorry, there is no motels matching your search. Please try again with other filters.">
+            </nz-result>
+        </div>
     </div>
 
     <div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>

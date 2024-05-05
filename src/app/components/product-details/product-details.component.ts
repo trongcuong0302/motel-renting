@@ -103,7 +103,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     lng: 105.8342
   }
   selectedCurrencyUnits: string = 'VND';
-  currencyUnits: string[] = ['VND', 'USD'];
+  currencyUnits: string[] = ['VND'];
   yesNoList = [
     { label: 'Có', value: '1' },
     { label: 'Không', value: '0' },
@@ -761,7 +761,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   isShowUpdateCommentButton(i: number) {
     i = i + this.pageIndex*5-5;
-    return this.listComments[i].userId === this.accountData._id && this.isRenter;
+    return this.listComments[i]?.userId === this.accountData._id && this.isRenter;
   }
 
   handleSubmit() {
@@ -777,7 +777,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
     this.listComments.unshift(comment);
     this.showEditComment = false;
-    let formData = { listComments : this.listComments }
+    this.calculateRateScore()
+    let formData = { listComments : this.listComments, rate: this.totalRate }
     this.updateMotel(formData);
   }
 
@@ -802,7 +803,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     this.rateScore = 5;
     this.listComments.splice(i, 1);
     this.showEditComment = true;
-    let formData = { listComments : this.listComments }
+    this.calculateRateScore()
+    let formData = { listComments : this.listComments, rate: this.totalRate }
     this.updateMotel(formData);
   }
 
@@ -812,6 +814,17 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     for(let i = start; i < start + 5; i++) {
       this.listCommentsPagination.push(this.listComments[i]);
       if(i == this.listComments.length-1) break;
+    }
+  }
+
+  calculateRateScore() {
+    if(this.listComments.length == 0) this.totalRate = 5;
+    else {
+      let score = 0;
+      this.listComments.forEach((item: any) => {
+        score += item.rate;
+      })
+      this.totalRate = Math.round(score / this.listComments.length * 2) / 2;
     }
   }
 }

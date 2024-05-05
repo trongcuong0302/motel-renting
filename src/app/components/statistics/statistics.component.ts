@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from 'src/app/services/products.service';
 import { Category } from 'src/app/models/category.model';
-import { CategoryService } from 'src/app/services/category.service';
+// import { CategoryService } from 'src/app/services/category.service';
 
 @Component({
   selector: 'app-statistics',
@@ -18,7 +18,7 @@ export class StatisticsComponent implements OnInit {
   
   constructor(
     private productsService: ProductsService,
-    private categoryService: CategoryService) {}
+    ) {}
 
   ngOnInit(): void {
     this.onSelectDateChange(this.mode);
@@ -51,12 +51,12 @@ export class StatisticsComponent implements OnInit {
 
   loadCategoryFromServer(): void {
     let filter = [{}];
-    this.categoryService.getAllCategory(filter).subscribe({
-      next: (data) => {
-        this.categories = data.data;
-      },
-      error: (err) => {}
-    });
+    // this.categoryService.getAllCategory(filter).subscribe({
+    //   next: (data) => {
+    //     this.categories = data.data;
+    //   },
+    //   error: (err) => {}
+    // });
   }
 
 }

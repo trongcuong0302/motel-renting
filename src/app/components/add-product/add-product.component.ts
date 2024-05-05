@@ -35,7 +35,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     lng: 105.8342
   }
   selectedCurrencyUnits: string = 'VND';
-  currencyUnits: string[] = ['VND', 'USD'];
+  currencyUnits: string[] = ['VND'];
   yesNoList = [
     { label: 'Có', value: '1' },
     { label: 'Không', value: '0' },
