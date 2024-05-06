@@ -16,7 +16,7 @@
 }
 
 .logo {
-  width: 84px;
+  min-width: 84px;
   height: 100%;
   margin: 0 24px;
   cursor: pointer;
@@ -108,4 +108,19 @@
   height: 36px;
   width: 36px;
   margin-right: 10px;
+}
+
+.right-side {
+  display: flex;
+  align-items: center;
+}
+
+.label-language {
+  height: 40px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-weight: 500;
+  cursor: pointer;
 }

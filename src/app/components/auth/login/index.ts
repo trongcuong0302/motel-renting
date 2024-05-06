@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/baseComponent';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: '[login-form]',
@@ -26,6 +27,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
     private userService: UserService,
+    private translateService: TranslateService,
     private router: Router,
     private notification: NzNotificationService) {
     super(notification, router, userService);
@@ -76,7 +78,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     if(!this.validateForm.valid) return false;
     let data = this.validateForm.value;
     if(!data.email) {
-      this.showError("Please input email or phone number.");
+      this.showError(this.translateService.instant("login.errorEmptyEmail"));
       return false;
     }
     return true;
@@ -93,7 +95,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   handleOk(): void {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     if(!this.emailReset || !emailRegex.test(this.emailReset)) {
-      this.showError("Invaid email! Please enter a valid email address.");
+      this.showError(this.translateService.instant("login.errorEmailInvalid"));
     }
     else {
       this.userService.sendMailResetPassword(this.emailReset).subscribe({

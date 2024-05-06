@@ -1,0 +1,6 @@
+{
+    "login.login": "Đăng nhập",
+    "login.loginStayEase": "Đăng nhập StayEase",
+    "login.errorEmptyEmail": "Hãy nhập email hoặc số điện thoại.",
+    "login.errorEmailInvalid": "Địa chỉ email không hợp lệ!"
+}

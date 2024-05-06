@@ -35,7 +35,7 @@
         >
           <ng-container *nzModalContent>
             <form nz-form [formGroup]="validateForm">     
-              <div *ngIf="isBtnAddFilter" style="margin-bottom: 16px;">
+              <div *ngIf="isBtnAddFilter || isBtnChooseFilter" style="margin-bottom: 16px;">
                 <div class="group-label"><span nz-icon nzType="filter" style="margin-right: 8px;"></span>Filters</div>
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                   <div class="item" nz-col nzXs="24" nzLg="12">
@@ -232,18 +232,19 @@
       <div>
         <div class="form-label" style="height: 14px;"></div>
         <button nz-button nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
-          <span nz-icon nzType="bars" nzTheme="outline"></span>List filters
+          <span nz-icon nzType="bars" nzTheme="outline"></span>{{isBtnChooseFilter ? filterName : 'List filters'}}
         </button>
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu class="list-container">
             <li nz-menu-item class="filter-item" (click)="onDefaultFilter()">
               <span>Default filter</span>
             </li>
-            <li nz-menu-item *ngFor="let item of this.listFilterData.list; let i = index" class="filter-item">
-              <span>{{item.name}}</span>
+            <li nz-menu-item *ngFor="let item of this.listFilterData.list; let i = index" class="filter-item" (click)="onChooseFilter(i)">
+              <span>{{filterIndex == i ? filterName : item.name}}</span>
               <div style="display: flex;">
-                <span nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Edit" style="margin-left: 10px;"></span>
-                <span nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Remove" style="margin-left: 10px; color: #ff4d4f;"></span>
+                <span nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Edit" style="margin-left: 10px;" (click)="onBtnEditFilter(i)"></span>
+                <span nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Remove" style="margin-left: 10px; color: #ff4d4f;"
+                 (click)="onBtnRemoveFilter(i)"></span>
               </div>
             </li>
           </ul>
@@ -252,7 +253,7 @@
               <span nz-icon nzType="plus" nzTheme="outline" style="margin-right: 10px;"></span>
               <span>Add new filter</span>
             </div>
-            <div class="list-button">
+            <div *ngIf="filterIndex >= 0" class="list-button" (click)="onBtnSaveFilter(filterIndex)">
               <span nz-icon nzType="save" nzTheme="outline" style="margin-right: 10px;"></span>
               <span>Save this filter</span>
             </div>

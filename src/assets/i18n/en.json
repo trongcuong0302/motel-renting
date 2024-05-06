@@ -1,0 +1,6 @@
+{
+    "login.login": "Sign in",
+    "login.loginStayEase": "Sign in to StayEase",
+    "login.errorEmptyEmail": "Please input email or phone number.",
+    "login.errorEmailInvalid": "Invaid email! Please enter a valid email address."
+}

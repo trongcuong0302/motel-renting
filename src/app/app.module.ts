@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -69,6 +69,12 @@ import { MapComponent } from './components/map-component';
 import { AddRenterComponent } from './components/add-renter-component';
 import { VerifyAccountComponent } from './components/auth/verify-account';
 import { FormFilter } from './components/products-list/form-filter';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -131,13 +137,20 @@ import { FormFilter } from './components/products-list/form-filter';
     NzAvatarModule,
     NzRadioModule,
     NzSliderModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCaKbVhcX_22R_pRKDYuNA7vox-PtGaDkI'
     })
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }
+  providers: [{ provide: NZ_I18N, useValue: en_US }, HttpClient
   ],
   bootstrap: [AppComponent]
 })

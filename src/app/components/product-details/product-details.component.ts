@@ -163,7 +163,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       this.getProvinceList();
       this.getProduct(this.route.snapshot.params["id"]);
       if(window.innerWidth <= 769) this.showUserLarge = false;
-      if(window.innerWidth <= 685) this.showSettingButton = true;
+      if(window.innerWidth <= 769) this.showSettingButton = true;
     }
   }
 
@@ -641,7 +641,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   onResize(event: any) {
     if(window.innerWidth <= 769) this.showUserLarge = false;
     else this.showUserLarge = true;
-    if(window.innerWidth <= 685) this.showSettingButton = true;
+    if(window.innerWidth <= 769) this.showSettingButton = true;
     else this.showSettingButton = false;
   }
 

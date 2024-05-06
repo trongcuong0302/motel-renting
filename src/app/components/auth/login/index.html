@@ -1,6 +1,6 @@
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="content">
   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="form-container">
-    <div class="title">Sign in to StayEase</div>
+    <div class="title">{{"login.loginStayEase" | translate}}</div>
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
       <ng-container>
         <div class="text-bold label">Email or phone number</div>
@@ -32,7 +32,7 @@
           
         </div>
       </div>
-      <button nz-button class="login-form-button login-form-margin text-bold" [nzType]="'primary'">Sign in</button>
+      <button nz-button class="login-form-button login-form-margin text-bold" [nzType]="'primary'">{{"login.login" | translate}}</button>
       <div style="margin-bottom: 16px;">
         <span>Or </span><span class="register-button text-bold" (click)="onRegisterBtn()">register now!</span>
       </div>

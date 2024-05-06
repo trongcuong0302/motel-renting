@@ -3,6 +3,7 @@ import { BaseComponent } from '../../base/baseComponent';
 import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: '[topnav]',
@@ -27,13 +28,28 @@ export class TopnavComponent extends BaseComponent implements OnInit {
       isSelected: false,
     }
   ]
+  language = 'Tiếng Việt';
+  iconLang = "../../../assets/img/vietnam.png";
+  languageList = [
+    {
+      value: "vi",
+      label: "Tiếng Việt",
+      icon: "../../../assets/img/vietnam.png"
+    },
+    {
+      value: "en",
+      label: "English",
+      icon: "../../../assets/img/uk.png"
+    }
+  ]
 
   @Output() onGetUser: EventEmitter<any> = new EventEmitter();
   @Output() onGetUserDone: EventEmitter<any> = new EventEmitter();
 
   override ngOnInit(): void {
     super.ngOnInit();
-    if(window.innerWidth <= 685) this.hideMenuIcon = true;
+    localStorage.setItem('lang', 'vi');
+    if(window.innerWidth <= 785) this.hideMenuIcon = true;
     this.userService.auth.subscribe(user => {
       if(user.email){
         this.getUser();
@@ -49,6 +65,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   }
 
   constructor(private notification: NzNotificationService,
+    private translateService: TranslateService,
     private router: Router,
     private userService: UserService) {
       super(notification, router, userService);
@@ -115,7 +132,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if(window.innerWidth <= 685) this.hideMenuIcon = true;
+    if(window.innerWidth <= 785) this.hideMenuIcon = true;
     else this.hideMenuIcon = false;
   }
 
@@ -138,6 +155,13 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   goHomePage() {
     this.router.navigate(['/products']);
     this.onSelectMenuItem(0);
+  }
+
+  onChangeLanguage(lang: any) {
+    this.language = lang.label;
+    this.iconLang = lang.icon;
+    localStorage.setItem('lang', lang.value);
+    this.translateService.use(lang.value);
   }
 
 }

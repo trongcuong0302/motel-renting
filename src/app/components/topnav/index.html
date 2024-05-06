@@ -7,6 +7,18 @@
       </div>
     </div>
     <div class="right-side">
+      <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="languageDropdown" nzPlacement="bottomRight" style="margin-right: 16px;">
+        <div class="label-language">
+          <img [src]="iconLang" style="margin-right: 10px; height: 32px; width: 32px;" />{{language}}
+        </div>
+      </div>
+      <nz-dropdown-menu #languageDropdown="nzDropdownMenu">
+        <ul nz-menu>
+          <li *ngFor="let lang of languageList" nz-menu-item (click)="onChangeLanguage(lang)" style="font-weight: 500;">
+            <img [src]="lang.icon" style="margin-right: 10px; height: 32px; width: 32px;" />{{lang.label}}
+          </li>
+        </ul>
+      </nz-dropdown-menu>
       <div class="user" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
         <img class="avatar-container" [src]="avatarUrl">
         <span style="font-weight: 500;">{{getLabelUser()}}</span>
@@ -28,6 +40,18 @@
       <img class="logo" src="../../../assets/img/logo-stayease.jpg" (click)="goHomePage()">
     </div>
     <div class="right-side">
+      <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="languageDropdown" nzPlacement="bottomRight" style="margin-right: 16px;">
+        <div class="label-language">
+          <img [src]="iconLang" style="height: 32px; width: 32px;" />
+        </div>
+      </div>
+      <nz-dropdown-menu #languageDropdown="nzDropdownMenu">
+        <ul nz-menu>
+          <li *ngFor="let lang of languageList" nz-menu-item (click)="onChangeLanguage(lang)" style="font-weight: 500;">
+            <img [src]="lang.icon" style="margin-right: 10px; height: 32px; width: 32px;" />{{lang.label}}
+          </li>
+        </ul>
+      </nz-dropdown-menu>
       <div nz-dropdown nzTrigger="click" [(nzVisible)]="hideMenu" [nzDropdownMenu]="menuDropdown" class="icon-menu">
         <span nz-icon nzType="menu" nzTheme="outline"></span>
       </div>
@@ -56,6 +80,18 @@
     </div>
   </div>
 </div>
-<div class="header" *ngIf="!isShowTopnav" style="justify-content: center; position: absolute;">
-  <img class="logo" style="margin: 0;" src="../../../assets/img/logo-stayease.jpg">
+<div class="header" *ngIf="!isShowTopnav" style="width: 100%; position: absolute;">
+  <img class="logo" src="../../../assets/img/logo-stayease.jpg">
+  <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="languageDropdown" nzPlacement="bottomRight" style="margin-right: 24px;">
+    <div class="label-language">
+      <img [src]="iconLang" style="margin-right: 10px; height: 32px; width: 32px;" />{{language}}
+    </div>
+  </div>
+  <nz-dropdown-menu #languageDropdown="nzDropdownMenu">
+    <ul nz-menu>
+      <li *ngFor="let lang of languageList" nz-menu-item (click)="onChangeLanguage(lang)" style="font-weight: 500;">
+        <img [src]="lang.icon" style="margin-right: 10px; height: 32px; width: 32px;" />{{lang.label}}
+      </li>
+    </ul>
+  </nz-dropdown-menu>
 </div>

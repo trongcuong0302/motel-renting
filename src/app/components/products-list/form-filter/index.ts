@@ -20,12 +20,15 @@ import { NzMarks } from 'ng-zorro-antd/slider';
 })
 export class FormFilter extends BaseComponent implements OnInit{
   searchKeyword: string = '';
-  filterName: string = 'Filter number ';
+  filterName: string = '';
   isClear: boolean = false;
   isVisible = false;
   isBtnAddFilter: boolean = false;
   isBtnSaveFilter: boolean = false;
+  isBtnChooseFilter: boolean = false;
+  isBtnRemoveFilter: boolean = false;
   filterListExist: boolean = false;
+  filterIndex: number = -1;
   clearData: any = {};
   provinceList: any = [];
   location = [];
@@ -114,6 +117,7 @@ export class FormFilter extends BaseComponent implements OnInit{
   }
 
   constructor(private fb: NonNullableFormBuilder,
+    private modal: NzModalService,
     private userService: UserService,
     private provinceService: ProvinceService,
     private router: Router,
@@ -280,7 +284,7 @@ export class FormFilter extends BaseComponent implements OnInit{
     this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
       next: (data) => {
         this.isLoading = false;
-        console.log(data.data);
+        this.showSuccess("Filter saved successfully")
       },
       error: (err) => {
         this.isLoading = false;
@@ -297,7 +301,6 @@ export class FormFilter extends BaseComponent implements OnInit{
       this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
         next: (data) => {
           this.isLoading = false;
-          console.log(data.data);
           this.showSuccess("Filter added successfully")
         },
         error: (err) => {
@@ -312,7 +315,6 @@ export class FormFilter extends BaseComponent implements OnInit{
       this.filterService.postAFilter(this.listFilterData).subscribe({
         next: (data) => {
           this.isLoading = false;
-          console.log(data.data);
         },
         error: (err) => {
           this.isLoading = false;
@@ -320,7 +322,7 @@ export class FormFilter extends BaseComponent implements OnInit{
         }
       });
     }
-    
+    this.onChooseFilter(this.listFilterData.list.length-1);
   }
 
   onClearInput() {
@@ -343,6 +345,12 @@ export class FormFilter extends BaseComponent implements OnInit{
   }
 
   handleOk(): void {
+    if(this.isBtnAddFilter || this.isBtnSaveFilter || this.isBtnChooseFilter) {
+      if(this.filterName == '') {
+        this.showError("Filter name should not be empty");
+        return;
+      }
+    }
     this.isVisible = false;
     this.onSearch();
   }
@@ -356,6 +364,8 @@ export class FormFilter extends BaseComponent implements OnInit{
         this.validateForm.get(key)?.setValue(this.clearData[key]);
       }
     }
+    this.filterName = this.listFilterData.list[this.filterIndex]?.name ?? '';
+    this.isBtnAddFilter = false;
     this.isVisible = false;
   }
 
@@ -395,7 +405,59 @@ export class FormFilter extends BaseComponent implements OnInit{
   }
 
   onDefaultFilter() {
+    this.filterName = '';
+    this.isBtnChooseFilter = false;
+    this.filterIndex = -1;
     this.onClearInput();
     this.onSearch();
+  }
+
+  onChooseFilter(i: number) {
+    if(this.isBtnRemoveFilter == true) return;
+    this.isBtnChooseFilter = true;
+    this.filterIndex = i;
+    let filter  = this.listFilterData.list[i].formData;
+    this.filterName = this.listFilterData.list[i].name;
+    this.searchKeyword = filter['search'];
+    this.roomType = filter['roomType'];
+    this.location = filter['locationSelect'];
+    for(let key in this.validateForm.controls) {
+      this.validateForm.get(key)?.setValue(filter[key]);
+    }
+    this.onSearch(i);
+  }
+
+  onBtnEditFilter(i: number) {
+    this.onChooseFilter(i);
+    this.showModal();
+  }
+
+  onBtnRemoveFilter(i: number) {
+    this.isBtnRemoveFilter = true;
+    this.modal.confirm({
+      nzTitle: `Do you want to remove filter <strong>${this.listFilterData.list[i].name}</strong>?`,
+      nzOnOk: () => this.removeFilter(i),
+      nzOnCancel: () => {
+        this.isBtnRemoveFilter = false;
+        this.modal.closeAll();
+      } 
+    })
+  }
+
+  removeFilter(i: number) {
+    this.isBtnRemoveFilter = false;
+    this.listFilterData.list.splice(i, 1);
+    this.isLoading = true;
+    this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        if(i== this.filterIndex) this.onDefaultFilter();
+        this.showSuccess("Filter removed successfully")
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.log(err.error.message);
+      }
+    });
   }
 }
