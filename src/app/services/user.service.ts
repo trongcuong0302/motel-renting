@@ -36,8 +36,8 @@ export class UserService {
     return this.http.post(`${baseUrl}/logout`, {}, { withCredentials: true });
   }
 
-  sendMailResetPassword(email: string): Observable<any> {
-    return this.http.post(`${baseUrl}/send-email`, { email: email });
+  sendMailResetPassword(objEmail: object): Observable<any> {
+    return this.http.post(`${baseUrl}/send-email`, objEmail);
   }
 
   resetPassword(resetObj: object): Observable<any> {

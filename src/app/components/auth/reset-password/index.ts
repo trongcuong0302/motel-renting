@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base/baseComponent';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'reset-password',
@@ -30,6 +31,7 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
     private modal: NzModalService,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
+    private translateService: TranslateService,
     private router: Router,
     private notification: NzNotificationService,) {
     super(notification, router, userService);
@@ -48,12 +50,17 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
       this.userService.resetPassword(resetObj).subscribe({
         next: (data) => {
           this.modal.success({
-            nzTitle: 'Password changed successfully',
-            nzContent: 'You can go to login page to sign in now.',
+            nzTitle: this.translateService.instant("resetPassword.resetSuccess"),
+            nzContent: this.translateService.instant("resetPassword.resetSuccessContent"),
             nzOnOk: () => this.router.navigate(['/login'])
           });
         },
-        error: (error) => this.showError(error.error.message)
+        error: (error) => {
+          if(error.error.message == "Reset link is expired. Please send a new request to reset your password!") 
+            this.showError(this.translateService.instant("resetPassword.linkExpired"))
+          else if(error.error.message == "Something went wrong while reseting password") 
+            this.showError(this.translateService.instant("resetPassword.resetError"))
+        } 
       });
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
@@ -74,11 +81,11 @@ export class ResetPasswordComponent extends BaseComponent implements OnInit {
     let data = this.validateForm.value;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     if(!data.password || !passwordRegex.test(data.password)){
-      this.showError("Invaid password! Please enter a valid password.");
+      this.showError(this.translateService.instant("resetPassword.invalidPassword"));
       return false;
     } 
     if(!data.confirmPassword || data.password != data.confirmPassword){
-      this.showError("Confirm password must be similar to password!");
+      this.showError(this.translateService.instant("resetPassword.invalidConfirmPassword"));
       return false;
     } 
     return true;

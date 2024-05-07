@@ -3,21 +3,21 @@
     <div class="title">{{"login.loginStayEase" | translate}}</div>
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
       <ng-container>
-        <div class="text-bold label">Email or phone number</div>
+        <div class="text-bold label">{{"login.emailLabel" | translate}}</div>
         <nz-form-item>
-          <nz-form-control nzErrorTip="Please input your email or phone number!">
+          <nz-form-control [nzErrorTip]="'login.errorEmptyEmail' | translate">
             <nz-input-group nzPrefixIcon="mail">
-              <input type="text" nz-input formControlName="email" placeholder="Email or phone number" />
+              <input type="text" nz-input formControlName="email" [placeholder]="'login.emailLabel' | translate" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
       </ng-container>
       <ng-container>
-        <div class="text-bold label">Password</div>
+        <div class="text-bold label">{{"login.passwordLabel" | translate}}</div>
         <nz-form-item>
-          <nz-form-control nzErrorTip="Please input your password!">
+          <nz-form-control [nzErrorTip]="'login.errorEmptyPassword' | translate">
             <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
-              <input [type]="isShowPassword ? 'text' : 'password'" nz-input formControlName="password" placeholder="Password" />
+              <input [type]="isShowPassword ? 'text' : 'password'" nz-input formControlName="password" [placeholder]="'login.passwordLabel' | translate" />
             </nz-input-group>
             <ng-template #suffixTemplate>
               <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
@@ -28,26 +28,28 @@
       <div nz-row class="login-form-margin">
         <div nz-col [nzSpan]="12"></div>
         <div nz-col [nzSpan]="12">
-          <span class="login-form-forgot text-bold" (click)="onBtnForgotPassword()">Forgot password?</span>
+          <span class="login-form-forgot text-bold" (click)="onBtnForgotPassword()">{{"login.forgotPasswordLabel" | translate}}?</span>
           
         </div>
       </div>
-      <button nz-button class="login-form-button login-form-margin text-bold" [nzType]="'primary'">{{"login.login" | translate}}</button>
+      <button nz-button class="login-form-button login-form-margin text-bold" [nzType]="'primary'">
+        <span nz-icon nzType="login" nzTheme="outline"></span>{{"login.login" | translate}}
+      </button>
       <div style="margin-bottom: 16px;">
-        <span>Or </span><span class="register-button text-bold" (click)="onRegisterBtn()">register now!</span>
+        <span>{{"login.or" | translate}} </span><span class="register-button text-bold" (click)="onRegisterBtn()">{{"login.registernow" | translate}}!</span>
       </div>
     </form>
     <nz-modal
       [(nzVisible)]="isVisible"
-      nzTitle="Forgot password"
-      nzOkText="Send"
-      nzCancelText="Cancel"
+      [nzTitle]="'login.forgotPasswordLabel' | translate"
+      [nzOkText]="'login.sendLabel' | translate"
+      [nzCancelText]="'login.cancelLabel' | translate"
       [nzWidth]="400"
       (nzOnOk)="handleOk()"
       (nzOnCancel)="handleCancel()"
     >
       <ng-container *nzModalContent>
-        <div>Enter your email and we'll send you instructions on how to reset your password</div>
+        <div>{{"login.forgotPasswordContent" | translate}}</div>
         <input style="margin-top:8px; width: 350px;" type="text" nz-input placeholder="Email" [(ngModel)]="emailReset" />
       </ng-container>
     </nz-modal>

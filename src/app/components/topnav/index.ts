@@ -48,7 +48,11 @@ export class TopnavComponent extends BaseComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    localStorage.setItem('lang', 'vi');
+    if(!localStorage.getItem('lang')) localStorage.setItem('lang', 'vi');
+    else if(localStorage.getItem('lang') == "en"){
+      this.language = 'English';
+      this.iconLang = "../../../assets/img/uk.png";
+    }
     if(window.innerWidth <= 785) this.hideMenuIcon = true;
     this.userService.auth.subscribe(user => {
       if(user.email){
@@ -109,7 +113,10 @@ export class TopnavComponent extends BaseComponent implements OnInit {
         this.isLoggedIn = false;
         this.onGetUserDone.emit();
         if(!this.router.url.includes('/reset')) this.router.navigate(['/login']);
-        if(this.router.url != '/login' && !this.router.url.includes('/reset')) this.showError(error.error.message);
+        if(this.router.url != '/login' && !this.router.url.includes('/reset')) {
+          if(error.error.message == "Unauthenticated") this.showError(this.translateService.instant("user.unauthenticated"))
+          else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
+        } 
       }
     });
   }
@@ -153,7 +160,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   }
 
   goHomePage() {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/login']);
     this.onSelectMenuItem(0);
   }
 

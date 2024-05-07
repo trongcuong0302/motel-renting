@@ -26,10 +26,10 @@
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
           <li nz-menu-item (click)="onBtnProfile()" style="font-weight: 500;">
-            <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>Profile
+            <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>{{"user.profileLabel" | translate}}
           </li>
           <li nz-menu-item (click)="onLogOut()" style="font-weight: 500;">
-            <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>Logout
+            <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>{{"user.LogoutLabel" | translate}}
           </li>
         </ul>
       </nz-dropdown-menu>
@@ -67,10 +67,10 @@
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item (click)="onBtnProfile()" style="font-weight: 500;">
-                <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>Profile
+                <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>{{"user.profileLabel" | translate}}
               </li>
               <li nz-menu-item (click)="onLogOut()" style="font-weight: 500;">
-                <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>Logout
+                <span nz-icon nzType="logout" nzTheme="outline" style="margin-right: 10px;"></span>{{"user.LogoutLabel" | translate}}
               </li>
             </ul>
           </nz-dropdown-menu>
@@ -81,7 +81,7 @@
   </div>
 </div>
 <div class="header" *ngIf="!isShowTopnav" style="width: 100%; position: absolute;">
-  <img class="logo" src="../../../assets/img/logo-stayease.jpg">
+  <img class="logo" src="../../../assets/img/logo-stayease.jpg" (click)="goHomePage()">
   <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="languageDropdown" nzPlacement="bottomRight" style="margin-right: 24px;">
     <div class="label-language">
       <img [src]="iconLang" style="margin-right: 10px; height: 32px; width: 32px;" />{{language}}

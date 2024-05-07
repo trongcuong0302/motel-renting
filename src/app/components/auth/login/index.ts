@@ -62,7 +62,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
           this.userService.nextUser(formData);
           this.router.navigate(['/products']);
         },
-        error: (error) => this.showError(error.error.message)
+        error: (error) => {
+          if(error.error.message == "Not found email or phone number") this.showError(this.translateService.instant("login.notFoundEmail"))
+          else if(error.error.message == "Password is incorrect") this.showError(this.translateService.instant("login.incorrectPassword"))
+          else if(error.error.message == "Your account is inactive. Please verify your account in your email message.") 
+            this.showError(this.translateService.instant("login.inactiveAccount"))
+        }
       });
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
@@ -98,15 +103,19 @@ export class LoginComponent extends BaseComponent implements OnInit {
       this.showError(this.translateService.instant("login.errorEmailInvalid"));
     }
     else {
-      this.userService.sendMailResetPassword(this.emailReset).subscribe({
+      let objEmail: any = {
+        email: this.emailReset,
+        language: localStorage.getItem('lang') || 'vi'
+      }
+      this.userService.sendMailResetPassword(objEmail).subscribe({
         next: (data) => {
           this.modal.success({
-            nzTitle: 'Send email successfully',
-            nzContent: 'An instruction has been sent to your email address. Please check your email and follow the instructions to reset your password.'
+            nzTitle: this.translateService.instant("login.sendEmailSuccessTitle"),
+            nzContent: this.translateService.instant("login.sendEmailSuccessContent")
           });
           this.isVisible = false;
         },
-        error: (error) => this.showError(error.error.message)
+        error: (error) => this.showError(this.translateService.instant("login.sendMailError"))
       });
     }
   }

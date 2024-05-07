@@ -1,14 +1,14 @@
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="content">
   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="form-container">
-    <div class="title">Reset your password</div>
+    <div class="title">{{"resetPassword.title" | translate}}</div>
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
       <ng-container *ngFor="let key of ['password']">
-        <div class="text-bold">Password</div>
-        <div class="label-password">* Password should contain at least 8 characters including at least 1 lowercase letter, 1 capital letter, 1 number, and 1 special character</div>
+        <div class="text-bold">{{"resetPassword.passwordLabel" | translate}}</div>
+        <div class="label-password">* {{"resetPassword.instruction" | translate}}</div>
         <nz-form-item class="form-item">
-          <nz-form-control nzErrorTip="Please input your password!">
+          <nz-form-control [nzErrorTip]="'resetPassword.errorEmptyPassword' | translate">
             <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
-              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" placeholder="Password" />
+              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" [placeholder]="'resetPassword.passwordLabel' | translate" />
             </nz-input-group>
             <ng-template #suffixTemplate>
               <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
@@ -17,11 +17,11 @@
         </nz-form-item>
       </ng-container>
       <ng-container *ngFor="let key of ['confirmPassword']">
-        <div class="text-bold label">Confirm password</div>
+        <div class="text-bold label">{{"resetPassword.confirmPasswordLabel" | translate}}</div>
         <nz-form-item class="form-item">
-          <nz-form-control nzErrorTip="Please input your confirm password!">
+          <nz-form-control [nzErrorTip]="'resetPassword.errorEmptyConfirmPassword' | translate">
             <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
-              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" placeholder="Confirm password" />
+              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" [placeholder]="'resetPassword.confirmPasswordLabel' | translate" />
             </nz-input-group>
             <ng-template #suffixTemplate>
               <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
@@ -29,9 +29,11 @@
           </nz-form-control>
         </nz-form-item>
       </ng-container>
-      <button nz-button class="text-bold login-form-button login-form-margin" [nzType]="'primary'">Submit</button>
-      Or
-      <span class="register-button text-bold" (click)="onLoginBtn()">login now!</span>
+      <button nz-button class="text-bold login-form-button login-form-margin" [nzType]="'primary'">
+        <span nz-icon nzType="upload" nzTheme="outline"></span>{{"resetPassword.submit" | translate}}
+      </button>
+      {{"resetPassword.or" | translate}}
+      <span class="register-button text-bold" (click)="onLoginBtn()">{{"resetPassword.loginNow" | translate}}!</span>
     </form>
   </div>
 </div>

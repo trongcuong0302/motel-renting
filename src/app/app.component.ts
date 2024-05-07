@@ -11,7 +11,7 @@ export class AppComponent {
   isLoading = false;
 
   constructor(private translateService: TranslateService) {
-    this.translateService.setDefaultLang('vi');
+    //this.translateService.setDefaultLang('vi');
     this.translateService.use(localStorage.getItem('lang') || 'vi');
 
   }

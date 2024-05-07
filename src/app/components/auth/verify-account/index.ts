@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base/baseComponent';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'verify-account',
@@ -19,6 +20,7 @@ export class VerifyAccountComponent extends BaseComponent implements OnInit {
     private modal: NzModalService,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
+    private translateService: TranslateService,
     private router: Router,
     private notification: NzNotificationService,) {
     super(notification, router, userService);
@@ -31,9 +33,14 @@ export class VerifyAccountComponent extends BaseComponent implements OnInit {
     }
     this.userService.verifyEmail(resetObj).subscribe({
       next: (data) => {
-        this.showSuccess("Account verified successfully!");
+        this.showSuccess(this.translateService.instant("verify.success"));
       },
-      error: (error) => this.showError(error.error.message)
+      error: (error) => {
+        if(error.error.message == "Your account has already been activated or it does not exist!") this.showError(this.translateService.instant("verify.activated"))
+        else if(error.error.message == "Something went wrong while verify account!") this.showError(this.translateService.instant("verify.activateError"))
+        else if(error.error.message == "Verification link is expired. Please send a new request to verify your account!") 
+          this.showError(this.translateService.instant("verify.expiredLink"))
+      } 
     });
   }
 

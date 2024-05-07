@@ -1,9 +1,9 @@
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="content">
   <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="form-container">
-    <div class="title">Account verified</div>
-    <span>Your account is verified successfully. Now you can sign in to <strong><a (click)="onLoginBtn()">StayEase</a></strong> and use our service.</span>
+    <div class="title">{{"verify.title" | translate}}</div>
+    <span>{{"verify.contentSuccess" | translate}} <strong><a (click)="onLoginBtn()">StayEase</a></strong> {{"verify.contentLogin" | translate}}</span>
     <button nz-button class="login-form-button" [nzShape]="'round'" [nzType]="'primary'" (click)="onLoginBtn()">
-      <span nz-icon nzType="login" nzTheme="outline"></span>Sign in
+      <span nz-icon nzType="login" nzTheme="outline"></span>{{"verify.login" | translate}}
     </button>
   </div>
 </div>

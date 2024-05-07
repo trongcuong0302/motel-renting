@@ -5,6 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/baseComponent';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: '[register-form]',
@@ -32,6 +33,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
   constructor(private fb: NonNullableFormBuilder,
     private userService: UserService,
+    private translateService: TranslateService,
     private router: Router,
     private notification: NzNotificationService,
     private modal: NzModalService) {
@@ -43,13 +45,19 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateFormData()) {
-      let formData = this.validateForm.value;
+      let formData: any = this.validateForm.value;
+      formData['language'] = localStorage.getItem('lang') || 'vi';
       this.userService.register(formData).subscribe({
         next: (data) => {
-          this.showSuccess("Successfully registered!");
+          this.showSuccess(this.translateService.instant("register.success"));
           this.info();
         },
-        error: (error) => this.showError(error.error.message)
+        error: (error) => {
+          if(error.error.message == "Duplicate Email") this.showError(this.translateService.instant("register.duplicateEmail"))
+          else if(error.error.message == "Duplicate phone number") this.showError(this.translateService.instant("register.duplicatePhone"))
+          else if(error.error.message == "Email not found") this.showError(this.translateService.instant("register.notFoundEmail"))
+          else if(error.error.message == "Something went wrong while sending the email") this.showError(this.translateService.instant("register.sendEmailError"))
+        } 
       });
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
@@ -63,8 +71,8 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
   info(): void {
     this.modal.info({
-      nzTitle: 'Account Verification',
-      nzContent: '<p>An account verification message has been sent to your email</p><p>Please check your email and follow the instructions to verify your account to sign in our website.</p>',
+      nzTitle: this.translateService.instant("register.verify"),
+      nzContent: this.translateService.instant("register.verifyContent"),
       nzOnOk: () => {
         this.onLoginBtn();
       },
@@ -85,19 +93,19 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     const phoneNumberRegex = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     if(!data.email || !emailRegex.test(data.email)) {
-      this.showError("Invaid email! Please enter a valid email address.");
+      this.showError(this.translateService.instant("register.invalidEmail"));
       return false;
     }
     if(!data.phoneNumber || !phoneNumberRegex.test(data.phoneNumber)) {
-      this.showError("Invaid phone number! Please enter a valid phone number.");
+      this.showError(this.translateService.instant("register.invalidPhone"));
       return false;
     }
     if(!data.password || !passwordRegex.test(data.password)){
-      this.showError("Invaid password! Please enter a valid password.");
+      this.showError(this.translateService.instant("register.invalidPassword"));
       return false;
     } 
     if(!data.confirmPassword || data.password != data.confirmPassword){
-      this.showError("Confirm password must be similar to password!");
+      this.showError(this.translateService.instant("register.invalidConfirmPassword"));
       return false;
     } 
     return true;
