@@ -3,7 +3,7 @@ import { BaseComponent } from '../../base/baseComponent';
 import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: '[topnav]',
@@ -24,6 +24,11 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     },
     {
       label: 'Add Motel',
+      link: 'add',
+      isSelected: false,
+    },
+    {
+      label: 'Contact Us',
       link: 'add',
       isSelected: false,
     }
@@ -48,12 +53,15 @@ export class TopnavComponent extends BaseComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
+    this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.getLabelForArray(event.lang);
+    });
     if(!localStorage.getItem('lang')) localStorage.setItem('lang', 'vi');
     else if(localStorage.getItem('lang') == "en"){
       this.language = 'English';
       this.iconLang = "../../../assets/img/uk.png";
     }
-    if(window.innerWidth <= 785) this.hideMenuIcon = true;
+    if(window.innerWidth <= 920) this.hideMenuIcon = true;
     this.userService.auth.subscribe(user => {
       if(user.email){
         this.getUser();
@@ -66,6 +74,12 @@ export class TopnavComponent extends BaseComponent implements OnInit {
       this.onSelectMenuItem(0);
       this.router.navigate(['/products']);
     } 
+  }
+
+  getLabelForArray(lang: any) {
+    this.menuList[0].label = this.translateService.instant("user.motelListLabel");
+    this.menuList[1].label = this.translateService.instant("user.addMotelLabel");
+    this.menuList[2].label = this.translateService.instant("user.contactUsLabel");
   }
 
   constructor(private notification: NzNotificationService,
@@ -139,7 +153,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if(window.innerWidth <= 785) this.hideMenuIcon = true;
+    if(window.innerWidth <= 920) this.hideMenuIcon = true;
     else this.hideMenuIcon = false;
   }
 

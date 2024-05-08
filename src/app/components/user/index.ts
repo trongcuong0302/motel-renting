@@ -9,6 +9,7 @@ import { BaseComponent } from 'src/app/base/baseComponent';
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { Storage } from '@angular/fire/storage'
 import { finalize } from 'rxjs';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: '[user-profile]',
@@ -46,6 +47,7 @@ export class UserProfile extends BaseComponent implements OnInit {
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
     private userService: UserService,
+    private translateService: TranslateService,
     private provinceService: ProvinceService,
     private fireStorage: AngularFireStorage,
     private router: Router,
@@ -91,7 +93,8 @@ export class UserProfile extends BaseComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Unauthenticated") this.showError(this.translateService.instant("user.unauthenticated"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
       }
     });
   }
@@ -105,7 +108,7 @@ export class UserProfile extends BaseComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("user.getProvinceError"))
       }
     });
   }
@@ -170,12 +173,12 @@ export class UserProfile extends BaseComponent implements OnInit {
   validateFormData() {
     let data = this.validateForm.value;
     if(!data.name) {
-      this.showError("Please enter the name field.");
+      this.showError(this.translateService.instant("user.nameError"));
       return false;
     }
     const phoneNumberRegex = /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/;
     if(!data.phoneNumber || !phoneNumberRegex.test(data.phoneNumber)) {
-      this.showError("Invaid phone number! Please enter a valid phone number.");
+      this.showError(this.translateService.instant("user.phoneError"));
       return false;
     }
     return true;
@@ -210,11 +213,12 @@ export class UserProfile extends BaseComponent implements OnInit {
         this.userService.updateUserProfile(this.userData._id, formData).subscribe({
           next: (data) => {
             this.isLoading = false;
-            this.showSuccess("User profile updated successfully!");
+            this.showSuccess(this.translateService.instant("user.updateSuccess"));
           },
           error: (error) => {
             this.isLoading = false;
-            this.showError(error.error.message);
+            if(error.error.message == "Invalid data") this.showError(this.translateService.instant("user.invalidData"))
+            else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
           }
         });
       } else {
@@ -235,6 +239,11 @@ export class UserProfile extends BaseComponent implements OnInit {
 
   onBtnChangePassword() {
     this.isVisible = true;
+    this.objectChangePassword = {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    }
   }
 
   handleCancel() {
@@ -255,11 +264,13 @@ export class UserProfile extends BaseComponent implements OnInit {
             newPassword: '',
             confirmPassword: '',
           }
-          this.showSuccess("Password changed successfully!");
+          this.showSuccess(this.translateService.instant("user.changePasswordSuccess"));
         },
         error: (error) => {
           this.isLoading = false;
-          this.showError(error.error.message);
+          if(error.error.message == "Password is incorrect") this.showError(this.translateService.instant("user.wrongPassword"))
+          else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
+          else if(error.error.message == "Something went wrong while reseting password") this.showError(this.translateService.instant("user.changePasswordError"))
         }
       });
     }
@@ -268,17 +279,17 @@ export class UserProfile extends BaseComponent implements OnInit {
   validateChangePassword() {
     for(let key in this.objectChangePassword) {
       if(!this.objectChangePassword[key]) {
-        this.showError("Please enter all the fields");
+        this.showError(this.translateService.instant("user.passwordEmpty"));
         return false;
       }
     }
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     if(!passwordRegex.test(this.objectChangePassword.newPassword)){
-      this.showError("Invaid password! Please enter a valid password.");
+      this.showError(this.translateService.instant("user.passwordInvalid"));
       return false;
     } 
     if(this.objectChangePassword.newPassword != this.objectChangePassword.confirmPassword){
-      this.showError("Confirm password must be similar to password!");
+      this.showError(this.translateService.instant("user.passwordConfirmError"));
       return false;
     } 
     return true;
@@ -315,12 +326,13 @@ export class UserProfile extends BaseComponent implements OnInit {
             this.userService.updateUserProfile(this.userData._id, { avatarInfo: avatarInfo, isChangeAvatar: true }).subscribe({
               next: (data) => {
                 this.loading = false;
-                this.showSuccess("Avatar changed successfully!");
+                this.showSuccess(this.translateService.instant("user.saveImageSuccess"));
                 window.location.reload();
               },
               error: (error) => {
                 this.loading = false;
-                this.showError(error.error);
+                if(error.error.message == "Invalid data") this.showError(this.translateService.instant("user.invalidData"))
+                else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
               }
             });
           },
@@ -352,11 +364,11 @@ export class UserProfile extends BaseComponent implements OnInit {
   confirmDelete() : void {
     if(this.avatarUrl == '../../../assets/img/default-avatar.jpg') return;
     this.modal.confirm({
-      nzTitle: 'Do you want to delete this avatar?',
-      nzOkText: 'Yes',
+      nzTitle: this.translateService.instant("user.deleteImageContent"),
+      nzOkText: this.translateService.instant("user.deleteImageYes"),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: this.translateService.instant("user.deleteImageNo"),
       nzOnOk: () => this.onDeleteImage()
     });
   }
@@ -374,7 +386,8 @@ export class UserProfile extends BaseComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        this.showError(error.error);
+        if(error.error.message == "Invalid data") this.showError(this.translateService.instant("user.invalidData"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
       }
     });
   }

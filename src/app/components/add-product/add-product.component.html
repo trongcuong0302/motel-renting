@@ -1,19 +1,20 @@
 <div>
     <div *ngIf="isEdit">
-      <div class="header"><span>Add new room</span></div>
+      <div class="header"><span>{{'add.title' | translate}}</span></div>
         <div class="container">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="main-content">
               <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
                 <form nz-form [formGroup]="validateForm">     
                   <div class="group-content">
-                    <div class="group-label"><span nz-icon nzType="home" style="margin-right: 8px;"></span>Motel Overview</div>
+                    <div class="group-label"><span nz-icon nzType="home" style="margin-right: 8px;"></span>{{'add.overview' | translate}}</div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Room type<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.roomType' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['roomType']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="roomTypeList" style="width:100%;" placeholder="Room type"></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="roomTypeList" style="width:100%;" 
+                                [nzPlaceHolder]="'add.roomType' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -21,11 +22,12 @@
                           style="width:100%; margin-bottom: 24px;" (ngModelChange)="onChangeValue('roomType', $event)"></nz-select> -->
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Room status<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.roomStatus' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['roomStatus']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="roomStatusList" style="width:100%;" placeholder="Room status"></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="roomStatusList" style="width:100%;" 
+                                [nzPlaceHolder]="'add.roomStatus' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -35,41 +37,42 @@
                     </div>                                                 
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Room name<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.roomName' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['roomName']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="text" nz-input [formControlName]="key" placeholder="Room name" />
+                              <input type="text" nz-input [formControlName]="key" [placeholder]="'add.roomName' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of floors (0 if not House)</div>
+                        <div class="label">{{'add.floor' | translate}}</div>
                         <div *ngFor="let key of ['numberOfFloors']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of floors" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.floorShort' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Area (m<sup>2</sup> each floor)<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.area' | translate}} (m<sup>2</sup> {{'add.eachFloor' | translate}})<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['area']" style="max-width: 600px;">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Area (each floor)" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.areaFloor' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Duration</div>
+                        <div class="label">{{'add.duration' | translate}}</div>
                         <div *ngFor="let key of ['duration']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="durationList" style="width:100%;" placeholder="Duration"></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="durationList" style="width:100%;" 
+                                [nzPlaceHolder]="'add.duration' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -78,14 +81,14 @@
                   </div>
                   <div class="seperator"></div>
                   <div class="group-content">
-                    <div class="group-label"><span nz-icon nzType="dollar" style="margin-right: 8px;"></span>Price</div>
+                    <div class="group-label"><span nz-icon nzType="dollar" style="margin-right: 8px;"></span>{{'add.price' | translate}}</div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Price/month (1000000 = 1 million)<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.priceMonth' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['price']" style="display: flex;">
                           <nz-form-item style="width: 60%" >
                             <nz-form-control>
-                              <input type="number" nz-input [formControlName]="key" placeholder="Price"/>
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.price' | translate"/>
                             </nz-form-control>
                           </nz-form-item>
                           <nz-form-item style="width: 40%; height: 32px;">
@@ -98,11 +101,11 @@
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Deposit (1000000 = 1 million)<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.depositLabel' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['deposit']" style="display: flex;">
                           <nz-form-item style="width: 60%">
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Deposit"/>
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.deposit' | translate"/>
                             </nz-form-control>
                           </nz-form-item>
                           <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
@@ -111,11 +114,11 @@
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Electric price/kWh (leave 0 if standard price)</div>
+                        <div class="label">{{'add.electricPriceLabel' | translate}} {{'add.standardPrice' | translate}}</div>
                         <div *ngFor="let key of ['electricPrice']" style="display: flex;">
                           <nz-form-item style="width: 60%">
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Electric price" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.electricPrice' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                           <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
@@ -124,11 +127,11 @@
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Water price/m3 (leave 0 if standard price)</div>
+                        <div class="label">{{'add.waterPrice' | translate}}/m<sup>3</sup> {{'add.standardPrice' | translate}}</div>
                         <div *ngFor="let key of ['waterPrice']" style="display: flex;">
                           <nz-form-item style="width: 60%" >
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Water price" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.waterPrice' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                           <nz-select [ngModel]="selectedCurrencyUnits" [ngModelOptions]="{standalone:true}" nzDisabled style="width: 40%; height: 32px;"> 
@@ -140,45 +143,50 @@
                   </div>
                   <div class="seperator"></div>
                   <div class="group-content">
-                    <div class="group-label"><span nz-icon nzType="info-circle" style="margin-right: 8px;"></span>More Information</div>
+                    <div class="group-label">
+                      <span nz-icon nzType="info-circle" style="margin-right: 8px;"></span>{{'add.moreInfo' | translate}}
+                    </div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Direction</div>
+                        <div class="label">{{'add.direction' | translate}}</div>
                         <div *ngFor="let key of ['directions']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="directionList" style="width:100%;" placeholder="Direction"></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="directionList" style="width:100%;" 
+                                [nzPlaceHolder]="'add.direction' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Same house with owner</div>
+                        <div class="label">{{'add.sameHouseWithOwner' | translate}}</div>
                         <div *ngFor="let key of ['sameHouseWithOwner']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="yesNoList" style="width:100%;" placeholder="Direction"></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="yesNoList" style="width:100%;" 
+                              [nzPlaceHolder]="'add.sameHouseWithOwner' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Requirement for renters</div>
+                        <div class="label">{{'add.renterRequirement' | translate}}</div>
                         <div *ngFor="let key of ['renterRequirement']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="renterRequirementList" style="width:100%;" placeholder="Requirement for renters"
-                              ></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="renterRequirementList" style="width:100%;" 
+                                [nzPlaceHolder]="'add.renterRequirement' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Parking area</div>
+                        <div class="label">{{'add.parkingArea' | translate}}</div>
                         <div *ngFor="let key of ['hasParkingArea']">
                           <nz-form-item>
                             <nz-form-control >
-                              <nz-select [formControlName]="key" [nzOptions]="yesNoList" style="width:100%;" placeholder="Parking area"></nz-select>
+                              <nz-select [formControlName]="key" [nzOptions]="yesNoList" style="width:100%;" 
+                                [nzPlaceHolder]="'add.parkingArea' | translate"></nz-select>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -186,41 +194,41 @@
                     </div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of washing machines</div>
+                        <div class="label">{{'add.washingMachine' | translate}}</div>
                         <div *ngFor="let key of ['numberOfWashingMachine']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of washing machines" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.washingMachine' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of air-conditioners</div>
+                        <div class="label">{{'add.air-conditioner' | translate}}</div>
                         <div *ngFor="let key of ['numberOfAirConditioners']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of air-conditioners" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.air-conditioner' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of water-heaters</div>
+                        <div class="label">{{'add.water-heater' | translate}}</div>
                         <div *ngFor="let key of ['numberOfWaterHeaters']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of water-heaters" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.water-heater' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of wardrobes</div>
+                        <div class="label">{{'add.wardrobe' | translate}}</div>
                         <div *ngFor="let key of ['numberOfWardrobes']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of wardrobes" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.wardrobe' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -228,41 +236,41 @@
                     </div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of bathrooms</div>
+                        <div class="label">{{'add.bathroom' | translate}}</div>
                         <div *ngFor="let key of ['numberOfBathrooms']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of bathrooms" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.bathroom' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of bedrooms</div>
+                        <div class="label">{{'add.bedroom' | translate}}</div>
                         <div *ngFor="let key of ['numberOfBedrooms']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of bedrooms" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.bedroom' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Number of beds</div>
+                        <div class="label">{{'add.bed' | translate}}</div>
                         <div *ngFor="let key of ['numberOfBeds']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="number" nz-input [formControlName]="key" placeholder="Number of beds" />
+                              <input type="number" nz-input [formControlName]="key" [placeholder]="'add.bed' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-                        <div class="label">Note</div>
+                        <div class="label">{{'add.note' | translate}}</div>
                         <div *ngFor="let key of ['note']">
                           <nz-form-item>
                             <nz-form-control >
-                              <textarea nz-input [formControlName]="key" placeholder="Note" nzAutosize></textarea>
+                              <textarea nz-input [formControlName]="key" [placeholder]="'add.note' | translate" nzAutosize></textarea>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -271,25 +279,25 @@
                   </div>
                   <div class="seperator"></div>
                   <div class="group-content">
-                    <div class="group-label"><span nz-icon nzType="environment" style="margin-right: 8px;"></span>Motel Location</div>
+                    <div class="group-label"><span nz-icon nzType="environment" style="margin-right: 8px;"></span>{{'add.motelLocation' | translate}}</div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Address (House number, Street)<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.address' | translate}} {{'add.addressSuggest' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['address']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="text" nz-input [formControlName]="key" placeholder="Address" />
+                              <input type="text" nz-input [formControlName]="key" [placeholder]="'add.address' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>
                       </div>
                       <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
-                        <div class="label">Location<span class="mark-require">*</span></div>
+                        <div class="label">{{'add.location' | translate}}<span class="mark-require">*</span></div>
                         <div *ngFor="let key of ['location']">
                           <nz-form-item>
                             <nz-form-control >
                               <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="location" [nzShowSearch]="true"
-                                class="form-location-picker" nzPlaceHolder="Location"></nz-cascader>
+                                class="form-location-picker" [nzPlaceHolder]="'add.location' | translate"></nz-cascader>
                             </nz-form-control>
                           </nz-form-item>
                         </div>
@@ -297,7 +305,7 @@
                     </div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24">
-                        <div style="margin-bottom: 10px;">Click in the map to choose the location of your room</div>
+                        <div style="margin-bottom: 10px;">{{'add.instructionMap' | translate}}</div>
                           <nz-form-item>
                             <nz-form-control >
                               <div map-component [latLng]="latLng" (placeChanged)="onPlaceChange($event)"></div>
@@ -308,10 +316,10 @@
                   </div>
                   <div class="seperator"></div>
                   <div class="group-content">
-                    <div class="group-label"><span nz-icon nzType="camera" style="margin-right: 8px;"></span>Motel Images</div>
+                    <div class="group-label"><span nz-icon nzType="camera" style="margin-right: 8px;"></span>{{'add.imageMotel' | translate}}</div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                       <div class="item" nz-col nzXs="24">
-                        <div style="margin-bottom: 10px; font-size: 16px;">Upload room images (at least 1 image)</div>
+                        <div style="margin-bottom: 10px; font-size: 16px;">{{'add.uploadInstruction' | translate}}</div>
                         <div *ngIf="previews.length" class="image-container">
                           <div><span class="icon-watch-image" nz-icon nzType="left" nzTheme="outline" (click)="prevImage()"></span></div>
                           <nz-carousel nzEffect="scrollx" nzDotPosition="top" (nzBeforeChange)="onChangeImageIndex($event)">
@@ -325,19 +333,19 @@
                           <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                             <label for="many-files">
                               <div class="choose-image-button label">
-                                <span>Upload images</span>
+                                <span>{{'add.upload' | translate}}</span>
                               </div>
                             </label>
                             <input type="file" id="many-files" class="hidden" accept="image/png, image/jpeg" multiple (change)="onChangeImage($event)">
                           </div>
                           <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                             <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('one')">
-                              <span>Delete this image</span>
+                              <span>{{'add.deleteOne' | translate}}</span>
                             </div>
                           </div>
                           <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                             <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('all')">
-                              <span>Delete all images</span>
+                              <span>{{'add.deleteAll' | translate}}</span>
                             </div>
                           </div>
                         </div>
@@ -348,16 +356,16 @@
                   <div class="group-content" style="padding-bottom: 16px;">
                     <div class="group-label">
                       <span nz-icon nzType="user-add" style="margin-right: 8px;"></span>
-                      Add renters
+                      {{'add.addRenter' | translate}}
                     </div>
-                    <div>You can ignore this field if the room has not been rented yet.</div>
+                    <div>{{'add.addRenterInfo' | translate}}</div>
                     <div add-renter-component (renterListChanged)="onRenterListChanged($event)"></div>
                   </div>
                 </form>
                 <div class="seperator"></div>
                 <div class="button">
                   <button nz-button class="login-form-button" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnAdd()">
-                    <span nz-icon nzType="save" nzTheme="outline"></span>Confirm
+                    <span nz-icon nzType="save" nzTheme="outline"></span>{{'add.confirm' | translate}}
                     <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                   </button>
                 </div>
@@ -367,10 +375,10 @@
     </div>
 
     <div *ngIf="!isEdit">
-        <nz-result nzStatus="success" nzTitle="Successfully upload a motel!">
+        <nz-result nzStatus="success" [nzTitle]="'add.addSuccess' | translate">
             <div nz-result-extra>
-                <button nz-button nzType="primary" (click)="goList()" style="margin-bottom: 8px;">View my motel detail</button>
-                <button nz-button (click)="newProduct()">Add other motel</button>
+                <button nz-button nzType="primary" (click)="goList()" style="margin-bottom: 8px;">{{'add.viewDetail' | translate}}</button>
+                <button nz-button (click)="newProduct()">{{'add.addAgain' | translate}}</button>
             </div>
         </nz-result>
     </div>
