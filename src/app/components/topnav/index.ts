@@ -54,7 +54,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.getLabelForArray(event.lang);
+      this.getLabelForArray();
     });
     if(!localStorage.getItem('lang')) localStorage.setItem('lang', 'vi');
     else if(localStorage.getItem('lang') == "en"){
@@ -76,7 +76,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     } 
   }
 
-  getLabelForArray(lang: any) {
+  getLabelForArray() {
     this.menuList[0].label = this.translateService.instant("user.motelListLabel");
     this.menuList[1].label = this.translateService.instant("user.addMotelLabel");
     this.menuList[2].label = this.translateService.instant("user.contactUsLabel");

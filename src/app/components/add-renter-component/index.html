@@ -7,16 +7,17 @@
                     <span style="font-weight: 500;">{{user.name}}</span>
                 </div>
                 <div>
-                    <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Remove renter" (click)="confirmDelete(user, i)"></span>
+                    <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip [nzTooltipTitle]="'add.removeRenter' | translate" 
+                    (click)="confirmDelete(user, i)"></span>
                 </div>
             </div>
         </div>
     </div>
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
         <div class="item" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
-            <div class="label">Search your renter</div>
+            <div class="label">{{'add.searchRenter' | translate}}</div>
             <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Search by name, email or phone number" 
+                <input type="text" nz-input [placeholder]="'add.searchPlaceholder' | translate" 
                 [(ngModel)]="searchInput" (keyup.enter)="onSearch()"/>
             </nz-input-group>
             <ng-template #suffixIconSearch>
@@ -40,13 +41,13 @@
                             <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>
                         </div>
                         <div>
-                            <span style="font-weight: 500;">Phone number: </span><span>{{user.phoneNumber}}</span>
+                            <span style="font-weight: 500;">{{'add.phoneNumber' | translate}}: </span><span>{{user.phoneNumber}}</span>
                         </div>
                     </div>
                 </div>
                 <div *ngIf="!user.isSelected" class="btn-container">
                     <div class="btn-add" (click)="addRenter(user)">
-                        Add renter
+                        {{'add.addRenterButton' | translate}}
                     </div>
                 </div>
             </div>
@@ -59,7 +60,7 @@
         <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" [nzSize]="'small'"
         (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
         <ng-template #rangeTemplate let-range="range" let-total>
-            {{ range[0] }}-{{ range[1] }} of {{ total }} users
+            {{ range[0] }}-{{ range[1] }} of {{ total }} {{'add.userLabel' | translate}}
         </ng-template>  
     </div>
 </div>

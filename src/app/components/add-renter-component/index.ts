@@ -4,6 +4,7 @@ import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: '[add-renter-component]',
@@ -30,6 +31,7 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
   constructor(private notification: NzNotificationService,
     private router: Router,
     private userService: UserService,
+    private translateService: TranslateService,
     private zone: NgZone,
     private modal: NzModalService,) {
       super(notification, router, userService);
@@ -55,7 +57,7 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.showError(err.error.message);
+        if(err.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("user.getProvinceError"))
       } 
     })
   }
@@ -76,17 +78,17 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
       this.selectedUserList.push(user); 
       this.renterListChanged.emit(this.selectedUserList);
     } 
-    else this.showError('User has already been selected!');
+    else this.showError(this.translateService.instant("add.userExist"));
   }
 
   confirmDelete(user: any, i: number) : void {
     if(this.isLoading) return;
     this.modal.confirm({
-      nzTitle: 'Do you want to delete this user?',
-      nzOkText: 'Yes',
+      nzTitle: this.translateService.instant("add.removeRenterConfirm"),
+      nzOkText: this.translateService.instant("add.yes"),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: this.translateService.instant("add.no"),
       nzOnOk: () => this.deleteUser(user, i)
     });
   }

@@ -286,7 +286,7 @@
                         <div *ngFor="let key of ['address']">
                           <nz-form-item>
                             <nz-form-control >
-                              <input type="text" nz-input [formControlName]="key" [placeholder]="'add.address' | translate" />
+                              <input type="text" #inputField nz-input [formControlName]="key" [placeholder]="'add.address' | translate" />
                             </nz-form-control>
                           </nz-form-item>
                         </div>

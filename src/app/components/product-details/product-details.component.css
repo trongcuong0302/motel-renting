@@ -245,3 +245,12 @@
     font-weight: 500;
     line-height: 26px;
 }
+
+.hidden {
+    visibility: hidden;
+}
+
+.edit-container {
+    visibility: visible;
+    transition: all 0.3s ease;
+}

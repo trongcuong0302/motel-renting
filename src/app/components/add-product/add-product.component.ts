@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { UserService } from "../../services/user.service";
 import { ProvinceService } from "../../services/province.service";
@@ -10,6 +10,7 @@ import { finalize } from 'rxjs';
 import { ProductsService } from 'src/app/services/products.service';
 import { BaseComponent } from 'src/app/base/baseComponent';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-product',
@@ -77,6 +78,9 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
   @Output() onRegister: EventEmitter<any> = new EventEmitter();
   @ViewChild(NzCarouselComponent, { static: false }) myCarousel!: NzCarouselComponent;
+  @ViewChild('inputField') inputField!: ElementRef;
+
+  autocomplete: google.maps.places.Autocomplete | undefined;
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -84,9 +88,26 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     this.getProvinceList();
   }
 
+  ngAfterViewInit(): void {
+    this.autocomplete = new google.maps.places.Autocomplete(
+      this.inputField.nativeElement
+    );
+
+    this.autocomplete.addListener('place_changed', () => {
+      const place = this.autocomplete?.getPlace();
+      let lat = place?.geometry?.location.lat() || this.latLng.lat;
+      let lng = place?.geometry?.location.lng() || this.latLng.lng;
+      this.latLng = {
+        lat: lat,
+        lng: lng
+      }
+    })
+  }
+
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
     private userService: UserService,
+    private translateService: TranslateService,
     private provinceService: ProvinceService,
     private fireStorage: AngularFireStorage,
     private router: Router,
@@ -166,7 +187,8 @@ export class AddProductComponent extends BaseComponent implements OnInit{
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Unauthenticated") this.showError(this.translateService.instant("user.unauthenticated"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
       }
     });
   }
@@ -180,7 +202,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("user.getProvinceError"))
       }
     });
   }
@@ -245,23 +267,23 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   validateFormData() {
     for(let key of ['roomName', 'price', 'deposit', 'address', 'area']) {
       if(!this.validateForm.get(key)?.value) {
-        this.showError("Please enter the required field.");
+        this.showError(this.translateService.instant("add.requireField"));
         return false;
       }
     }
     for(let key of ['area', 'price', 'deposit', 'electricPrice', 'waterPrice', 'numberOfWashingMachine', 'numberOfAirConditioners',
     'numberOfWaterHeaters', 'numberOfWardrobes', 'numberOfBathrooms', 'numberOfBedrooms', 'numberOfBeds', 'numberOfFloors']) {
       if(this.validateForm.get(key)?.value! < 0) {
-        this.showError("Number fields must not be negative.");
+        this.showError(this.translateService.instant("add.negativeError"));
         return false;
       }
     }
     if(!this.location.length) {
-      this.showError("Please enter the required field.");
+      this.showError(this.translateService.instant("add.requireField"));
       return false;
     }
     if(this.previews.length == 0) {
-      this.showError("You must upload at least 1 image.");
+      this.showError(this.translateService.instant("add.requireImage"));
       return false;
     }
     return true;
@@ -299,10 +321,6 @@ export class AddProductComponent extends BaseComponent implements OnInit{
       });
       return;
     }
-  }
-
-  onBtnChangePassword() {
-    this.isVisible = true;
   }
 
   onChangeImage(event: any) {
@@ -355,12 +373,13 @@ export class AddProductComponent extends BaseComponent implements OnInit{
       next: (data) => {
         this.newRoom = data.data;
         this.isLoading = false;
-        this.showSuccess("Motel upload successfully!");
+        this.showSuccess(this.translateService.instant("add.addSuccess"));
         this.isEdit = false;
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Invalid data") this.showError(this.translateService.instant("add.invalidData"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
       }
     });
   }
@@ -379,13 +398,13 @@ export class AddProductComponent extends BaseComponent implements OnInit{
   }
 
   confirmDeleteImage(type: any) : void {
-    let title = type == 'all' ? 'Do you want to delete all images?' : 'Do you want to delete this image?';
+    let title = type == 'all' ? this.translateService.instant("add.deleteAllConfirm") : this.translateService.instant("add.deleteOneConfirm");
     this.modal.confirm({
       nzTitle: title,
-      nzOkText: 'Yes',
+      nzOkText: this.translateService.instant("add.yes"),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: this.translateService.instant("add.no"),
       nzOnOk: () => type == 'all' ? this.deleteAllImages() : this.deleteOneImage()
     });
   }

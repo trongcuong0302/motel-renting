@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { UserService } from "../../services/user.service";
 import { ProvinceService } from "../../services/province.service";
@@ -11,6 +11,7 @@ import { finalize } from 'rxjs';
 import { ProductsService } from 'src/app/services/products.service';
 import { BaseComponent } from 'src/app/base/baseComponent';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-details',
@@ -144,11 +145,15 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   ];
 
   @ViewChild(NzCarouselComponent, { static: false }) myCarousel!: NzCarouselComponent;
+  @ViewChild('inputField') inputField!: ElementRef;
+
+  autocomplete: google.maps.places.Autocomplete | undefined;
 
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
     private message: NzMessageService,
     private userService: UserService,
+    private translateService: TranslateService,
     private provinceService: ProvinceService,
     private fireStorage: AngularFireStorage,
     private router: Router,
@@ -165,6 +170,23 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       if(window.innerWidth <= 769) this.showUserLarge = false;
       if(window.innerWidth <= 769) this.showSettingButton = true;
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.autocomplete = new google.maps.places.Autocomplete(
+      this.inputField.nativeElement
+    );
+
+    this.autocomplete.addListener('place_changed', () => {
+      const place = this.autocomplete?.getPlace();
+      if(place?.name) this.validateForm.get("address")?.setValue(place?.name);
+      let lat = place?.geometry?.location.lat() || this.latLng.lat;
+      let lng = place?.geometry?.location.lng() || this.latLng.lng;
+      this.latLng = {
+        lat: lat,
+        lng: lng
+      }
+    })
   }
 
   getProduct(id: string): void {
@@ -297,15 +319,15 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   getUserDataLabel(key: string) {
     switch (key) {
       case 'dateOfBirth':
-        return 'Date of Birth';
+        return this.translateService.instant("user.dobLabel");
       case 'hometown':
-        return 'Hometown';
+        return this.translateService.instant("user.hometownLabel");
       case 'address':
-        return 'Address';
+        return this.translateService.instant("user.addressLabel");
       case 'job':
-        return 'Job';
+        return this.translateService.instant("user.jobLabel");
       case 'linkFacebook':
-        return 'Link Facebook';
+        return this.translateService.instant("user.facebookLabel");
       default: 
         return '';
     }
