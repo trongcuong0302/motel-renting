@@ -87,15 +87,15 @@
                                 <div>
                                     <div style="margin-bottom: 10px;">
                                         <span style="font-weight: 500;">{{userData.name}}</span>
-                                        <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(userData.name)"></span>
+                                        <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.name)"></span>
                                     </div>
                                     <div style="margin-bottom: 10px;">
                                         <span style="font-weight: 500;">Email: </span><span>{{userData.email}}</span>
-                                        <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(userData.email)"></span>
+                                        <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.email)"></span>
                                     </div>
                                     <div>
                                         <span style="font-weight: 500;">{{'detail.phoneNumber' | translate}}: </span><span>{{userData.phoneNumber}}</span>
-                                        <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(userData.phoneNumber)"></span>
+                                        <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.phoneNumber)"></span>
                                     </div>
                                 </div>
                             </div>
@@ -237,20 +237,20 @@
                         <div>
                             <div style="margin-bottom: 10px;">
                                 <span style="font-weight: 500;">{{'user.nameLabel' | translate}}: </span><span>{{userData.name}}</span>
-                                <span nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(userData.name)"></span>
+                                <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.name)"></span>
                             </div>
                             <div style="margin-bottom: 10px;">
                                 <span style="font-weight: 500;">Email: </span><span>{{userData.email}}</span>
-                                <span nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(userData.email)"></span>
+                                <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.email)"></span>
                             </div>
                             <div style="margin-bottom: 10px;">
                                 <span style="font-weight: 500;">{{'detail.phoneNumber' | translate}}: </span><span>{{userData.phoneNumber}}</span>
-                                <span nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(userData.phoneNumber)"></span>
+                                <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.phoneNumber)"></span>
                             </div>
                             <div *ngFor="let key of ['dateOfBirth', 'hometown', 'address', 'job', 'linkFacebook']">
                                 <div *ngIf="getUserData(key)" style="margin-bottom: 10px;">
                                     <span style="font-weight: 500;">{{getUserDataLabel(key)}}: </span><span>{{getUserData(key)}}</span>
-                                    <span *ngIf="key == 'linkFacebook'" nz-icon nzType="copy" class="icon-copy" (click)="onBtnCopy(getUserData(key))"></span>
+                                    <span *ngIf="key == 'linkFacebook'" nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(getUserData(key))"></span>
                                 </div>
                             </div>
                         </div>
@@ -267,15 +267,15 @@
                             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="16">
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight: 500;">{{'user.nameLabel' | translate}}: </span><span>{{user.name}}</span>
-                                    <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.name)"></span>
+                                    <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(user.name)"></span>
                                 </div>
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>
-                                    <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.email)"></span>
+                                    <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(user.email)"></span>
                                 </div>
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight: 500;">{{'detail.phoneNumber' | translate}}: </span><span>{{user.phoneNumber}}</span>
-                                    <span nz-icon nzType="copy" class="icon-copy" (click)="copyMessage(user.phoneNumber)"></span>
+                                    <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(user.phoneNumber)"></span>
                                 </div> 
                             </div>
                         </div>
@@ -697,12 +697,12 @@
                                 </div>
                                 <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                                 <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('one')">
-                                    <span>Delete this image</span>
+                                    <span>{{'add.deleteOne' | translate}}</span>
                                 </div>
                                 </div>
                                 <div class="image-button label" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
                                 <div class="choose-image-button danger-button label" (click)="confirmDeleteImage('all')">
-                                    <span>Delete all images</span>
+                                    <span>{{'add.deleteAll' | translate}}</span>
                                 </div>
                                 </div>
                             </div>
@@ -713,9 +713,9 @@
                 <div class="group-content" style="padding-bottom: 16px;">
                     <div class="group-label">
                         <span nz-icon nzType="user-add" style="margin-right: 8px;"></span>
-                        Add renters
+                        {{'add.addRenter' | translate}}
                     </div>
-                    <div>You can ignore this field if the room has not been rented yet.</div>
+                    <div>{{'add.addRenterInfo' | translate}}</div>
                     <div add-renter-component [selectedUserList]="renterList" (renterListChanged)="onRenterListChanged($event)"></div>
                 </div>
             </form>

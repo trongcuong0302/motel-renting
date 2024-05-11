@@ -1,61 +1,12 @@
-<!-- <div>
-    <h3 nz-typography>Products List</h3>
-
-    <nz-table #productTable *ngIf="products" [nzData]="products" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading" [nzTotal]="total" [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
-        <thead>
-            <tr>
-                <th nzColumnKey="productCode" [nzSortFn]="true">Product Code</th>
-                <th nzCustomFilter>Product Name
-                    <nz-filter-trigger [(nzVisible)]="visibleProductName" [nzActive]="searchName.length > 0" [nzDropdownMenu]="menuProductName">
-                        <span nz-icon nzType="search"></span>
-                    </nz-filter-trigger>
-                </th>
-                <th nzColumnKey="price" [nzSortFn]="true" [nzFilters]="filterPrice" [nzFilterMultiple]="false" [nzFilterFn]="true">Price</th>
-                <th nzCustomFilter>Category Code
-                    <nz-filter-trigger [(nzVisible)]="visibleCategoryCode" [nzActive]="searchCode.length > 0" [nzDropdownMenu]="menuCategoryCode">
-                        <span nz-icon nzType="search"></span>
-                    </nz-filter-trigger>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let product of productTable.data " (click)="setActiveProduct(product) ">
-                <td>{{product.productCode}}</td>
-                <td>{{product.productName}}</td>
-                <td>{{product.price}}</td>
-                <td>{{product.categoryCode}}</td>
-            </tr>
-        </tbody>
-    </nz-table>
-    <nz-dropdown-menu #menuProductName="nzDropdownMenu">
-        <div class="ant-table-filter-dropdown">
-            <div class="search-box">
-                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchName" />
-                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
-                <button nz-button nzSize="small" (click)="resetName()">Reset</button>
-            </div>
-        </div>
-    </nz-dropdown-menu>
-    <nz-dropdown-menu #menuCategoryCode="nzDropdownMenu">
-        <div class="ant-table-filter-dropdown">
-            <div class="search-box">
-                <input type="text" nz-input placeholder="Search code" [(ngModel)]="searchCode" />
-                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
-                <button nz-button nzSize="small" (click)="resetCode()">Reset</button>
-            </div>
-        </div>
-    </nz-dropdown-menu>
-</div> -->
-
-<div class="header"><span>Motels List</span></div>
+<div class="header"><span>{{'list.title' | translate}}</span></div>
 <div class="seperator"></div>
 <div form-filter (onSearchEvent)="onSearchEvent($event)"></div>
 <div class="seperator"></div>
 <div class="content">
     <div class="sort">
-        <div class="sort-label">Total: {{total}}</div>
+        <div class="sort-label">{{'list.total' | translate}}: {{total}}</div>
         <div class="sort-label">
-            <span style="width: 80px;">Sort by</span>
+            <span style="width: 90px;">{{'list.sort' | translate}}</span>
             <nz-select [(ngModel)]="sortOrder" [nzOptions]="sortList" style="width:100%;" nzPlaceHolder="Price sort" 
                 (ngModelChange)="onChangeSortOrder()"></nz-select>
         </div>
@@ -65,20 +16,20 @@
         <ng-container *ngFor="let motel of products">
             <div nz-col class="gutter-row" nzXs="24" nzMd="12" nzXl="8" nzXXl="6" (click)="setActiveProduct(motel)">
                 <img class="avatar-container" [src]="getMotelData('image', motel)">
-                <div><span class="label">Name: </span>{{getMotelData('name', motel)}}</div>
+                <div><span class="label">{{'list.name' | translate}}: </span>{{getMotelData('name', motel)}}</div>
                 <div>
-                    <span class="label">Status: </span>
+                    <span class="label">{{'list.status' | translate}}: </span>
                     <nz-tag class="tag-status" [nzColor]="getTagColor(motel)">{{getMotelData('roomStatus', motel)}}</nz-tag>
                 </div>
-                <div><span class="label">Type: </span>{{getMotelData('roomType', motel)}}</div>
-                <div><span class="label">Location: </span>{{getMotelData('location', motel)}}</div>
-                <div><span class="label">Price: </span>{{getMotelData('price', motel)}}</div>
-                <div><span class="label">Rate: </span>{{getMotelData('rate', motel)}}</div>
+                <div><span class="label">{{'list.type' | translate}}: </span>{{getMotelData('roomType', motel)}}</div>
+                <div><span class="label">{{'list.location' | translate}}: </span>{{getMotelData('location', motel)}}</div>
+                <div><span class="label">{{'list.labelPrice' | translate}}: </span>{{getMotelData('price', motel)}}</div>
+                <div><span class="label">{{'list.rateLabel' | translate}}: </span>{{getMotelData('rate', motel)}}</div>
             </div>
         </ng-container>
         <div *ngIf="!total" style="display: flex; justify-content: center; width: 100%;">
-            <nz-result nzStatus="404" nzTitle="Found no items" 
-            nzSubTitle="Sorry, there is no motels matching your search. Please try again with other filters.">
+            <nz-result nzStatus="404" [nzTitle]="'list.foundNoItem' | translate" 
+            [nzSubTitle]="'list.foundNoItemContent' | translate">
             </nz-result>
         </div>
     </div>
@@ -89,7 +40,7 @@
         <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" [nzSize]="'small'"
         (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
         <ng-template #rangeTemplate let-range="range" let-total>
-            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+            {{ range[0] }}-{{ range[1] }} of {{ total }} {{'list.items' | translate}}
         </ng-template>  
     </div>
 </div>

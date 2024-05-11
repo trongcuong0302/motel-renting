@@ -12,6 +12,7 @@ import { FilterService } from 'src/app/services/filters.service';
 import { BaseComponent } from 'src/app/base/baseComponent';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
 import { NzMarks } from 'ng-zorro-antd/slider';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: '[form-filter]',
@@ -119,6 +120,7 @@ export class FormFilter extends BaseComponent implements OnInit{
   constructor(private fb: NonNullableFormBuilder,
     private modal: NzModalService,
     private userService: UserService,
+    private translateService: TranslateService,
     private provinceService: ProvinceService,
     private router: Router,
     private notification: NzNotificationService,
@@ -170,7 +172,7 @@ export class FormFilter extends BaseComponent implements OnInit{
         this.filterListExist = false;
         this.listFilterData = { list: []};
         this.isLoading = false;
-        console.log(err.error.message);
+        if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.getListFilterError"))
       }
     });
   }
@@ -184,7 +186,7 @@ export class FormFilter extends BaseComponent implements OnInit{
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("user.getProvinceError"))
       }
     });
   }
@@ -284,11 +286,12 @@ export class FormFilter extends BaseComponent implements OnInit{
     this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
       next: (data) => {
         this.isLoading = false;
-        this.showSuccess("Filter saved successfully")
+        this.showSuccess(this.translateService.instant("list.saveFilterSuccess"))
       },
       error: (err) => {
         this.isLoading = false;
-        console.log(err.error.message);
+        if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.notFoundFilter"))
+        else if(err.error.message == "Invalid data") this.showError(this.translateService.instant("add.invalidData"))
       }
     });
   }
@@ -301,11 +304,12 @@ export class FormFilter extends BaseComponent implements OnInit{
       this.filterService.updateFilterById(this.listFilterData?._id, this.listFilterData).subscribe({
         next: (data) => {
           this.isLoading = false;
-          this.showSuccess("Filter added successfully")
+          this.showSuccess(this.translateService.instant("list.addFilterSuccess"))
         },
         error: (err) => {
           this.isLoading = false;
-          console.log(err.error.message);
+          if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.notFoundFilter"))
+          else if(err.error.message == "Invalid data") this.showError(this.translateService.instant("add.invalidData"))
         }
       });
     } else {
@@ -315,10 +319,11 @@ export class FormFilter extends BaseComponent implements OnInit{
       this.filterService.postAFilter(this.listFilterData).subscribe({
         next: (data) => {
           this.isLoading = false;
+          this.showSuccess(this.translateService.instant("list.addFilterSuccess"))
         },
         error: (err) => {
           this.isLoading = false;
-          console.log(err.error.message);
+          if(err.error.message == "Invalid data") this.showError(this.translateService.instant("add.invalidData"))
         }
       });
     }
@@ -347,7 +352,7 @@ export class FormFilter extends BaseComponent implements OnInit{
   handleOk(): void {
     if(this.isBtnAddFilter || this.isBtnSaveFilter || this.isBtnChooseFilter) {
       if(this.filterName == '') {
-        this.showError("Filter name should not be empty");
+        this.showError(this.translateService.instant("list.filterNameEmpty"));
         return;
       }
     }
@@ -395,7 +400,8 @@ export class FormFilter extends BaseComponent implements OnInit{
 
   onBtnAddFilter() {
     this.isBtnAddFilter = true;
-    this.filterName = `Filter number ${this.listFilterData.list.length + 1}`;
+    this.filterName = this.translateService.instant("list.filterNameLabel");
+    this.filterName += ` ${this.listFilterData.list.length + 1}`;
     this.showModal();
   }
 
@@ -435,7 +441,11 @@ export class FormFilter extends BaseComponent implements OnInit{
   onBtnRemoveFilter(i: number) {
     this.isBtnRemoveFilter = true;
     this.modal.confirm({
-      nzTitle: `Do you want to remove filter <strong>${this.listFilterData.list[i].name}</strong>?`,
+      nzTitle: `${this.translateService.instant("list.removeFilterConfirm")} <strong>${this.listFilterData.list[i].name}</strong>?`,
+      nzOkText: this.translateService.instant("add.yes"),
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: this.translateService.instant("add.no"),
       nzOnOk: () => this.removeFilter(i),
       nzOnCancel: () => {
         this.isBtnRemoveFilter = false;
@@ -452,11 +462,11 @@ export class FormFilter extends BaseComponent implements OnInit{
       next: (data) => {
         this.isLoading = false;
         if(i== this.filterIndex) this.onDefaultFilter();
-        this.showSuccess("Filter removed successfully")
+        this.showSuccess(this.translateService.instant("list.removeFilterSuccess"))
       },
       error: (err) => {
         this.isLoading = false;
-        console.log(err.error.message);
+        if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.getListFilterError"))
       }
     });
   }

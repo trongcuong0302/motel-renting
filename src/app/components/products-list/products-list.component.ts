@@ -8,6 +8,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from "src/app/services/user.service";
 import { BaseComponent } from 'src/app/base/baseComponent';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     private productsService: ProductsService,
     private nzMessageService: NzMessageService,
     private userService: UserService,
+    private translateService: TranslateService,
     private router: Router,
     private notification: NzNotificationService) { 
       super(notification, router, userService);
@@ -187,7 +189,7 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.nzMessageService.error(err.error.message)
+        if(err.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("list.foundNoItem"))
       } 
     })
   }

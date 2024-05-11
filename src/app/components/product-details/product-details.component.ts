@@ -199,7 +199,9 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
           this.getUser('owner');
           this.getUser('renter');
         },
-        error: (error) => this.showError(error.error.message)
+        error: (error) => {
+          if(error.error.message == "Not Found") this.showError(this.translateService.instant("detail.nodata"))
+        } 
       });
   }
 
@@ -238,7 +240,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
             },
             error: (error) => {
               this.isLoading = false;
-              this.showError(error.error.message)
+              if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
             } 
           });
         })
@@ -256,7 +258,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
               },
               error: (error) => {
                 this.isLoading = false;
-                this.showError(error.error.message)
+                if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
               } 
             });
             score += item.rate;
@@ -280,7 +282,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          this.showError(error.error.message)
+          if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
         } 
       });
     }
@@ -293,7 +295,8 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          console.log(error.error.message);
+          if(error.error.message == "Unauthenticated") this.showError(this.translateService.instant("user.unauthenticated"))
+          else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
         }
       });
     }
@@ -356,7 +359,9 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     if(this.isLoading) return;
     if(event.ctrlKey==true) {
       this.modal.confirm({
-        nzTitle: 'Do you want to update this product?',
+        nzTitle: this.translateService.instant("detail.updateConfirm"),
+        nzOkText: this.translateService.instant("add.yes"),
+        nzCancelText: this.translateService.instant("add.no"),
         nzOnOk: () => this.updateProduct()
       })
     } else {
@@ -367,23 +372,23 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   validateFormData() {
     for(let key of ['roomName', 'price', 'deposit', 'location', 'area']) {
       if(!this.validateForm.get(key)?.value) {
-        this.showError("Please enter the required field.");
+        this.showError(this.translateService.instant("add.requireField"));
         return false;
       }
     }
     for(let key of ['area', 'price', 'deposit', 'electricPrice', 'waterPrice', 'numberOfWashingMachine', 'numberOfAirConditioners',
     'numberOfWaterHeaters', 'numberOfWardrobes', 'numberOfBathrooms', 'numberOfBedrooms', 'numberOfBeds', 'numberOfFloors']) {
       if(this.validateForm.get(key)?.value! < 0) {
-        this.showError("Number fields must not be negative.");
+        this.showError(this.translateService.instant("add.negativeError"));
         return false;
       }
     }
     if(!this.location.length) {
-      this.showError("Please enter the required field.");
+      this.showError(this.translateService.instant("add.requireField"));
       return false;
     }
     if(this.previews.length == 0) {
-      this.showError("You must upload at least 1 image.");
+      this.showError(this.translateService.instant("add.requireImage"));
       return false;
     }
     return true;
@@ -433,13 +438,13 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   }
 
   confirmDeleteImage(type: any) : void {
-    let title = type == 'all' ? 'Do you want to delete all images?' : 'Do you want to delete this image?';
+    let title = type == 'all' ? this.translateService.instant("add.deleteAllConfirm") : this.translateService.instant("add.deleteOneConfirm");
     this.modal.confirm({
       nzTitle: title,
-      nzOkText: 'Yes',
+      nzOkText:  this.translateService.instant("add.yes"),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText:  this.translateService.instant("add.no"),
       nzOnOk: () => type == 'all' ? this.deleteAllImages() : this.deleteOneImage()
     });
   }
@@ -447,11 +452,11 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   confirmDelete() : void {
     if(this.isLoading) return;
     this.modal.confirm({
-      nzTitle: 'Do you want to delete this motel?',
-      nzOkText: 'Yes',
+      nzTitle: this.translateService.instant("detail.deleteMotelConfirm"),
+      nzOkText: this.translateService.instant("add.yes"),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: this.translateService.instant("add.no"),
       nzOnOk: () => this.deleteProduct()
     });
   }
@@ -467,12 +472,12 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         next: (res) => {
           //console.log(res);
           this.isLoading = false;
-          this.showSuccess('Delete motel successfully');
+          this.showSuccess(this.translateService.instant("detail.deleteMotelSuccess"));
           this.router.navigate(['/products']);
         },
         error: (error) => {
           this.isLoading = false;
-          this.showError(error.error.message)
+          if(error.error.message == "Not Found") this.showError(this.translateService.instant("detail.notFoundMotel"))
         } 
       }); 
   }
@@ -487,7 +492,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("user.getProvinceError"))
       }
     });
   }
@@ -692,10 +697,10 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         findItem = this.yesNoList.find(d => d.value === this.motelData[key]);
         return findItem?.label;
       case "electricPrice":
-        if(this.motelData[key] == 0) return "Giá Nhà nước";
+        if(this.motelData[key] == 0) return this.translateService.instant("detail.standardPrice");
         return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
       case "waterPrice":
-        if(this.motelData[key] == 0) return "Giá Nhà nước";
+        if(this.motelData[key] == 0) return this.translateService.instant("detail.standardPrice");
         return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
       default:
         return;
@@ -704,12 +709,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   onBtnCopy(value: string) {
     navigator.clipboard.writeText(value);
-    this.showSuccess('Copied to clipboard successfully!');
-  }
-
-  copyMessage(value: string): void {
-    navigator.clipboard.writeText(value);
-    this.message.create('success', 'Copied to clipboard successfully!');
+    this.showSuccess(this.translateService.instant("detail.copySuccess"));
   }
 
   getUserAvt(user: any) {
@@ -732,11 +732,11 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   confirmQuitMotel() : void {
     this.modal.confirm({
-      nzTitle: 'Are you sure you want to leave this motel?',
-      nzOkText: 'Yes',
+      nzTitle: this.translateService.instant("detail.quitMotelConfirm"),
+      nzOkText: this.translateService.instant("add.yes"),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'No',
+      nzCancelText: this.translateService.instant("add.no"),
       nzOnOk: () => this.quitMotel()
     });
   }
@@ -754,13 +754,14 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     this.productsService.updateProductById(this.motelData._id, formData).subscribe({
       next: (data) => {
         this.isLoading = false;
-        this.showSuccess("Motel updated successfully!");
+        this.showSuccess(this.translateService.instant("detail.updateMotelSuccess"));
         this.getProduct(this.route.snapshot.params["id"]);
         this.viewMode = true;
       },
       error: (error) => {
         this.isLoading = false;
-        this.showError(error.error.message);
+        if(error.error.message == "Not Found") this.showError(this.translateService.instant("detail.notFoundMotel"))
+        else if(error.error.message == "Invalid data") this.showError(this.translateService.instant("add.invalidData"))
       }
     });
   }
@@ -814,7 +815,11 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
   confirmDeleteComment(i: number) {
     this.modal.confirm({
-      nzTitle: 'Do you want to delete your comment?',
+      nzTitle: this.translateService.instant("detail.deleteCommnentConfirm"),
+      nzOkText: this.translateService.instant("add.yes"),
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: this.translateService.instant("add.no"),
       nzOnOk: () => this.onDeleteComment(i)
     })
   }

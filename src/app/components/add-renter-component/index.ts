@@ -57,7 +57,7 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        if(err.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("user.getProvinceError"))
+        if(err.error.message == "Can not find any items in the database") this.showError(this.translateService.instant("add.getUserError"))
       } 
     })
   }
