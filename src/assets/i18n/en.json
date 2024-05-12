@@ -269,5 +269,11 @@
     "list.foundNoItemContent": "Sorry, there is no motels matching your search. Please try again with other filters.",
     "list.myMotel": "My motels",
 
-    "contact.title": "Contact Us"
+    "contact.title": "Contact Us",
+    "contact.message": "Message",
+    "contact.youAre": "You are",
+    "contact.owner": "Owner",
+    "contact.renter": "Renter",
+    "contact.other": "Others",
+    "contact.send": "Send"
 }

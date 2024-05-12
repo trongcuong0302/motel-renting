@@ -269,5 +269,11 @@
     "list.foundNoItemContent": "Không tìm thấy nhà trọ nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác.",
     "list.myMotel": "Nhà trọ của tôi",
 
-    "contact.title": "Liên hệ với chúng tôi"
+    "contact.title": "Liên hệ với chúng tôi",
+    "contact.message": "Nội dung",
+    "contact.youAre": "Bạn là",
+    "contact.owner": "Chủ nhà",
+    "contact.renter": "Người thuê",
+    "contact.other": "Khác",
+    "contact.send": "Gửi"
 }

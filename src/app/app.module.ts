@@ -70,6 +70,7 @@ import { AddRenterComponent } from './components/add-renter-component';
 import { VerifyAccountComponent } from './components/auth/verify-account';
 import { FormFilter } from './components/products-list/form-filter';
 import { ContactComponent } from './components/contact-us';
+import { UserListComponent } from './components/admin/list-user';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -95,7 +96,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddRenterComponent,
     VerifyAccountComponent,
     FormFilter,
-    ContactComponent
+    ContactComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,

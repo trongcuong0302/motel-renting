@@ -1,0 +1,24 @@
+<div class="header"><span>{{'list.title' | translate}}</span></div>
+<div class="seperator"></div>
+<div class="content">
+    <nz-table
+      #table
+      [nzData]="userList"
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of table.data">
+          <td>{{ data.name }}</td>
+          <td>{{ data.email }}</td>
+          <td>{{ data.phoneNumber }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+</div>
