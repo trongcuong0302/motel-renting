@@ -8,6 +8,7 @@ import { AuthComponent } from './components/auth';
 import { ResetPasswordComponent } from './components/auth/reset-password';
 import { VerifyAccountComponent } from './components/auth/verify-account';
 import { UserProfile } from './components/user';
+import { ContactComponent } from './components/contact-us';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'products', component: ProductsListComponent },
   { path: 'products/:id', component: ProductDetailsComponent },
   { path: 'add', component: AddProductComponent },
+  { path: 'contact-us', component: ContactComponent },
   { path: 'statistics', component: StatisticsComponent },
   { path: '**', redirectTo: 'products'}
 ];

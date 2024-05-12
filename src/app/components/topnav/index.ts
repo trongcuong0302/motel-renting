@@ -29,7 +29,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     },
     {
       label: 'Contact Us',
-      link: 'add',
+      link: 'contact-us',
       isSelected: false,
     }
   ]

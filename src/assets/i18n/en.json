@@ -266,5 +266,8 @@
     "list.labelPrice": "Price",
     "list.rateLabel": "Rate",
     "list.foundNoItem": "Found no motels",
-    "list.foundNoItemContent": "Sorry, there is no motels matching your search. Please try again with other filters."
+    "list.foundNoItemContent": "Sorry, there is no motels matching your search. Please try again with other filters.",
+    "list.myMotel": "My motels",
+
+    "contact.title": "Contact Us"
 }

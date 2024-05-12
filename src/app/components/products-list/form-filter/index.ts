@@ -37,6 +37,7 @@ export class FormFilter extends BaseComponent implements OnInit{
   accountData: any = {}
   roomType: string = '';
   countFilter: number = 0;
+  checked: boolean = false;
   yesNoList = [
     { label: 'Có', value: '1' },
     { label: 'Không', value: '0' },
@@ -273,6 +274,7 @@ export class FormFilter extends BaseComponent implements OnInit{
     this.validateForm.get('roomType')?.setValue(this.roomType);
     let formData: any = this.validateForm.value;
     formData['search'] = this.searchKeyword;
+    formData['isMyMotel'] = this.checked;
     this.onSearchEvent.emit(formData);
     this.getNumberOfFilter();
     if(this.isBtnAddFilter) this.addFilter(formData);
@@ -334,12 +336,14 @@ export class FormFilter extends BaseComponent implements OnInit{
     this.isClear = true;
     this.clearData = this.validateForm.value;
     this.clearData['search'] = this.searchKeyword;
+    this.clearData['isMyMotel'] = this.checked;
     this.clearData['locationSelect'] = this.location;
     for(let key in this.validateForm.controls) {
       if(key == 'price') this.validateForm.get(key)?.setValue([0, 0]);
       else this.validateForm.get(key)?.setValue('');
     }
     this.searchKeyword = '';
+    this.checked = false;
     this.roomType = '';
     this.location = [];
   }
@@ -363,6 +367,7 @@ export class FormFilter extends BaseComponent implements OnInit{
   handleCancel(): void {
     if(this.isClear) {
       this.searchKeyword = this.clearData['search'];
+      this.checked = this.clearData['isMyMotel'];
       this.roomType = this.clearData['roomType'];
       this.location = this.clearData['locationSelect'];
       for(let key in this.validateForm.controls) {
@@ -425,6 +430,7 @@ export class FormFilter extends BaseComponent implements OnInit{
     let filter  = this.listFilterData.list[i].formData;
     this.filterName = this.listFilterData.list[i].name;
     this.searchKeyword = filter['search'];
+    this.checked = filter['isMyMotel'];
     this.roomType = filter['roomType'];
     this.location = filter['locationSelect'];
     for(let key in this.validateForm.controls) {
@@ -469,5 +475,9 @@ export class FormFilter extends BaseComponent implements OnInit{
         if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.getListFilterError"))
       }
     });
+  }
+
+  onFilterMyList() {
+    this.onSearch();
   }
 }

@@ -1,0 +1,44 @@
+<div class="main-container">
+    <img class="img" src="/assets/img/contact-cover.jpg">
+    <div style="width: 50%;">
+        <div class="header"><span>{{"contact.title" | translate}}</span></div>
+        <div class="content">
+            <form nz-form [formGroup]="validateForm"  class="form-container">
+                <div class="group-content">
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                        <div class="item" nz-col nzXs="24">
+                            <div class="label">Bạn là<span class="mark-require">*</span>:</div>
+                            <div *ngFor="let key of ['roomType']">
+                                <nz-form-item>
+                                    <nz-form-control >
+                                        <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup">
+                                            <label nz-radio nzValue="A">Chủ nhà</label>
+                                            <label nz-radio nzValue="B">Người thuê nhà</label>
+                                            <label nz-radio nzValue="C">Khác</label>
+                                        </nz-radio-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                        <div class="item" nz-col nzXs="24">
+                            <div class="label">{{'add.note' | translate}}<span class="mark-require">*</span></div>
+                            <div *ngFor="let key of ['note']">
+                                <nz-form-item>
+                                    <nz-form-control >
+                                        <textarea nz-input [formControlName]="key" [placeholder]="'add.note' | translate" rows="5"></textarea>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="button">
+                  <button nz-button class="login-form-button" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnAdd()">
+                    <span nz-icon nzType="save" nzTheme="outline"></span>{{'add.confirm' | translate}}
+                    <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+                  </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

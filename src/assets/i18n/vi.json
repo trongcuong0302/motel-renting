@@ -233,7 +233,7 @@
     "list.search": "Tìm kiếm",
     "list.searchPlaceholder": "Tìm kiếm theo tên hoặc địa chỉ nhà trọ",
     "list.moreFilter": "Bộ lọc khác",
-    "list.listFilter": "Danh sách bộ lọc đã lưu",
+    "list.listFilter": "Bộ lọc đã lưu",
     "list.defaultFilter": "Bộ lọc mặc định",
     "list.addFilter": "Thêm bộ lọc mới",
     "list.saveFilter": "Lưu bộ lọc này",
@@ -266,5 +266,8 @@
     "list.labelPrice": "Giá nhà",
     "list.rateLabel": "Điểm đánh giá",
     "list.foundNoItem": "Không tìm thấy nhà trọ",
-    "list.foundNoItemContent": "Không tìm thấy nhà trọ nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác."
+    "list.foundNoItemContent": "Không tìm thấy nhà trọ nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác.",
+    "list.myMotel": "Nhà trọ của tôi",
+
+    "contact.title": "Liên hệ với chúng tôi"
 }

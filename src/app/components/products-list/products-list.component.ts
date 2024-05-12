@@ -18,7 +18,8 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 })
 export class ProductsListComponent extends BaseComponent implements OnInit {
   products: any = [];
-  currentProduct: Product = {};
+  accountData: any = {};
+  currentProduct: any = {};
   pageSize = 12;
   pageIndex = 1;
   total = 1;
@@ -63,8 +64,23 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
     this.filterData = { search: "", price: [0, 0] };
+    this.getUser();
     this.onSearchEvent(this.filterData);
     //this.loadDataFromServer(this.pageIndex, this.pageSize, this.searchName, this.searchCode, null, null, [{key: 'price', value: this.price}]);
+  }
+
+  getUser() {
+    this.userService.getUser().subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.accountData = data.data;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if(error.error.message == "Unauthenticated") this.showError(this.translateService.instant("user.unauthenticated"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
+      }
+    });
   }
 
   getMotelData(key: any, item: any) {
@@ -174,6 +190,10 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
       start = data?.price[0] * 1000000;
       end = data?.price[1] * 1000000;
       filter.push({field: 'price', value: [start, end], operator: "range"});
+    }
+    
+    if(data?.isMyMotel) {
+      filter.push({field: 'owner', value: this.accountData?._id, operator: "matches"});
     }
     this.filterMotel(filter);
   }
