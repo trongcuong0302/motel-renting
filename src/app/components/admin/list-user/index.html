@@ -1,24 +1,54 @@
-<div class="header"><span>{{'list.title' | translate}}</span></div>
-<div class="seperator"></div>
-<div class="content">
-    <nz-table
-      #table
-      [nzData]="userList"
-      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
-    >
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone Number</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of table.data">
-          <td>{{ data.name }}</td>
-          <td>{{ data.email }}</td>
-          <td>{{ data.phoneNumber }}</td>
-        </tr>
-      </tbody>
+<div class="header"><span>{{'userList.title' | translate}}</span></div>
+<div class="container">
+
+  <div class="list-data">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%; margin-bottom: 16px;">
+      <div class="item" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
+          <div class="label">{{'userList.search' | translate}}</div>
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input type="text" nz-input [placeholder]="'userList.searchPlaceHolder' | translate" 
+              [(ngModel)]="searchInput" (keyup.enter)="onSearch()"/>
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+              <span *ngIf="searchInput" nz-icon nzType="close-circle" class="icon-delete" (click)="onClearInput()"></span>
+              <span nz-icon nzType="search" style="cursor: pointer" (click)="onSearch()"></span>
+          </ng-template>
+      </div>
+    </div>
+    <nz-table #userTable *ngIf="userList.length" [nzData]="userList" [nzFrontPagination]="false" [nzLoading]="isLoading" 
+      nzBordered [nzTotal]="total" [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+            <tr>
+              <th>{{'userList.name' | translate}}</th>
+              <th>Email</th>
+              <th>{{'userList.phoneNumber' | translate}}</th>
+              <th>{{'userList.role' | translate}}</th>
+              <th>{{'userList.status' | translate}}</th>
+              <th>{{'userList.action' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of userTable.data ">
+              <td (click)="setActiveProduct(user)" style="cursor: pointer;">{{user.name}}</td>
+              <td (click)="setActiveProduct(user)" style="cursor: pointer;">{{user.email}}</td>
+              <td (click)="setActiveProduct(user)" style="cursor: pointer;">{{user.phoneNumber}}</td>
+              <td>{{user.role == 1 ? ('userList.roleUser' | translate) : ('userList.roleAdmin' | translate)}}</td>
+              <td>{{getUserData(user, 'status')}}</td>
+              <td>
+                <span *ngIf="user.status == 'active'" class="icon-block-user" nz-icon nzType="lock" nz-tooltip [nzTooltipTitle]="'userList.block' | translate" 
+                (click)="confirmBlock(user)"></span>
+                <span *ngIf="user.status == 'block'" class="icon-block-user" nz-icon nzType="unlock" nz-tooltip [nzTooltipTitle]="'userList.unblock' | translate" 
+                (click)="confirmUnblock(user)"></span>
+                <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip [nzTooltipTitle]="'userList.delete' | translate" 
+                (click)="confirmDelete(user)"></span>
+              </td>
+            </tr>
+        </tbody>
     </nz-table>
+    <div *ngIf="!total" style="display: flex; justify-content: center; width: 100%;">
+      <nz-result nzStatus="404" [nzTitle]="'list.foundNoItem' | translate" 
+      [nzSubTitle]="'list.foundNoItemContent' | translate">
+      </nz-result>
+    </div>
+  </div>
 </div>

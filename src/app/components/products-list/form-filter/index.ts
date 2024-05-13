@@ -173,7 +173,7 @@ export class FormFilter extends BaseComponent implements OnInit{
         this.filterListExist = false;
         this.listFilterData = { list: []};
         this.isLoading = false;
-        if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.getListFilterError"))
+        //if(err.error.message == "Not Found") this.showError(this.translateService.instant("list.getListFilterError"))
       }
     });
   }

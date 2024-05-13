@@ -25,15 +25,11 @@ h3 {
     margin-right: 8px;
 }
 
-.avatar-container {
-    margin-top: 16px;
-    width: 100%;
-    height: 300px;
-}
-
-.gutter-row {
-    cursor: pointer;
-    padding: 8px 16px !important;
+.container {
+    margin: 0 !important;
+    padding: 24px;
+    background-color: #f1f5f9;
+    min-height: calc(100vh - 108px);
 }
 
 .header{
@@ -42,55 +38,27 @@ h3 {
     font-size: 20px;
     font-weight: 600;
     height: 48px;
-    padding: 0 24px;
+    padding-left: 24px;
     background-color: #fff;
 }
 
-.seperator {
-    height: 16px;
-    background-color: #f1f5f9;
-}
-
-.content {
-    margin: 0 !important;
+.list-data {
+    background-color: #fff;
     padding: 24px;
-    background-color: #fff;
+}
+
+.icon-block-user {
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 16px;
+}
+
+.icon-delete-user {
+    cursor: pointer;
+    color: #ff4d4f;
+    font-size: 16px;
 }
 
 .label {
     font-weight: 500;
-}
-
-.tag-status {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-}
-
-.pagination {
-    margin-right: 24px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.nodata {
-    width: 100%;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sort {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0 8px;
-}
-
-.sort-label {
-    font-size: 16px;
-    font-weight: 500;
-    display: flex; 
-    align-items: center;
 }

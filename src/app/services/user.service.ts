@@ -66,4 +66,8 @@ export class UserService {
     return this.http.get(baseUrl, {params});
   }
 
+  deleteUserById(id: string): Observable<any> {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
 }
