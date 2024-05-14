@@ -105,6 +105,10 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     return this.authUser.name;
   }
 
+  get isAdmin() {
+    return this.authUser.role == 0;
+  }
+
   getUser() {
     this.onGetUser.emit();
     this.userService.getUser().subscribe({
@@ -149,6 +153,11 @@ export class TopnavComponent extends BaseComponent implements OnInit {
   onBtnProfile() {
     this.onSelectMenuItem(-1);
     this.router.navigate(['/profile']);
+  }
+
+  onBtnUserList() {
+    this.onSelectMenuItem(-1);
+    this.router.navigate(['/admin/users']);
   }
 
   @HostListener('window:resize', ['$event'])

@@ -71,6 +71,7 @@ import { VerifyAccountComponent } from './components/auth/verify-account';
 import { FormFilter } from './components/products-list/form-filter';
 import { ContactComponent } from './components/contact-us';
 import { UserListComponent } from './components/admin/list-user';
+import { UserDetail } from './components/user/user-detail';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -97,7 +98,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     VerifyAccountComponent,
     FormFilter,
     ContactComponent,
-    UserListComponent
+    UserListComponent,
+    UserDetail
   ],
   imports: [
     BrowserModule,

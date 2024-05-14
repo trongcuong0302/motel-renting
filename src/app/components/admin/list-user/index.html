@@ -3,7 +3,7 @@
 
   <div class="list-data">
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%; margin-bottom: 16px;">
-      <div class="item" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
+      <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
           <div class="label">{{'userList.search' | translate}}</div>
           <nz-input-group [nzSuffix]="suffixIconSearch">
               <input type="text" nz-input [placeholder]="'userList.searchPlaceHolder' | translate" 
@@ -14,6 +14,17 @@
               <span nz-icon nzType="search" style="cursor: pointer" (click)="onSearch()"></span>
           </ng-template>
       </div>
+      <div class="item" nz-col nzXs="12" nzSm="12" nzMd="6" nzLg="6">
+        <div class="label">{{'userList.role' | translate}}</div>
+        <nz-select [(ngModel)]="role" (ngModelChange)="onSearch()" [nzOptions]="roleList" style="width:100%;" nzAllowClear
+          [nzPlaceHolder]="'userList.role' | translate"></nz-select>
+      </div>
+      <div class="item" nz-col nzXs="12" nzSm="12" nzMd="6" nzLg="6">
+        <div class="label">{{'userList.status' | translate}}</div>
+        <nz-select [(ngModel)]="status" (ngModelChange)="onSearch()" [nzOptions]="statusList" style="width:100%;" nzAllowClear
+          [nzPlaceHolder]="'userList.status' | translate"></nz-select>
+      </div>
+      
     </div>
     <nz-table #userTable *ngIf="userList.length" [nzData]="userList" [nzFrontPagination]="false" [nzLoading]="isLoading" 
       nzBordered [nzTotal]="total" [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
@@ -35,6 +46,10 @@
               <td>{{user.role == 1 ? ('userList.roleUser' | translate) : ('userList.roleAdmin' | translate)}}</td>
               <td>{{getUserData(user, 'status')}}</td>
               <td>
+                <span *ngIf="user.role == 0" class="icon-block-user" nz-icon nzType="down-square" nz-tooltip [nzTooltipTitle]="'userList.downgradeAdmin' | translate" 
+                (click)="confirmUpdateRole(user, 1)"></span>
+                <span *ngIf="user.role == 1" class="icon-block-user" nz-icon nzType="up-square" nz-tooltip [nzTooltipTitle]="'userList.upgradeAdmin' | translate" 
+                (click)="confirmUpdateRole(user, 0)"></span>
                 <span *ngIf="user.status == 'active'" class="icon-block-user" nz-icon nzType="lock" nz-tooltip [nzTooltipTitle]="'userList.block' | translate" 
                 (click)="confirmBlock(user)"></span>
                 <span *ngIf="user.status == 'block'" class="icon-block-user" nz-icon nzType="unlock" nz-tooltip [nzTooltipTitle]="'userList.unblock' | translate" 
@@ -46,8 +61,8 @@
         </tbody>
     </nz-table>
     <div *ngIf="!total" style="display: flex; justify-content: center; width: 100%;">
-      <nz-result nzStatus="404" [nzTitle]="'list.foundNoItem' | translate" 
-      [nzSubTitle]="'list.foundNoItemContent' | translate">
+      <nz-result nzStatus="404" [nzTitle]="'userList.foundNoItem' | translate" 
+      [nzSubTitle]="'userList.foundNoItemContent' | translate">
       </nz-result>
     </div>
   </div>

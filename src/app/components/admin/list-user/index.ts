@@ -5,7 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UserService } from "src/app/services/user.service";
 import { BaseComponent } from 'src/app/base/baseComponent';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
@@ -21,6 +21,17 @@ export class UserListComponent extends BaseComponent implements OnInit {
   pageIndex = 1;
   total = 1;
   searchInput: any = '';
+  statusList = [
+    { label: 'Đã kích hoạt', value: "active" },
+    { label: 'Chưa kích hoạt', value: "inactive" },
+    { label: 'Đã bị chặn', value: "block" }
+  ]
+  status: string = '';
+  roleList = [
+    { label: 'Quản trị viên', value: 0 },
+    { label: 'Người dùng', value: 1 }
+  ]
+  role: number = -1;
   
   constructor(
     private nzMessageService: NzMessageService,
@@ -34,8 +45,16 @@ export class UserListComponent extends BaseComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
+    this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.getLabelForArray();
+    });
     this.getUserProfile();
     this.loadDataFromServer(this.pageIndex, this.pageSize);
+  }
+
+  getLabelForArray() {
+    this.roleList[0].label = this.translateService.instant("userList.roleAdmin");
+    this.roleList[1].label = this.translateService.instant("userList.roleUser");
   }
 
   getUserProfile() {
@@ -57,7 +76,7 @@ export class UserListComponent extends BaseComponent implements OnInit {
 
   setActiveProduct(user: any): void {
     this.currentUser = user;
-    this.router.navigate([`/products/${this.currentUser._id}`]);
+    this.router.navigate([`/users/${this.currentUser._id}`]);
   }
 
   loadDataFromServer(pageIndex: number, pageSize: number): void {
@@ -67,6 +86,9 @@ export class UserListComponent extends BaseComponent implements OnInit {
       {field: "pageSize", value: pageSize, operator: "pagination"},
       {field: "", value: this.searchInput, operator: "includes"}
     ];
+
+    if(this.role != null && this.role >= 0) filter.push({field: "role", value: this.role, operator: "matches"});
+    if(this.status) filter.push({field: "status", value: this.status, operator: "matches"});
 
     this.userService.getAllUser(filter).subscribe({
       next: (data) => {
@@ -157,6 +179,7 @@ export class UserListComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.isLoading = false;
+          this.onSearch();
           this.showSuccess(this.translateService.instant("userList.blockSuccess"));
         },
         error: (error) => {
@@ -187,7 +210,39 @@ export class UserListComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.isLoading = false;
+          this.onSearch();
           this.showSuccess(this.translateService.instant("userList.unblockSuccess"));
+        },
+        error: (error) => {
+          this.isLoading = false;
+          if(error.error.message == "Invalid data") this.showError(this.translateService.instant("userList.invalidError"))
+          else if(error.error.message == "Not Found") this.showError(this.translateService.instant("userList.notFoundError"))
+        }
+      }); 
+  }
+
+  confirmUpdateRole(user: any, role: any) : void {
+    if(this.isLoading) return;
+    this.modal.confirm({
+      nzTitle: role == 1 ? this.translateService.instant("userList.downgradeAdminConfirm") : this.translateService.instant("userList.upgradeAdminConfirm"),
+      nzOkText: this.translateService.instant("add.yes"),
+      nzOkType: 'primary',
+      nzCancelText: this.translateService.instant("add.no"),
+      nzOnOk: () => this.updateRoleUser(user, role)
+    });
+  }
+
+  updateRoleUser(user: any, role: any) {
+    let dataUpdate = user;
+    dataUpdate['role'] = role;
+    this.userService.updateUserProfile(user._id, dataUpdate)
+      .subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          if(this.userData._id == user._id) this.getUserProfile();
+          this.onSearch();
+          if(role == 1) this.showSuccess(this.translateService.instant("userList.downgradeAdminSuccess"));
+          else this.showSuccess(this.translateService.instant("userList.upgradeAdminSuccess"));
         },
         error: (error) => {
           this.isLoading = false;

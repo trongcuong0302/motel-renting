@@ -7,14 +7,14 @@
                 <div class="group-content">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                         <div class="item" nz-col nzXs="24">
-                            <div class="label">Bạn là<span class="mark-require">*</span>:</div>
+                            <div class="label">{{"contact.youAre" | translate}}<span class="mark-require">*</span>:</div>
                             <div *ngFor="let key of ['role']">
                                 <nz-form-item>
                                     <nz-form-control >
                                         <nz-radio-group [formControlName]="key" nzName="radiogroup">
-                                            <label nz-radio nzValue="owner">Chủ nhà</label>
-                                            <label nz-radio nzValue="renter">Người thuê nhà</label>
-                                            <label nz-radio nzValue="other">Khác</label>
+                                            <label nz-radio nzValue="owner">{{"contact.owner" | translate}}</label>
+                                            <label nz-radio nzValue="renter">{{"contact.renter" | translate}}</label>
+                                            <label nz-radio nzValue="other">{{"contact.other" | translate}}</label>
                                         </nz-radio-group>
                                     </nz-form-control>
                                 </nz-form-item>

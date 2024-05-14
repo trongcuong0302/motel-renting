@@ -17,6 +17,7 @@
     "login.notFoundEmail": "Địa chỉ email hoặc số điện thoại không tồn tại",
     "login.incorrectPassword": "Mật khẩu không đúng",
     "login.inactiveAccount": "Tài khoản của bạn chưa được kích hoạt. Hãy kích hoạt tài khoản của bạn trong email được chúng tôi gửi tới.",
+    "login.blockAccount": "Không thể đăng nhập. Tài khoản của bạn đã bị khóa.",
     "login.sendMailError": "Có lỗi xảy ra khi gửi email. Hãy thử lại sau!",
 
     "resetPassword.title": "Đặt lại mật khẩu",
@@ -71,6 +72,7 @@
     "verify.expiredLink": "Liên kết xác thực tài khoản đã hết hạn. Hãy gửi một yêu cầu khác để xác thực tài khoản!",
 
     "user.profileLabel": "Hồ sơ",
+    "user.userDataLabel": "Thông tin người dùng",
     "user.LogoutLabel": "Đăng xuất",
     "user.unauthenticated": "Tài khoản chưa được đăng nhập!",
     "user.notFoundAccount": "Tài khoản không tồn tại!",
@@ -292,7 +294,13 @@
     "userList.action": "Hành động",
     "userList.block": "Khóa tài khoản",
     "userList.unblock": "Mở khóa tài khoản",
-    "userList.delete": "Xóa",
+    "userList.delete": "Xóa tài khoản",
+    "userList.upgradeAdmin": "Cấp quyền quản trị",
+    "userList.downgradeAdmin": "Xóa quyền quản trị",
+    "userList.upgradeAdminConfirm": "Bạn có muốn cung cấp quyền quản trị viên cho tài khoản này?",
+    "userList.downgradeAdminConfirm": "Bạn có muốn xóa quyền quản trị viên cho tài khoản này?",
+    "userList.upgradeAdminSuccess": "Cấp quyền quản trị viên thành công!",
+    "userList.downgradeAdminSuccess": "Xóa quyền quản trị viên thành công!",
     "userList.blockConfirm": "Bạn có muốn khóa tài khoản này?",
     "userList.blockSuccess": "Khóa tài khoản thành công!",
     "userList.unblockConfirm": "Bạn có muốn mở khóa tài khoản này?",
@@ -300,5 +308,7 @@
     "userList.deleteConfirm": "Bạn có muốn xóa tài khoản này?",
     "userList.deleteSuccess": "Xóa tài khoản thành công!",
     "userList.notFoundError": "Không tìm thấy tài khoản!",
-    "userList.invalidError": "Dữ liệu cập nhật không hợp lệ!"
+    "userList.invalidError": "Dữ liệu cập nhật không hợp lệ!",
+    "userList.foundNoItem": "Không tìm thấy tài khoản nào",
+    "userList.foundNoItemContent": "Không tìm thấy người dùng nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác."
 }

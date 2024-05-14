@@ -1,0 +1,276 @@
+<div class="header"><span>{{"user.userDataLabel" | translate}}</span></div>
+
+<div class="container">
+  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" class="main-content">
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="16">
+      <div *ngIf="isAdmin" class="button-container">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+          <div class="item" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="8" style="display: flex; justify-content: center;">
+            <button *ngIf="userData.role == 1" nz-button class="save-image-button label" [disabled]="loading"
+              [nzShape]="'round'" [nzType]="'primary'" (click)="confirmUpdateRole(0)">
+              <span class="icon-block-user" nz-icon nzType="up-square"></span>
+              <span>{{'userList.upgradeAdmin' | translate}}</span>
+              <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+            <button *ngIf="userData.role == 0" nz-button class="save-image-button label" [disabled]="loading"
+              [nzShape]="'round'" [nzType]="'primary'" (click)="confirmUpdateRole(1)">
+              <span class="icon-block-user" nz-icon nzType="down-square"></span>
+              <span>{{'userList.downgradeAdmin' | translate}}</span>
+              <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+          </div>
+          <div class="item" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="8" style="display: flex; justify-content: center;">
+            <button *ngIf="userData.status == 'active'" nz-button class="save-image-button label" [disabled]="loading"
+              [nzShape]="'round'" [nzType]="'primary'" (click)="confirmBlock(userData)">
+              <span class="icon-block-user" nz-icon nzType="lock"></span>
+              <span>{{'userList.block' | translate}}</span>
+              <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+            <button *ngIf="userData.status == 'block'" nz-button class="save-image-button label" [disabled]="loading"
+              [nzShape]="'round'" [nzType]="'primary'" (click)="confirmUnblock(userData)">
+              <span class="icon-block-user" nz-icon nzType="unlock"></span>
+              <span>{{'userList.unblock' | translate}}</span>
+              <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+          </div>
+          <div class="item" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="8" style="display: flex; justify-content: center;">
+            <button nz-button class="save-image-button label" [disabled]="loading"
+              [nzShape]="'round'" nzDanger [nzType]="'primary'" (click)="confirmDeleteAccount(userData)">
+              <span class="icon-delete-user" nz-icon nzType="delete"></span>
+              <span>{{"userList.delete" | translate}}</span>
+              <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isAccountOwner" class="button">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+          <div class="item" nz-col nzXs="12" nzSm="6" nzMd="6" nzLg="6">
+            <button nz-button class="login-form-button label" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnEdit()">
+              <span nz-icon [nzType]="isEdit ? 'save' : 'edit'" nzTheme="outline"></span>
+              {{isEdit ? ('user.saveLabel' | translate) : ('user.editLabel' | translate)}}
+              <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+            </button>
+          </div>
+          <div class="item" nz-col nzXs="12" nzSm="6" nzMd="6" nzLg="6">
+            <div *ngIf="isEdit" class="btn-cancel" (click)="cancelEdit()">
+              <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
+              {{'user.cancelLabel' | translate}}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <form nz-form [formGroup]="validateForm">
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.nameLabel' | translate}}<span *ngIf="isEdit" class="mark-require">*</span>:</div>
+            <div *ngFor="let key of ['name']" nz-col nzXs="24" nzSm="19" >
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <input type="text" nz-input [formControlName]="key" [placeholder]="'user.nameLabel' | translate" />
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">Email:</div>
+            <div *ngFor="let key of ['email']" nz-col nzXs="24" nzSm="19" >
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <input type="text" nz-input [formControlName]="key" placeholder="Email" />
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.dobLabel' | translate}}:</div>
+            <div *ngFor="let key of ['dateOfBirth']" nz-col nzXs="24" nzSm="19" >
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <nz-date-picker class="form-date-picker" [formControlName]="key" nzFormat="dd/MM/yyyy" [nzPlaceHolder]="'user.dobLabel' | translate">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.phoneLabel' | translate}}<span *ngIf="isEdit" class="mark-require">*</span>:</div>
+            <div *ngFor="let key of ['phoneNumber']" nz-col nzXs="24" nzSm="19" >
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <input type="text" nz-input [formControlName]="key" [placeholder]="'user.phoneLabel' | translate" />
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.hometownLabel' | translate}}:</div>
+            <div *ngFor="let key of ['hometown']" nz-col nzXs="24" nzSm="19">
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="location[key]" [nzShowSearch]="true"
+                    class="form-location-picker" [nzPlaceHolder]="'user.hometownLabel' | translate"></nz-cascader>
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.addressLabel' | translate}}:</div>
+            <div *ngFor="let key of ['address']" nz-col nzXs="24" nzSm="19">
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <nz-cascader [nzOptions]="provinceList" [ngModelOptions]="{standalone: true}" [(ngModel)]="location[key]" [nzShowSearch]="true"
+                    class="form-location-picker" [nzPlaceHolder]="'user.addressLabel' | translate"></nz-cascader>
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.jobLabel' | translate}}:</div>
+            <div *ngFor="let key of ['job']" nz-col nzXs="24" nzSm="19" >
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <input type="text" nz-input [formControlName]="key" [placeholder]="'user.jobLabel' | translate" />
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="item" nz-col nzXs="24">
+          <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width: 100%;">
+            <div class="label" nz-col nzXs="24" nzSm="5">{{'user.facebookLabel' | translate}}:</div>
+            <div *ngFor="let key of ['linkFacebook']" nz-col nzXs="24" nzSm="19" >
+              <nz-form-item *ngIf="isEdit">
+                <nz-form-control >
+                  <input type="text" nz-input [formControlName]="key" [placeholder]="'user.facebookLabel' | translate" />
+                </nz-form-control>
+              </nz-form-item>
+              <div *ngIf="!isEdit">{{getFormValue(key)}}</div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div *ngIf="isAccountOwner" class="button">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+          <div class="item" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
+            <button nz-button class="login-form-button label" [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnChangePassword()">
+              <span nz-icon nzType="lock" nzTheme="outline"></span>
+              {{'user.changePasswordLabel' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8">
+      <div class="item-avatar">
+        <div style="display: flex; align-items: center;">
+          <div class="label"><span nz-icon nzType="file-image" style="margin-right: 8px;" ></span>{{'user.avatarLabel' | translate}}</div>
+          <div *ngIf="isAccountOwner" style="margin-left: 16px;">
+            <label for="files">
+              <div class="choose-image-button label">
+                <span>{{'user.chooseImage' | translate}}</span>
+              </div>
+            </label>
+            <input type="file" id="files" class="hidden" accept="image/png, image/jpeg" (change)="onChangeImage($event)">
+          </div>
+        </div>
+        <div style="width: 100%;">
+          <div style="display: flex;"><img class="avatar-container" [src]="avatarUrl"></div>
+          <div *ngIf="isAccountOwner" class="button-container">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }">
+              <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12" style="display: flex; justify-content: center;">
+                <button nz-button class="save-image-button label" [disabled]="loading"
+                  [nzShape]="'round'" [nzType]="'primary'" (click)="onBtnSaveImage()">
+                  <span>{{'user.saveImage' | translate}}</span>
+                  <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+                </button>
+              </div>
+              <div class="item" nz-col nzXs="12" nzSm="12" nzMd="12" nzLg="12" style="display: flex; justify-content: center;">
+                <button nz-button class="save-image-button label" [disabled]="loading"
+                  [nzShape]="'round'" nzDanger [nzType]="'primary'" (click)="confirmDelete()">
+                  <span>{{'user.deleteImage' | translate}}</span>
+                  <span *ngIf="loading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="'user.changePasswordLabel' | translate"
+      [nzOkText]="'user.saveLabel' | translate"
+      [nzCancelText]="'user.cancelLabel' | translate"
+      [nzWidth]="400"
+      [nzOkLoading] = "isLoading"
+      (nzOnOk)="handleOk()"
+      (nzOnCancel)="handleCancel()"
+    >
+      <ng-container *nzModalContent>
+        <ng-container *ngFor="let key of ['oldPassword']">
+          <div class="text-bold label">{{'user.oldPassword' | translate}}</div>
+          <nz-form-item class="form-item">
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                <input [type]="isShowPassword ? 'text' : 'password'" nz-input [(ngModel)]="objectChangePassword.oldPassword" [placeholder]="'user.oldPassword' | translate" />
+              </nz-input-group>
+              <ng-template #suffixTemplate>
+                <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+        <ng-container *ngFor="let key of ['newPassword']">
+          <div class="text-bold label">{{'user.newPassword' | translate}}</div>
+          <div class="label-password">* {{'register.instruction' | translate}}</div>
+          <nz-form-item class="form-item">
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                <input [type]="isShowPassword ? 'text' : 'password'" nz-input [(ngModel)]="objectChangePassword.newPassword" [placeholder]="'user.newPassword' | translate" />
+              </nz-input-group>
+              <ng-template #suffixTemplate>
+                <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+        <ng-container *ngFor="let key of ['confirmPassword']">
+          <div class="text-bold label">{{'user.confirmPassword' | translate}}</div>
+          <nz-form-item class="form-item">
+            <nz-form-control>
+              <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                <input [type]="isShowPassword ? 'text' : 'password'" nz-input [(ngModel)]="objectChangePassword.confirmPassword" [placeholder]="'user.confirmPassword' | translate" />
+              </nz-input-group>
+              <ng-template #suffixTemplate>
+                <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+      </ng-container>
+  </nz-modal>
+</div>

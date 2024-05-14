@@ -47,6 +47,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     if (this.validateFormData()) {
       let formData: any = this.validateForm.value;
       formData['language'] = localStorage.getItem('lang') || 'vi';
+      formData['role'] = 1;
       this.userService.register(formData).subscribe({
         next: (data) => {
           this.showSuccess(this.translateService.instant("register.success"));

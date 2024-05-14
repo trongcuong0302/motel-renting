@@ -67,6 +67,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
           else if(error.error.message == "Password is incorrect") this.showError(this.translateService.instant("login.incorrectPassword"))
           else if(error.error.message == "Your account is inactive. Please verify your account in your email message.") 
             this.showError(this.translateService.instant("login.inactiveAccount"))
+          else if(error.error.message == "Your account is blocked. Cannot login.") this.showError(this.translateService.instant("login.blockAccount"))
         }
       });
     } else {

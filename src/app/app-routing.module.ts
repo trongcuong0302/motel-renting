@@ -10,6 +10,7 @@ import { VerifyAccountComponent } from './components/auth/verify-account';
 import { UserProfile } from './components/user';
 import { ContactComponent } from './components/contact-us';
 import { UserListComponent } from './components/admin/list-user';
+import { UserDetail } from './components/user/user-detail';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'add', component: AddProductComponent },
   { path: 'contact-us', component: ContactComponent },
   { path: 'admin/users', component: UserListComponent },
+  { path: 'users/:id', component: UserDetail },
   { path: '**', redirectTo: 'products'}
 ];
 
