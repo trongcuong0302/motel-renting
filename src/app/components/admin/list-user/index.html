@@ -1,4 +1,7 @@
-<div class="header"><span>{{'userList.title' | translate}}</span></div>
+<div class="header">
+  <span>{{'userList.title' | translate}}</span>
+  <button nz-button (click)="openModal()"><span nz-icon nzType="plus"></span>{{'userList.addUser' | translate}}</button>
+</div>
 <div class="container">
 
   <div class="list-data">
@@ -67,3 +70,18 @@
     </div>
   </div>
 </div>
+
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="'userList.addUser' | translate"
+  [nzOkText]="'userList.addUserConfirm' | translate"
+  [nzCancelText]="'login.cancelLabel' | translate"
+  [nzWidth]="400"
+  (nzOnOk)="handleOk()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <div add-user [confirm]="isConfirmAddUser" (onAddUser)="onAddUser()" (onAddUserFail)="onAddUserFail()"></div>
+  </ng-container>
+</nz-modal>

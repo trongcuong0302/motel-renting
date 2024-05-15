@@ -278,6 +278,7 @@
     "contact.renter": "Người thuê",
     "contact.other": "Khác",
     "contact.send": "Gửi",
+    "contact.addSuccess": "Gửi phản hồi thành công!",
 
     "userList.title": "Danh sách người dùng",
     "userList.search": "Tìm kiếm",
@@ -310,5 +311,8 @@
     "userList.notFoundError": "Không tìm thấy tài khoản!",
     "userList.invalidError": "Dữ liệu cập nhật không hợp lệ!",
     "userList.foundNoItem": "Không tìm thấy tài khoản nào",
-    "userList.foundNoItemContent": "Không tìm thấy người dùng nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác."
+    "userList.foundNoItemContent": "Không tìm thấy người dùng nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác.",
+    "userList.addUser": "Thêm tài khoản",
+    "userList.addUserConfirm": "Xác nhận",
+    "userList.addUserSuccess": "Thêm tài khoản thành công!"
 }

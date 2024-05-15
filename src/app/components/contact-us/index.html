@@ -21,11 +21,11 @@
                             </div>
                         </div>
                         <div class="item" nz-col nzXs="24">
-                            <div class="label">{{'add.note' | translate}}<span class="mark-require">*</span>:</div>
+                            <div class="label">{{'contact.message' | translate}}<span class="mark-require">*</span>:</div>
                             <div *ngFor="let key of ['message']">
                                 <nz-form-item>
                                     <nz-form-control >
-                                        <textarea nz-input [formControlName]="key" [placeholder]="'add.note' | translate" rows="5"></textarea>
+                                        <textarea nz-input [formControlName]="key" [placeholder]="'contact.message' | translate" rows="5"></textarea>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>

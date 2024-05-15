@@ -278,6 +278,7 @@
     "contact.renter": "Renter",
     "contact.other": "Others",
     "contact.send": "Send",
+    "contact.addSuccess": "Send feedback successfully!",
 
     "userList.title": "Users List",
     "userList.search": "Search",
@@ -310,5 +311,8 @@
     "userList.notFoundError": "Account is not found!",
     "userList.invalidError": "Data is not valid!",
     "userList.foundNoItem": "Found no users",
-    "userList.foundNoItemContent": "Sorry, there is no users matching your search. Please try again with other filters."
+    "userList.foundNoItemContent": "Sorry, there is no users matching your search. Please try again with other filters.",
+    "userList.addUser": "Add new user",
+    "userList.addUserConfirm": "Confirm",
+    "userList.addUserSuccess": "Add new user successfully!"
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, 
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { BaseComponent } from '../../base/baseComponent';
 import { UserService } from "../../services/user.service";
+import { FeedbackService } from "../../services/feedback.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,6 +16,7 @@ export class ContactComponent extends BaseComponent implements OnInit {
 
   radioValue = 'owner';
   isMobile: boolean = false;
+  accountData: any = {};
   
   roomTypeList = [
     { label: 'Chung cư mini / Chung cư', value: 'apartment' },
@@ -33,26 +35,66 @@ export class ContactComponent extends BaseComponent implements OnInit {
     message: FormControl<string>;
   }> = this.fb.group({
     role: ['', [Validators.required]],
-    message: ['', [Validators.required]]
+    message: ['']
   });
 
   override ngOnInit(): void {
     super.ngOnInit();
     if(window.innerWidth <= 768) this.isMobile = true;
+    this.getUser();
   }
 
   constructor(private notification: NzNotificationService,
     private router: Router,
     private userService: UserService,
+    private feedbackService: FeedbackService,
     private translateService: TranslateService,
     private fb: NonNullableFormBuilder,
     private zone: NgZone) {
       super(notification, router, userService);
   }
 
+  getUser() {
+    this.userService.getUser().subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.accountData = data.data;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if(error.error.message == "Unauthenticated") this.showError(this.translateService.instant("user.unauthenticated"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
+      }
+    });
+  }
+
+  clearData() {
+    for(let key in this.validateForm.controls) {
+      this.validateForm.get(key)?.setValue('');
+    }
+    Object.values(this.validateForm.controls).forEach(control => {
+      if (control.invalid) {
+        control.markAsUntouched();
+        control.updateValueAndValidity({ onlySelf: true });
+      }
+    });
+  }
+
   onBtnAdd() {
     if (this.validateFormData()) {
-      console.log(this.validateForm.value)
+      let formData: any = this.validateForm.value;
+      formData['userId'] = this.accountData._id;
+      this.feedbackService.postAFeedback(formData).subscribe({
+        next: (data) => {
+          this.isLoading = false;
+          this.clearData();
+          this.showSuccess(this.translateService.instant("contact.addSuccess"))
+        },
+        error: (error) => {
+          this.isLoading = false;
+          if(error.error.message == "Invalid data") this.showError(this.translateService.instant("add.invalidData"))
+        }
+      })
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {

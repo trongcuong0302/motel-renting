@@ -70,4 +70,8 @@ export class UserService {
     return this.http.delete(`${baseUrl}/${id}`);
   }
 
+  postAnUser(data: any): Observable<any> {
+    return this.http.post(baseUrl, data);
+  }
+
 }

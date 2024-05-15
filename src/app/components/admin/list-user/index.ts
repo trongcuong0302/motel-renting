@@ -32,6 +32,8 @@ export class UserListComponent extends BaseComponent implements OnInit {
     { label: 'Người dùng', value: 1 }
   ]
   role: number = -1;
+  isVisible: boolean = false;
+  isConfirmAddUser: boolean = false;
   
   constructor(
     private nzMessageService: NzMessageService,
@@ -250,6 +252,29 @@ export class UserListComponent extends BaseComponent implements OnInit {
           else if(error.error.message == "Not Found") this.showError(this.translateService.instant("userList.notFoundError"))
         }
       }); 
+  }
+
+  openModal() {
+    this.isVisible = true;
+    this.isConfirmAddUser = false;
+  }
+
+  handleOk() {
+    this.isConfirmAddUser = true;
+  }
+
+  handleCancel() {
+    this.isVisible = false;
+  }
+
+  onAddUser() {
+    this.isConfirmAddUser = false;
+    this.isVisible = false;
+    this.loadDataFromServer(this.pageIndex, this.pageSize);
+  }
+
+  onAddUserFail() {
+    this.isConfirmAddUser = false;
   }
 
 }
