@@ -28,6 +28,9 @@
           <li *ngIf="isAdmin" nz-menu-item (click)="onBtnUserList()" style="font-weight: 500;">
             <span nz-icon nzType="team" nzTheme="outline" style="margin-right: 10px;"></span>{{"userList.title" | translate}}
           </li>
+          <li *ngIf="isAdmin" nz-menu-item (click)="onBtnFeedbackList()" style="font-weight: 500;">
+            <span nz-icon nzType="message" nzTheme="outline" style="margin-right: 10px;"></span>{{"feedback.title" | translate}}
+          </li>
           <li nz-menu-item (click)="onBtnProfile()" style="font-weight: 500;">
             <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>{{"user.profileLabel" | translate}}
           </li>
@@ -69,6 +72,12 @@
           </div>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
+              <li *ngIf="isAdmin" nz-menu-item (click)="onBtnUserList()" style="font-weight: 500;">
+                <span nz-icon nzType="team" nzTheme="outline" style="margin-right: 10px;"></span>{{"userList.title" | translate}}
+              </li>
+              <li *ngIf="isAdmin" nz-menu-item (click)="onBtnFeedbackList()" style="font-weight: 500;">
+                <span nz-icon nzType="message" nzTheme="outline" style="margin-right: 10px;"></span>{{"feedback.title" | translate}}
+              </li>
               <li nz-menu-item (click)="onBtnProfile()" style="font-weight: 500;">
                 <span nz-icon nzType="profile" nzTheme="outline" style="margin-right: 10px;"></span>{{"user.profileLabel" | translate}}
               </li>

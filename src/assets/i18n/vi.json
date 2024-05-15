@@ -314,5 +314,21 @@
     "userList.foundNoItemContent": "Không tìm thấy người dùng nào theo bộ lọc hiện tại. Hãy thử với bộ lọc khác.",
     "userList.addUser": "Thêm tài khoản",
     "userList.addUserConfirm": "Xác nhận",
-    "userList.addUserSuccess": "Thêm tài khoản thành công!"
+    "userList.addUserSuccess": "Thêm tài khoản thành công!",
+
+    "feedback.title": "Danh sách phản hồi",
+    "feedback.userName": "Họ tên",
+    "feedback.userPhone": "Số điện thoại",
+    "feedback.userRole": "Vai trò",
+    "feedback.date": "Ngày gửi",
+    "feedback.content": "Nội dung",
+    "feedback.action": "Hành động",
+    "feedback.owner": "Chủ nhà trọ",
+    "feedback.renter": "Người thuê trọ",
+    "feedback.other": "Khác",
+    "feedback.delete": "Xóa phản hồi",
+    "feedback.deleteConfirm": "Bạn có muốn xóa phản hồi này không?",
+    "feedback.deleteSuccess": "Xóa phản hồi thành công!",
+    "feedback.getFeedbackError": "Không tìm thấy phản hồi nào!",
+    "feedback.deleteError": "Không tìm thấy phản hồi!"
 }

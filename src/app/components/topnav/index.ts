@@ -160,6 +160,11 @@ export class TopnavComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/admin/users']);
   }
 
+  onBtnFeedbackList() {
+    this.onSelectMenuItem(-1);
+    this.router.navigate(['/admin/feedback']);
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if(window.innerWidth <= 920) this.hideMenuIcon = true;

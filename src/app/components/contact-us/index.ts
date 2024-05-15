@@ -84,6 +84,9 @@ export class ContactComponent extends BaseComponent implements OnInit {
     if (this.validateFormData()) {
       let formData: any = this.validateForm.value;
       formData['userId'] = this.accountData._id;
+      formData['userName'] = this.accountData.name;
+      formData['userEmail'] = this.accountData.email;
+      formData['userPhone'] = this.accountData.phoneNumber;
       this.feedbackService.postAFeedback(formData).subscribe({
         next: (data) => {
           this.isLoading = false;

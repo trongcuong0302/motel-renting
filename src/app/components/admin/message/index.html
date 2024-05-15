@@ -1,0 +1,55 @@
+<div class="header">
+  <span>{{'feedback.title' | translate}}</span>
+</div>
+<div class="container">
+
+  <div class="list-data">
+    <nz-table #userTable *ngIf="feedbackList.length" [nzData]="feedbackList" [nzFrontPagination]="false" [nzLoading]="isLoading"
+      nzBordered [nzTotal]="total" [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
+        <thead>
+            <tr>
+              <th style="width: 250px;">{{'feedback.userName' | translate}}</th>
+              <th>Email</th>
+              <th style="width: 120px;">{{'feedback.userPhone' | translate}}</th>
+              <th style="width: 150px;">{{'feedback.userRole' | translate}}</th>
+              <th style="width: 150px;">{{'feedback.date' | translate}}</th>
+              <th nzAlign="left">{{'feedback.content' | translate}}</th>
+              <th>{{'feedback.action' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let feedback of userTable.data ">
+              <td (click)="setActiveProduct(feedback)" style="cursor: pointer;">{{feedback.userName}}</td>
+              <td (click)="setActiveProduct(feedback)" style="cursor: pointer;">{{feedback.userEmail}}</td>
+              <td (click)="setActiveProduct(feedback)" style="cursor: pointer;">{{feedback.userPhone}}</td>
+              <td>{{getFeedbackData(feedback, 'role')}}</td>
+              <td >{{getFeedbackData(feedback, 'date')}}</td>
+              <td style="text-align: left!important;">{{feedback.message}}</td>
+              <td>
+                <span class="icon-delete-user" nz-icon nzType="delete" nz-tooltip [nzTooltipTitle]="'feedback.delete' | translate" 
+                (click)="confirmDelete(feedback)"></span>
+              </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div *ngIf="!total" style="display: flex; justify-content: center; width: 100%;">
+      <nz-result nzStatus="404" [nzTitle]="'feedback.getFeedbackError' | translate" >
+      </nz-result>
+    </div>
+  </div>
+</div>
+
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="'userList.addUser' | translate"
+  [nzOkText]="'userList.addUserConfirm' | translate"
+  [nzCancelText]="'login.cancelLabel' | translate"
+  [nzWidth]="400"
+  (nzOnOk)="handleOk()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <div add-user [confirm]="isConfirmAddUser" (onAddUser)="onAddUser()" (onAddUserFail)="onAddUserFail()"></div>
+  </ng-container>
+</nz-modal>

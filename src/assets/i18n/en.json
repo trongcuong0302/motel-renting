@@ -314,5 +314,21 @@
     "userList.foundNoItemContent": "Sorry, there is no users matching your search. Please try again with other filters.",
     "userList.addUser": "Add new user",
     "userList.addUserConfirm": "Confirm",
-    "userList.addUserSuccess": "Add new user successfully!"
+    "userList.addUserSuccess": "Add new user successfully!",
+
+    "feedback.title": "Feedback List",
+    "feedback.userName": "Full name",
+    "feedback.userPhone": "Phone number",
+    "feedback.userRole": "Role",
+    "feedback.date": "Send date",
+    "feedback.content": "Content",
+    "feedback.action": "Action",
+    "feedback.owner": "Landlord",
+    "feedback.renter": "Tenant",
+    "feedback.other": "Others",
+    "feedback.delete": "Delete feedback",
+    "feedback.deleteConfirm": "Do you want to delete this feedback?",
+    "feedback.deleteSuccess": "Delete feedback successfully!",
+    "feedback.getFeedbackError": "No feedbacks found!",
+    "feedback.deleteError": "Cannot find the feedback!"
 }
