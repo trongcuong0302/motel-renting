@@ -103,4 +103,13 @@ export class AddRenterComponent extends BaseComponent implements OnInit {
   onChangePageIndex() {
     this.onSearch();
   }
+
+  viewUserDetail(data: any) {
+    let id = data._id || data.userId;
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/users/${id}`])
+    );
+  
+    window.open(url, '_blank');
+  }
 }

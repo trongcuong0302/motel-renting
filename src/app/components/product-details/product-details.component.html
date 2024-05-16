@@ -15,7 +15,7 @@
                 {{'detail.save' | translate}}
                 <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
             </div>
-            <div *ngIf="isOwner" class="btn-delete" (click)="confirmDelete()">
+            <div *ngIf="isOwner || isAdmin" class="btn-delete" (click)="confirmDelete()">
                 <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
                 {{'detail.delete' | translate}}
                 <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
@@ -31,7 +31,7 @@
                 <span nz-icon nzType="close" nzTheme="outline" style="margin-right: 8px;"></span>
                 {{'detail.cancel' | translate}}
             </div>
-            <div *ngIf="isOwner" nz-dropdown [nzDropdownMenu]="menu" style="font-size: 14px; cursor: pointer;">
+            <div *ngIf="isOwner || isAdmin || isRenter" nz-dropdown [nzDropdownMenu]="menu" style="font-size: 14px; cursor: pointer;">
                 <span nz-icon nzType="setting" nzTheme="outline" style="margin-right: 8px;"></span>
                 {{'detail.setting' | translate}}
                 <span nz-icon nzType="down"></span>
@@ -43,11 +43,11 @@
                     {{'detail.save' | translate}}
                     <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
                 </li>
-                <li nz-menu-item *ngIf="viewMode" (click)="goToEdit()">
+                <li nz-menu-item *ngIf="viewMode && isOwner" (click)="goToEdit()">
                     <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
                     {{'detail.edit' | translate}}
                 </li>
-                <li nz-menu-item nzDanger (click)="confirmDelete()">
+                <li *ngIf="isAdmin || isOwner" nz-menu-item nzDanger (click)="confirmDelete()">
                     <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
                     {{'detail.delete' | translate}}
                     <span *ngIf="isLoading" style="margin-left: 8px;" nz-icon nzType="loading" nzTheme="outline"></span>
@@ -75,18 +75,18 @@
                         <div class="label">{{getMotelDetail('roomType')}}</div>
                     </div>
                     <div class="item" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" [ngClass]="{'user-large': showUserLarge}">
-                        <div class="user-small" nz-popover nzPopoverPlacement="topRight" [nzPopoverContent]="contentTemplate">
+                        <div class="user-small" nz-popover nzPopoverPlacement="topRight" [nzPopoverContent]="contentTemplate" (click)="viewUserDetail(userData)">
                             <img class="avatar-container" [src]="avatarUrl">
                             <span style="font-weight: 500;">{{userData.name}}</span>
                         </div>
                         <ng-template #contentTemplate>
                             <div class="user-more-info">
-                                <div>
+                                <div style="cursor: pointer;" (click)="viewUserDetail(userData)">
                                     <img class="user-avatar-info" [src]="avatarUrl">
                                 </div>
                                 <div>
                                     <div style="margin-bottom: 10px;">
-                                        <span style="font-weight: 500;">{{userData.name}}</span>
+                                        <span style="font-weight: 500; cursor: pointer;" (click)="viewUserDetail(userData)">{{userData.name}}</span>
                                         <span nz-icon nzType="copy" class="icon-copy" nz-tooltip [nzTooltipTitle]="'detail.copyLabel' | translate" (click)="onBtnCopy(userData.name)"></span>
                                     </div>
                                     <div style="margin-bottom: 10px;">
@@ -153,15 +153,19 @@
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="database" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.air-conditioner' | translate}}: </span><span>{{motelData.numberOfAirConditioners}}</span>
+                            <span class="bold">{{'add.air-conditioner' | translate}}: </span><span>{{motelData.numberOfAirConditioners ?? 0}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="database" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.water-heater' | translate}}: </span><span>{{motelData.numberOfWaterHeaters}}</span>
+                            <span class="bold">{{'add.water-heater' | translate}}: </span><span>{{motelData.numberOfWaterHeaters ?? 0}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="database" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.washingMachine' | translate}}: </span><span>{{motelData.numberOfWashingMachine}}</span>
+                            <span class="bold">{{'add.washingMachine' | translate}}: </span><span>{{motelData.numberOfWashingMachine ?? 0}}</span>
+                        </div>
+                        <div class="item-detail">
+                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
+                            <span class="bold">{{'add.wardrobe' | translate}}: </span><span>{{motelData.numberOfWardrobes ?? 0}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="form" style="margin-right: 8px;"></span>
@@ -169,6 +173,10 @@
                         </div>
                     </div>
                     <div class="item item-detail-container" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                        <div class="item-detail">
+                            <span nz-icon nzType="expand" style="margin-right: 8px;"></span>
+                            <span class="bold">Number of floors: </span><span>{{motelData.numberOfFloors ?? 0}}</span>
+                        </div>
                         <div class="item-detail">
                             <span nz-icon nzType="expand" style="margin-right: 8px;"></span>
                             <span class="bold">{{'add.areaFloor' | translate}}: </span>
@@ -196,19 +204,15 @@
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="database" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.wardrobe' | translate}}: </span><span>{{motelData.numberOfWardrobes}}</span>
+                            <span class="bold">{{'add.bathroom' | translate}}: </span><span>{{motelData.numberOfBathrooms ?? 0}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="database" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.bathroom' | translate}}: </span><span>{{motelData.numberOfBathrooms}}</span>
-                        </div>
-                        <div class="item-detail">
-                            <span nz-icon nzType="database" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.bedroom' | translate}}: </span><span>{{motelData.numberOfBedrooms}}</span>
+                            <span class="bold">{{'add.bedroom' | translate}}: </span><span>{{motelData.numberOfBedrooms ?? 0}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="database" style="margin-right: 8px;"></span> 
-                            <span class="bold">{{'add.bed' | translate}}: </span><span>{{motelData.numberOfBeds}}</span>
+                            <span class="bold">{{'add.bed' | translate}}: </span><span>{{motelData.numberOfBeds ?? 0}}</span>
                         </div>
                     </div>
                 </div>
@@ -228,7 +232,7 @@
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="item" nz-col nzXs="24" nzLg="12">
                         <div class="user-more-info">
-                            <div>
+                            <div style="cursor: pointer;" (click)="viewUserDetail(userData)">
                                 <img class="user-avatar-info-large" [src]="avatarUrl">
                             </div>
                         </div>
@@ -263,7 +267,9 @@
                 <div *ngIf="isOwner || isRenter" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                     <div class="user-selected" nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12" *ngFor="let user of renterList; let i = index">
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;" class="user-selected-container">
-                            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8"><img class="user-avatar-info" [src]="getUserAvt(user)"></div>
+                            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8">
+                                <img class="user-avatar-info" [src]="getUserAvt(user)" (click)="viewUserDetail(user)">
+                            </div>
                             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="16">
                                 <div style="margin-bottom: 10px;">
                                     <span style="font-weight: 500;">{{'user.nameLabel' | translate}}: </span><span>{{user.name}}</span>
@@ -322,20 +328,20 @@
                 </div>
                 <ng-container *ngFor="let comment of listCommentsPagination; let i = index">
                     <nz-comment [nzAuthor]="author" [nzDatetime]="dateTime">
-                        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="comment.userAvatar"></nz-avatar>
+                        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="comment.userAvatar" (click)="viewUserDetail(comment)"></nz-avatar>
                         <nz-comment-content>
                           <p style="font-size: 16px;">{{ comment.content }}</p>
                         </nz-comment-content>   
                     </nz-comment>
                     <ng-template #author>
-                        <span style="font-size: 16px; margin-right: 8px;">{{comment.userName}}</span>
+                        <span style="font-size: 16px; margin-right: 8px; cursor: pointer;" (click)="viewUserDetail(comment)">{{comment.userName}}</span>
                         <nz-rate [(ngModel)]="comment.rate" nzAllowHalf style="pointer-events: none; line-height: 10px;"></nz-rate>
                     </ng-template>
                     <ng-template #dateTime>
                         <span style="font-size: 16px;">{{comment.time}}</span>
                     </ng-template>
-                    <div *ngIf="isShowUpdateCommentButton(i)" class="button-container" style="justify-content:left; margin-left: 42px;">
-                        <div style="cursor: pointer; margin-right: 16px;" (click)="onEditComment(i)">
+                    <div *ngIf="isShowUpdateCommentButton(i) || isAdmin" class="button-container" style="justify-content:left; margin-left: 42px;">
+                        <div *ngIf="isShowUpdateCommentButton(i)" style="cursor: pointer; margin-right: 16px;" (click)="onEditComment(i)">
                             <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>{{'detail.edit' | translate}}
                         </div>
                         <div style="cursor: pointer; color: #ff4d4f" (click)="confirmDeleteComment(i)">

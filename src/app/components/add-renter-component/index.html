@@ -2,7 +2,7 @@
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
         <div class="item" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
             <div *ngFor="let user of selectedUserList; let i = index" class="user-selected">
-                <div>
+                <div style="cursor: pointer;" (click)="viewUserDetail(user)">
                     <img class="avatar-container" [src]="getUserAvt(user)">
                     <span style="font-weight: 500;">{{user.name}}</span>
                 </div>
@@ -31,11 +31,11 @@
             <div *ngFor="let user of userList" class="user-more-info" nz-col nzXs="24" nzSm="24" nzMd="11" nzLg="11">
                 <div>
                     <div style="margin: 10px 0; width: 120px;">
-                        <img class="user-avatar-info" [src]="getUserAvt(user)">
+                        <img class="user-avatar-info" [src]="getUserAvt(user)" (click)="viewUserDetail(user)">
                     </div>
                     <div>
                         <div style="margin-bottom: 10px;">
-                            <span style="font-weight: 500;">{{user.name}}</span>
+                            <span style="font-weight: 500; cursor: pointer;" (click)="viewUserDetail(user)">{{user.name}}</span>
                         </div>
                         <div style="margin-bottom: 10px;">
                             <span style="font-weight: 500;">Email: </span><span>{{user.email}}</span>

@@ -78,7 +78,11 @@ export class UserListComponent extends BaseComponent implements OnInit {
 
   setActiveProduct(user: any): void {
     this.currentUser = user;
-    this.router.navigate([`/users/${this.currentUser._id}`]);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/users/${this.currentUser._id}`])
+    );
+  
+    window.open(url, '_blank');
   }
 
   loadDataFromServer(pageIndex: number, pageSize: number): void {

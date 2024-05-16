@@ -10,6 +10,7 @@
 .user-avatar-info {
     height: 120px;
     width: 120px;
+    cursor: pointer;
 }
 
 .user-more-info {

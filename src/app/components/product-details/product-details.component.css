@@ -152,6 +152,7 @@
 .user-small {
     min-width: 100px;
     font-size: 16px;
+    cursor: pointer;
 }
 
 .image-preview {
@@ -211,6 +212,7 @@
     height: 120px;
     width: 120px;
     margin-right: 16px;
+    cursor: pointer;
 }
 
 .user-avatar-info-large {

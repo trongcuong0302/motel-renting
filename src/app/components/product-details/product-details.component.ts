@@ -697,10 +697,10 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         findItem = this.yesNoList.find(d => d.value === this.motelData[key]);
         return findItem?.label;
       case "electricPrice":
-        if(this.motelData[key] == 0) return this.translateService.instant("detail.standardPrice");
+        if(!this.motelData[key]) return this.translateService.instant("detail.standardPrice");
         return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
       case "waterPrice":
-        if(this.motelData[key] == 0) return this.translateService.instant("detail.standardPrice");
+        if(!this.motelData[key]) return this.translateService.instant("detail.standardPrice");
         return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
       default:
         return;
@@ -853,5 +853,18 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       })
       this.totalRate = Math.round(score / this.listComments.length * 2) / 2;
     }
+  }
+
+  get isAdmin() {
+    return this.accountData.role == 0;
+  }
+
+  viewUserDetail(data: any) {
+    let id = data._id || data.userId;
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/users/${id}`])
+    );
+  
+    window.open(url, '_blank');
   }
 }

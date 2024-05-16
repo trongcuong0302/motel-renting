@@ -95,6 +95,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
 
     this.autocomplete.addListener('place_changed', () => {
       const place = this.autocomplete?.getPlace();
+      if(place?.name) this.validateForm.get("address")?.setValue(place?.name);
       let lat = place?.geometry?.location.lat() || this.latLng.lat;
       let lng = place?.geometry?.location.lng() || this.latLng.lng;
       this.latLng = {
