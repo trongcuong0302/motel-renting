@@ -264,9 +264,9 @@
         </div>
         <div nz-col nzXs="12" nzSm="7" nzMd="5" nzLg="4" nzXl="8">
           <div class="form-label" style="height: 14px;"></div>
-          <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="onFilterMyList()" style="height: 26px; display: flex; align-items: center;">
-            {{'list.myMotel' | translate}}
-          </label>
+          <div style="height: 32px; display: flex; align-items: center;">
+            <label nz-checkbox [(ngModel)]="checked" (ngModelChange)="onFilterMyList()">{{'list.myMotel' | translate}}</label>
+          </div>
         </div>
       </div>
     </div>

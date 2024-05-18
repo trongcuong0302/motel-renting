@@ -1,68 +1,44 @@
+<div class="input-container" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+  <div class="item motel-input" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
+    <div class="text-bold label">{{'payment.roomName' | translate}}</div>
+    <nz-form-item class="form-item">
+      <nz-form-control>
+        <nz-select [(ngModel)]="motelName" [nzOptions]="motelNameList" style="width:100%;"
+          [nzPlaceHolder]="'payment.roomName' | translate"></nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div class="item date-input" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="12">
+    <div class="text-bold label">{{'payment.expiredDate' | translate}}</div>
+    <nz-form-item class="form-item">
+      <nz-form-control [nzErrorTip]="'register.phoneError' | translate">
+        <nz-date-picker nzFormat="dd-MM-yyyy" [nzDisabledDate]="disabledDate" [nzPlaceHolder]="'payment.expiredDate' | translate" 
+          [(ngModel)]="expiredDate" style="width: 100%;">
+        </nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>
 
-    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
-      <ng-container *ngFor="let key of ['name']">
-        <div class="text-bold label">{{"register.fullName" | translate}}</div>
-        <nz-form-item class="form-item">
-          <nz-form-control [nzErrorTip]="'register.fullNameError' | translate">
-            <nz-input-group nzPrefixIcon="user">
-              <input type="text" nz-input [formControlName]="key" [placeholder]="'register.fullName' | translate" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </ng-container>
-      <ng-container *ngFor="let key of ['email']">
-        <div class="text-bold label">Email</div>
-        <nz-form-item class="form-item">
-          <nz-form-control [nzErrorTip]="'register.emailError' | translate">
-            <nz-input-group nzPrefixIcon="mail">
-              <input type="email" nz-input [formControlName]="key" placeholder="Email" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </ng-container>
-      <ng-container *ngFor="let key of ['phoneNumber']">
-        <div class="text-bold label">{{"register.phoneNumber" | translate}}</div>
-        <nz-form-item class="form-item">
-          <nz-form-control [nzErrorTip]="'register.phoneError' | translate">
-            <nz-input-group nzPrefixIcon="phone">
-              <input type="tel" nz-input [formControlName]="key" [placeholder]="'register.phoneNumber' | translate" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </ng-container>
-      <ng-container *ngFor="let key of ['password']">
-        <div class="text-bold">{{"register.password" | translate}}</div>
-        <nz-form-item class="form-item">
-          <nz-form-control [nzErrorTip]="'register.passwordError' | translate">
-            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
-              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" [placeholder]="'register.password' | translate" />
-            </nz-input-group>
-            <ng-template #suffixTemplate>
-              <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </ng-container>
-      <ng-container *ngFor="let key of ['confirmPassword']">
-        <div class="text-bold label">{{"register.confirmPassword" | translate}}</div>
-        <nz-form-item class="form-item">
-          <nz-form-control [nzErrorTip]="'register.confirmPasswordError' | translate">
-            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
-              <input [type]="isShowPassword ? 'text' : 'password'" nz-input [formControlName]="key" [placeholder]="'register.confirmPassword' | translate" />
-            </nz-input-group>
-            <ng-template #suffixTemplate>
-              <span nz-icon [nzType]="isShowPassword ? 'eye-invisible' : 'eye'" (click)="isShowPassword = !isShowPassword"></span>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </ng-container>
-      <ng-container *ngFor="let key of ['role']">
-        <div class="text-bold label">{{'userList.role' | translate}}</div>
-        <nz-form-item class="form-item">
-          <nz-form-control>
-            <nz-select [formControlName]="key" [nzOptions]="roleList" style="width:100%;" nzAllowClear
-              [nzPlaceHolder]="'userList.role' | translate"></nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </ng-container>
-    </form>
+
+<ng-container>
+  <div class="text-bold label">{{'payment.payments' | translate}} ({{'payment.total' | translate}}: 0 VND)</div>
+  <nz-form-item class="form-item">
+    <nz-form-control [nzErrorTip]="'register.passwordError' | translate">
+      <input nz-input [placeholder]="'register.password' | translate" />
+    </nz-form-control>
+  </nz-form-item>
+</ng-container>
+
+<form nz-form [formGroup]="validateForm" class="login-form">
+  <ng-container *ngFor="let key of ['description']">
+    <div class="text-bold label">{{'payment.description' | translate}}</div>
+    <nz-form-item class="form-item">
+      <nz-form-control>
+        <nz-textarea-count [nzMaxCharacterCount]="100">
+          <textarea rows="1" [formControlName]="key" nz-input [placeholder]="'payment.descriptionPlaceholer' | translate"></textarea>
+        </nz-textarea-count>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</form>

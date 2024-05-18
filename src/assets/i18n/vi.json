@@ -338,5 +338,13 @@
     "payment.paid": "Đã thanh toán",
     "payment.notPaid": "Chưa thanh toán",
     "payment.addBill": "Thêm hóa đơn",
-    "payment.name": "Tên hóa đơn"
+    "payment.name": "Tên hóa đơn",
+    "payment.roomName": "Tên nhà trọ",
+    "payment.expiredDate": "Ngày hét hạn",
+    "payment.payments": "Các khoản thanh toán",
+    "payment.description": "Mô tả (tiếng Việt không dấu) (100 kí tự)",
+    "payment.descriptionPlaceholer": "Mô tả",
+    "payment.total": "Tổng",
+    "payment.totalWarning": "Bạn có chắc tổng giá là 0 VND?"
+
 }

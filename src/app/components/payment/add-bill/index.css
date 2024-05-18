@@ -58,3 +58,15 @@
 .text-bold {
   font-weight: 500;
 }
+
+.input-container {
+  margin: 0 !important;
+}
+
+.motel-input {
+  padding-left: 0 !important;
+}
+
+.date-input {
+  padding-right: 0 !important;
+}

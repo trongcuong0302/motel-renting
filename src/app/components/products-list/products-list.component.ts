@@ -66,10 +66,10 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     this.filterData = { search: "", price: [0, 0] };
     this.getUser();
     this.onSearchEvent(this.filterData);
-    //this.loadDataFromServer(this.pageIndex, this.pageSize, this.searchName, this.searchCode, null, null, [{key: 'price', value: this.price}]);
   }
 
   getUser() {
+    this.isLoading = true;
     this.userService.getUser().subscribe({
       next: (data) => {
         this.isLoading = false;
