@@ -1,0 +1,26 @@
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 600;
+    height: 48px;
+    padding: 0 24px;
+    background-color: #fff;
+}
+
+.seperator {
+    height: 16px;
+    background-color: #f1f5f9;
+}
+
+.content {
+    margin: 0 !important;
+    padding: 0 24px 24px 24px;
+    background-color: #fff;
+}
+
+::ng-deep .ant-tabs-tab {    
+    font-size: 16px !important;
+    font-weight: 500 !important;
+}

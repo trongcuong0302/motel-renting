@@ -1,4 +1,7 @@
-<div class="header"><span>{{'list.title' | translate}}</span></div>
+<div class="header">
+    <span>{{'list.title' | translate}}</span>
+    <button nz-button (click)="addMotel()"><span nz-icon nzType="plus"></span>{{'add.title' | translate}}</button>
+</div>
 <div class="seperator"></div>
 <div form-filter (onSearchEvent)="onSearchEvent($event)"></div>
 <div class="seperator"></div>

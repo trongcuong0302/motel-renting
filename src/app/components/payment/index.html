@@ -1,0 +1,29 @@
+<div class="header">
+    <span>{{'list.title' | translate}}</span>
+    <button nz-button (click)="openModal()"><span nz-icon nzType="plus"></span>{{'payment.addBill' | translate}}</button>
+</div>
+<div class="seperator"></div>
+<div class="content">
+    <nz-tabset nzCentered [nzSelectedIndex]="tabIndex" (nzSelectedIndexChange)="onTabIndexChange($event)">
+        <nz-tab class="title" [nzTitle]="'payment.all' | translate"></nz-tab>
+        <nz-tab class="title" [nzTitle]="'payment.paid' | translate"></nz-tab>
+        <nz-tab class="title" [nzTitle]="'payment.notPaid' | translate"></nz-tab>
+    </nz-tabset>
+    <div *ngIf="tabIndex == 0">
+        {{'payment.paid' | translate}}
+    </div>
+</div>
+
+<nz-modal
+    [(nzVisible)]="isVisible"
+    [nzTitle]="'payment.addBill' | translate"
+    [nzOkText]="'userList.addUserConfirm' | translate"
+    [nzCancelText]="'login.cancelLabel' | translate"
+    [nzWidth]="600"
+    (nzOnOk)="handleOk()"
+    (nzOnCancel)="handleCancel()"
+>
+    <ng-container *nzModalContent>
+        <div add-bill [confirm]="isConfirmAddBill" (onAddUser)="onAddUser()" (onAddUserFail)="onAddUserFail()"></div>
+    </ng-container>
+</nz-modal>

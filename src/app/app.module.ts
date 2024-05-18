@@ -74,6 +74,8 @@ import { UserListComponent } from './components/admin/list-user';
 import { FeedbackListComponent } from './components/admin/message';
 import { UserDetail } from './components/user/user-detail';
 import { AddUser } from './components/admin/add-user';
+import { AddBill } from './components/payment/add-bill';
+import { PaymentComponent } from './components/payment';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -103,7 +105,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserListComponent,
     FeedbackListComponent,
     UserDetail,
-    AddUser
+    AddUser,
+    PaymentComponent,
+    AddBill
   ],
   imports: [
     BrowserModule,

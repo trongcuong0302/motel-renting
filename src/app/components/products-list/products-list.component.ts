@@ -219,4 +219,8 @@ export class ProductsListComponent extends BaseComponent implements OnInit {
     sortFilter.value = this.sortOrder;
     this.filterMotel(this.filters);
   }
+
+  addMotel() {
+    this.router.navigate(['/add']);
+  }
 }

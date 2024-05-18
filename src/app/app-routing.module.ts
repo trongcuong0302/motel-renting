@@ -12,6 +12,7 @@ import { ContactComponent } from './components/contact-us';
 import { UserListComponent } from './components/admin/list-user';
 import { FeedbackListComponent } from './components/admin/message';
 import { UserDetail } from './components/user/user-detail';
+import { PaymentComponent } from './components/payment';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'admin/users', component: UserListComponent },
   { path: 'admin/feedback', component: FeedbackListComponent },
   { path: 'users/:id', component: UserDetail },
+  { path: 'payment', component: PaymentComponent },
   { path: '**', redirectTo: 'products'}
 ];
 

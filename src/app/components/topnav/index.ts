@@ -23,8 +23,8 @@ export class TopnavComponent extends BaseComponent implements OnInit {
       isSelected: false,
     },
     {
-      label: 'Add Motel',
-      link: 'add',
+      label: 'Payment',
+      link: 'payment',
       isSelected: false,
     },
     {
@@ -78,7 +78,7 @@ export class TopnavComponent extends BaseComponent implements OnInit {
 
   getLabelForArray() {
     this.menuList[0].label = this.translateService.instant("user.motelListLabel");
-    this.menuList[1].label = this.translateService.instant("user.addMotelLabel");
+    this.menuList[1].label = this.translateService.instant("user.paymentLabel");
     this.menuList[2].label = this.translateService.instant("user.contactUsLabel");
   }
 

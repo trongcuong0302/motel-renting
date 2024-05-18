@@ -77,6 +77,7 @@
     "user.unauthenticated": "Tài khoản chưa được đăng nhập!",
     "user.notFoundAccount": "Tài khoản không tồn tại!",
     "user.motelListLabel": "Danh sách nhà trọ",
+    "user.paymentLabel": "Thanh toán hóa đơn",
     "user.addMotelLabel": "Thêm nhà trọ",
     "user.contactUsLabel": "Liên hệ",
     "user.editLabel": "Sửa",
@@ -330,5 +331,12 @@
     "feedback.deleteConfirm": "Bạn có muốn xóa phản hồi này không?",
     "feedback.deleteSuccess": "Xóa phản hồi thành công!",
     "feedback.getFeedbackError": "Không tìm thấy phản hồi nào!",
-    "feedback.deleteError": "Không tìm thấy phản hồi!"
+    "feedback.deleteError": "Không tìm thấy phản hồi!",
+
+    "payment.title": "Hóa đơn tiền nhà",
+    "payment.all": "Tất cả hóa đơn",
+    "payment.paid": "Đã thanh toán",
+    "payment.notPaid": "Chưa thanh toán",
+    "payment.addBill": "Thêm hóa đơn",
+    "payment.name": "Tên hóa đơn"
 }
