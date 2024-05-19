@@ -22,7 +22,7 @@
 
 <ng-container>
   <div class="text-bold label" style="margin-top: 10px;">
-    {{'payment.payments' | translate}} ({{'payment.total' | translate}}: {{getTotalAmount()}})
+    {{'payment.payments' | translate}} ({{'payment.total' | translate}}: {{getTotalAmountLabel()}})
   </div>
   <div class="payment-list">
     <div *ngFor="let payment of paymentList; let i = index" class="payment-item">
@@ -39,8 +39,8 @@
       <input type="text" nz-input [placeholder]="'payment.paymentName' | translate" [(ngModel)]="paymentName"/>
     </div>
     <div class="item date-input" nz-col nzXs="12">
-      <div class="text-bold label">{{'payment.paymentAmout' | translate}}</div>
-      <nz-input-number type="number" [nzMin]="0" nz-input [nzPlaceHolder]="'payment.paymentAmout' | translate" style="width:100%;"
+      <div class="text-bold label">{{'payment.paymentAmount' | translate}}</div>
+      <nz-input-number type="number" [nzMin]="0" nz-input [nzPlaceHolder]="'payment.paymentAmount' | translate" style="width:100%;"
       [(ngModel)]="amount"></nz-input-number> 
     </div>
   </div>

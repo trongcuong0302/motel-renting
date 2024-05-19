@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/baseComponent';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductsService } from 'src/app/services/products.service';
+import { OrdersService } from 'src/app/services/orders.service';
 import { differenceInCalendarDays } from 'date-fns';
 
 @Component({
@@ -60,6 +61,7 @@ export class AddBill extends BaseComponent implements OnInit {
   constructor(private fb: NonNullableFormBuilder,
     private productsService: ProductsService,
     private userService: UserService,
+    private ordersService: OrdersService,
     private translateService: TranslateService,
     private router: Router,
     private notification: NzNotificationService,
@@ -114,17 +116,73 @@ export class AddBill extends BaseComponent implements OnInit {
     }
   }
 
+  saveBill() {
+    let formData = {
+      motelId: this.motelName,
+      userId: this.accountData._id,
+      expiryDate: new Date(new Date(this.expiredDate).setHours(23, 59, 59, 999)),
+      amount: this.getTotalAmount(),
+      paymentList: this.paymentList,
+      description: this.validateForm.get('description')?.value
+    }
+    this.isLoading = true;
+    this.ordersService.createAnOrder(formData).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.showSuccess(this.translateService.instant("payment.addSuccess"));
+        this.onAddBill.emit();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if(error.error.message == "Duplicate Email") this.showError(this.translateService.instant("register.duplicateEmail"))
+        else if(error.error.message == "Duplicate phone number") this.showError(this.translateService.instant("register.duplicatePhone"))
+        else if(error.error.message == "Email not found") this.showError(this.translateService.instant("register.notFoundEmail"))
+        this.onAddBillFail.emit();
+      } 
+    });
+  }
+
   submitForm(): void {
     if (this.validateFormData()) {
-      
+      this.confirmTotalZero();
     } else {
-      
+      this.onAddBillFail.emit();
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
     }
   }
 
   validateFormData() {
-    
+    if(!this.motelName) {
+      this.showError(this.translateService.instant("payment.motelNameError"));
+      return false;
+    }
+
+    if(!this.validateForm.get('description')?.value) {
+      this.showError(this.translateService.instant("payment.descriptionError"));
+      return false;
+    }
     return true;
+  }
+
+  confirmTotalZero() {
+    this.addPayment();
+    if(this.getTotalAmount() == 0) {
+      this.modal.confirm({
+        nzTitle: this.translateService.instant("payment.totalWarning"),
+        nzOkText: this.translateService.instant("add.yes"),
+        nzOkType: 'primary',
+        nzCancelText: this.translateService.instant("add.no"),
+        nzOnOk: () => this.saveBill(),
+        nzOnCancel: () => this.onAddBillFail.emit()
+      });
+    } else {
+      this.saveBill();
+    }
   }
 
   addPayment() {
@@ -150,12 +208,16 @@ export class AddBill extends BaseComponent implements OnInit {
     return `${payment.name}: ${this.formatDisplayMoney(payment.amount)}`
   }
 
-  getTotalAmount() {
+  getTotalAmountLabel() {
+    return this.formatDisplayMoney(this.getTotalAmount());
+  }
+
+  getTotalAmount(): number {
     let total = 0;
     this.paymentList.forEach((payment: any) => {
       total += payment.amount;
     })
-    return this.formatDisplayMoney(total);
+    return total;
   }
 
   editPayment(i: number) {

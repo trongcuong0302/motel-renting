@@ -83,6 +83,7 @@ export class AddUser extends BaseComponent implements OnInit {
         } 
       });
     } else {
+      this.onAddUserFail.emit();
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();

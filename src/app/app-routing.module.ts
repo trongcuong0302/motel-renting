@@ -13,6 +13,7 @@ import { UserListComponent } from './components/admin/list-user';
 import { FeedbackListComponent } from './components/admin/message';
 import { UserDetail } from './components/user/user-detail';
 import { PaymentComponent } from './components/payment';
+import { AddBillResult } from './components/payment/add-result';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'admin/feedback', component: FeedbackListComponent },
   { path: 'users/:id', component: UserDetail },
   { path: 'payment', component: PaymentComponent },
+  { path: 'payment/vnpay_return', component: AddBillResult },
   { path: '**', redirectTo: 'products'}
 ];
 

@@ -348,7 +348,11 @@
     "payment.deleteWarning": "Are you sure you want to delete this payment?",
     "payment.totalWarning": "Are you sure total price is 0 VND?",
     "payment.paymentName": "Payment name",
-    "payment.paymentAmout": "Amount (VND)",
+    "payment.paymentAmount": "Amount (VND)",
     "payment.addPayment": "Add payment",
-    "payment.savePayment": "Save payment"
+    "payment.savePayment": "Save payment",
+    "payment.motelNameError": "Please select 1 motel!",
+    "payment.descriptionError": "Please fill in the Description field!",
+    "payment.addSuccess": "Add new bill successfully!"
+
 }

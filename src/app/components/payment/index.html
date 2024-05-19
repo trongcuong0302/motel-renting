@@ -24,6 +24,6 @@
     (nzOnCancel)="handleCancel()"
 >
     <ng-container *nzModalContent>
-        <div add-bill [confirm]="isConfirmAddBill" (onAddUser)="onAddUser()" (onAddUserFail)="onAddUserFail()"></div>
+        <div add-bill [confirm]="isConfirmAddBill" (onAddBill)="onAddUser()" (onAddBillFail)="onAddUserFail()"></div>
     </ng-container>
 </nz-modal>

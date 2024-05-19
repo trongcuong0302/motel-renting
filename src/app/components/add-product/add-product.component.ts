@@ -369,6 +369,7 @@ export class AddProductComponent extends BaseComponent implements OnInit{
     formData['coordinate'] = this.latLng;
     formData['owner'] = this.userData?._id;
     formData['renters'] = this.renterList;
+    formData['rate'] = 5;
     this.isLoading = true;
     this.productsService.postAProduct(formData).subscribe({
       next: (data) => {

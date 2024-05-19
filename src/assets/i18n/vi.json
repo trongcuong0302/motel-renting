@@ -348,7 +348,11 @@
     "payment.deleteWarning": "Bạn có chắc muốn xóa khoản thanh toán này?",
     "payment.totalWarning": "Bạn có chắc tổng giá là 0 VND?",
     "payment.paymentName": "Tên khoản thu",
-    "payment.paymentAmout": "Giá tiền (VND)",
+    "payment.paymentAmount": "Giá tiền (VND)",
     "payment.addPayment": "Thêm khoản thu",
-    "payment.savePayment": "Lưu khoản thu"
+    "payment.savePayment": "Lưu khoản thu",
+    "payment.motelNameError": "Hãy chọn 1 nhà trọ!",
+    "payment.descriptionError": "Hãy điền phần Mô tả!",
+    "payment.addSuccess": "Thêm hóa đơn thành công!"
+
 }

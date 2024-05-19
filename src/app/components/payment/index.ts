@@ -3,6 +3,8 @@ import { BaseComponent } from '../../base/baseComponent';
 import { UserService } from "../../services/user.service";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
+import { OrdersService } from 'src/app/services/orders.service';
+
 
 @Component({
   selector: '[payment-component]',
@@ -23,7 +25,8 @@ export class PaymentComponent extends BaseComponent implements OnInit {
 
   constructor(private notification: NzNotificationService,
     private router: Router,
-    private userService: UserService) {
+    private userService: UserService,
+    private orderService: OrdersService) {
       super(notification, router, userService);
   }
 
@@ -33,6 +36,7 @@ export class PaymentComponent extends BaseComponent implements OnInit {
 
   openModal() {
     this.isVisible = true;
+    this.isConfirmAddBill = false;
   }
 
   handleOk() {
