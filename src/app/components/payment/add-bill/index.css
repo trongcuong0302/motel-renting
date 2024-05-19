@@ -60,7 +60,8 @@
 }
 
 .input-container {
-  margin: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .motel-input {
@@ -69,4 +70,59 @@
 
 .date-input {
   padding-right: 0 !important;
+}
+
+.add-button {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.add-icon {
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.add-label {
+  cursor: pointer;
+}
+
+.disabled {
+  color: #8d8d8d;
+  cursor: not-allowed;
+}
+
+.payment-list {
+  max-height: 120px;
+  overflow: auto;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.payment-item {
+  background-color: #f1f5f9;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  margin-bottom: 8px;
+}
+
+.button-payment {
+  display: flex;
+}
+
+.btn-edit {
+  cursor: pointer;
+}
+
+.btn-delete {
+  cursor: pointer;
+  margin-left: 10px; 
+  color: #ff4d4f;
+}
+
+::ng-deep .ant-form-item {
+  margin: 0 !important;
 }

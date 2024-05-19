@@ -21,6 +21,11 @@ export class AddBill extends BaseComponent implements OnInit {
   accountData: any = {};
   motelName: string = '';
   motelNameList: any = [];
+  paymentName: string = '';
+  amount: number = 0;
+  paymentList: any = [];
+  isEdit: boolean = false;
+  currentIndex: number = -1;
 
   _confirm: boolean = false;
   get confirm() {
@@ -120,6 +125,71 @@ export class AddBill extends BaseComponent implements OnInit {
   validateFormData() {
     
     return true;
+  }
+
+  addPayment() {
+    if(!this.paymentName) return;
+    let payment = {
+      name: '',
+      amount: 0
+    }
+    payment.name = this.paymentName;
+    payment.amount = this.amount;
+    if(this.isEdit) {
+      this.paymentList[this.currentIndex] = payment;
+      this.currentIndex = -1;
+      this.isEdit = false;
+    }
+    else this.paymentList.push(payment);
+
+    this.paymentName = '';
+    this.amount = 0;
+  }
+
+  getPaymentLabel(payment: any) {
+    return `${payment.name}: ${this.formatDisplayMoney(payment.amount)}`
+  }
+
+  getTotalAmount() {
+    let total = 0;
+    this.paymentList.forEach((payment: any) => {
+      total += payment.amount;
+    })
+    return this.formatDisplayMoney(total);
+  }
+
+  editPayment(i: number) {
+    this.isEdit = true;
+    this.currentIndex = i;
+    this.paymentName = this.paymentList[i].name;
+    this.amount = this.paymentList[i].amount;
+  }
+
+  deletePayment(i: number) {
+    if(this.currentIndex == i) {
+      this.paymentName = '';
+      this.amount = 0;
+      this.isEdit = false;
+    }
+    if(this.currentIndex > i) this.currentIndex--;
+
+    this.paymentList.splice(i, 1);
+  }
+
+  confirmDelete(i: number) : void {
+    if(this.isLoading) return;
+    this.modal.confirm({
+      nzTitle: this.translateService.instant("payment.deleteWarning"),
+      nzOkText: this.translateService.instant("add.yes"),
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: this.translateService.instant("add.no"),
+      nzOnOk: () => this.deletePayment(i)
+    });
+  }
+
+  formatDisplayMoney(amount: any) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   }
 
 }

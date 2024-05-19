@@ -343,8 +343,12 @@
     "payment.expiredDate": "Ngày hét hạn",
     "payment.payments": "Các khoản thanh toán",
     "payment.description": "Mô tả (tiếng Việt không dấu) (100 kí tự)",
-    "payment.descriptionPlaceholer": "Mô tả",
+    "payment.descriptionPlaceholer": "VD: thanh toan tien nha thang 5 phong 403",
     "payment.total": "Tổng",
-    "payment.totalWarning": "Bạn có chắc tổng giá là 0 VND?"
-
+    "payment.deleteWarning": "Bạn có chắc muốn xóa khoản thanh toán này?",
+    "payment.totalWarning": "Bạn có chắc tổng giá là 0 VND?",
+    "payment.paymentName": "Tên khoản thu",
+    "payment.paymentAmout": "Giá tiền (VND)",
+    "payment.addPayment": "Thêm khoản thu",
+    "payment.savePayment": "Lưu khoản thu"
 }

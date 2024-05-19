@@ -20,14 +20,35 @@
   </div>
 </div>
 
-
 <ng-container>
-  <div class="text-bold label">{{'payment.payments' | translate}} ({{'payment.total' | translate}}: 0 VND)</div>
-  <nz-form-item class="form-item">
-    <nz-form-control [nzErrorTip]="'register.passwordError' | translate">
-      <input nz-input [placeholder]="'register.password' | translate" />
-    </nz-form-control>
-  </nz-form-item>
+  <div class="text-bold label" style="margin-top: 10px;">
+    {{'payment.payments' | translate}} ({{'payment.total' | translate}}: {{getTotalAmount()}})
+  </div>
+  <div class="payment-list">
+    <div *ngFor="let payment of paymentList; let i = index" class="payment-item">
+      <div>{{getPaymentLabel(payment)}}</div>
+      <div class="button-payment">
+        <span class="btn-edit" nz-icon nzType="edit" nz-tooltip [nzTooltipTitle]="'detail.edit' | translate" (click)="editPayment(i)"></span>
+        <span class="btn-delete" nz-icon nzType="close" nz-tooltip [nzTooltipTitle]="'detail.delete' | translate" (click)="confirmDelete(i)"></span>
+      </div>
+    </div>
+  </div>
+  <div class="input-container" nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%; margin-bottom: 16px;">
+    <div class="item motel-input" nz-col nzXs="12">
+      <div class="text-bold label">{{'payment.paymentName' | translate}}</div>
+      <input type="text" nz-input [placeholder]="'payment.paymentName' | translate" [(ngModel)]="paymentName"/>
+    </div>
+    <div class="item date-input" nz-col nzXs="12">
+      <div class="text-bold label">{{'payment.paymentAmout' | translate}}</div>
+      <nz-input-number type="number" [nzMin]="0" nz-input [nzPlaceHolder]="'payment.paymentAmout' | translate" style="width:100%;"
+      [(ngModel)]="amount"></nz-input-number> 
+    </div>
+  </div>
+  <div class="add-button">
+    <span nz-icon nzType="plus-circle" class="add-icon" [ngClass]="{'disabled': !paymentName}" (click)="addPayment()"></span>
+    <span *ngIf="!isEdit" class="text-bold add-label" [ngClass]="{'disabled': !paymentName}" (click)="addPayment()">{{'payment.addPayment' | translate}}</span>
+    <span *ngIf="isEdit" class="text-bold add-label" [ngClass]="{'disabled': !paymentName}" (click)="addPayment()">{{'payment.savePayment' | translate}}</span>
+  </div>
 </ng-container>
 
 <form nz-form [formGroup]="validateForm" class="login-form">

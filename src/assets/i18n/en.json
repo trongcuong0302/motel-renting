@@ -343,8 +343,12 @@
     "payment.expiredDate": "Expiry Date",
     "payment.payments": "Payments",
     "payment.description": "Description (Vietnamese without accents) (100 characters)",
-    "payment.descriptionPlaceholer": "Description",
+    "payment.descriptionPlaceholer": "E.g. thanh toan tien nha thang 5 phong 403",
     "payment.total": "Total",
-    "payment.totalWarning": "Are you sure total price is 0 VND?"
-
+    "payment.deleteWarning": "Are you sure you want to delete this payment?",
+    "payment.totalWarning": "Are you sure total price is 0 VND?",
+    "payment.paymentName": "Payment name",
+    "payment.paymentAmout": "Amount (VND)",
+    "payment.addPayment": "Add payment",
+    "payment.savePayment": "Save payment"
 }
