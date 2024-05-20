@@ -52,8 +52,16 @@
 </ng-container>
 
 <form nz-form [formGroup]="validateForm" class="login-form">
+  <ng-container *ngFor="let key of ['content']">
+    <div class="text-bold label">{{'payment.content' | translate}}</div>
+    <nz-form-item class="form-item">
+      <nz-form-control>
+        <input [formControlName]="key" nz-input [placeholder]="'payment.content' | translate"/>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
   <ng-container *ngFor="let key of ['description']">
-    <div class="text-bold label">{{'payment.description' | translate}}</div>
+    <div class="text-bold label" style="margin-top: 16px;">{{'payment.description' | translate}}</div>
     <nz-form-item class="form-item">
       <nz-form-control>
         <nz-textarea-count [nzMaxCharacterCount]="100">

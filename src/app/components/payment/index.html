@@ -1,16 +1,53 @@
 <div class="header">
-    <span>{{'list.title' | translate}}</span>
+    <span>{{'payment.title' | translate}}</span>
     <button nz-button (click)="openModal()"><span nz-icon nzType="plus"></span>{{'payment.addBill' | translate}}</button>
 </div>
 <div class="seperator"></div>
+
 <div class="content">
     <nz-tabset nzCentered [nzSelectedIndex]="tabIndex" (nzSelectedIndexChange)="onTabIndexChange($event)">
         <nz-tab class="title" [nzTitle]="'payment.all' | translate"></nz-tab>
         <nz-tab class="title" [nzTitle]="'payment.paid' | translate"></nz-tab>
         <nz-tab class="title" [nzTitle]="'payment.notPaid' | translate"></nz-tab>
     </nz-tabset>
-    <div *ngIf="tabIndex == 0">
-        {{'payment.paid' | translate}}
+    <div *ngIf="tabIndex == 0" class="list-bill">
+        <div class="bill-container" *ngFor="let bill of billData">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
+                <div class="bill-info" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+                    <div><span class="label">{{'payment.name' | translate}}: </span>{{bill.content}}</div>
+                    <div><span class="label">{{'payment.roomName' | translate}}: </span>{{bill.motel.roomName}}</div>
+                    <div><span class="label">{{'payment.ownerName' | translate}}: </span>{{bill.user.name}}</div>
+                    <div><span class="label">{{'payment.expiredDate' | translate}}: </span>{{getFormValue('expiryDate', bill)}}</div>
+                    <div><span class="label">{{'payment.descriptionLabel' | translate}}: </span>{{bill.description}}</div>
+                </div>
+                <div class="bill-info" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
+                    <div class="label">{{'payment.payments' | translate}}</div>
+                    <div><span class="label">{{'payment.total' | translate}}: </span>{{getFormValue('amount', bill)}}</div>
+                    <ul style="padding-left: 24px;">
+                        <li *ngFor="let payment of bill.paymentList">
+                            <div><span class="label">{{payment.name}}: </span>{{getFormValue('amount', payment)}}</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bill-info" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8">
+                    <div style="margin-bottom: 8px;">
+                        <span class="label">{{'payment.status' | translate}}: </span>
+                        <span [ngClass]="{'paid': bill.status == 'paid', 'unpaid': bill.status == 'unpaid'}">{{getFormValue('status', bill)}}</span>
+                    </div>
+                    <button *ngIf="isShowBtnPay(bill)" class="btn-pay" nz-button nzType="primary" (click)="onPay(bill)">
+                        {{'payment.pay' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>
+        <div class="pagination" *ngIf="billData.length">
+            <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" [nzSize]="'small'"
+            (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
+            <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} {{'payment.bill' | translate}}
+            </ng-template>  
+        </div>
     </div>
 </div>
 
@@ -24,6 +61,6 @@
     (nzOnCancel)="handleCancel()"
 >
     <ng-container *nzModalContent>
-        <div add-bill [confirm]="isConfirmAddBill" (onAddBill)="onAddUser()" (onAddBillFail)="onAddUserFail()"></div>
+        <div add-bill [confirm]="isConfirmAddBill" (onAddBill)="onAddBill()" (onAddBillFail)="onAddBillFail()"></div>
     </ng-container>
 </nz-modal>

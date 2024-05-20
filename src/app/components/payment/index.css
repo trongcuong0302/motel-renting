@@ -16,11 +16,52 @@
 
 .content {
     margin: 0 !important;
-    padding: 0 24px 24px 24px;
     background-color: #fff;
 }
 
 ::ng-deep .ant-tabs-tab {    
     font-size: 16px !important;
     font-weight: 500 !important;
+}
+
+.list-bill {
+    background-color: #f1f5f9;
+    padding: 24px;
+    min-height: calc(100vh - 189px);
+}
+
+.bill-container {
+    margin-bottom: 16px;
+    background-color: #fff;
+    padding: 16px;
+}
+
+.label {
+    font-weight: 500;
+}
+
+.pagination {
+    margin-right: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.nodata {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paid {
+    color: #52c41a;
+}
+
+.unpaid {
+    color: #ff4d4f;
+}
+
+.btn-pay {
+    font-weight: 500;
 }

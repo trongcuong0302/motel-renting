@@ -54,8 +54,10 @@ export class AddBill extends BaseComponent implements OnInit {
 
   validateForm: FormGroup<{
     description: FormControl<string>;
+    content: FormControl<string>;
   }> = this.fb.group({
-    description: ['', [Validators.required, Validators.maxLength(100)]]
+    description: ['', [Validators.required, Validators.maxLength(100)]],
+    content: ['', [Validators.required]]
   });
 
   constructor(private fb: NonNullableFormBuilder,
@@ -123,7 +125,8 @@ export class AddBill extends BaseComponent implements OnInit {
       expiryDate: new Date(new Date(this.expiredDate).setHours(23, 59, 59, 999)),
       amount: this.getTotalAmount(),
       paymentList: this.paymentList,
-      description: this.validateForm.get('description')?.value
+      description: this.validateForm.get('description')?.value,
+      content: this.validateForm.get('content')?.value
     }
     this.isLoading = true;
     this.ordersService.createAnOrder(formData).subscribe({
@@ -134,9 +137,8 @@ export class AddBill extends BaseComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        if(error.error.message == "Duplicate Email") this.showError(this.translateService.instant("register.duplicateEmail"))
-        else if(error.error.message == "Duplicate phone number") this.showError(this.translateService.instant("register.duplicatePhone"))
-        else if(error.error.message == "Email not found") this.showError(this.translateService.instant("register.notFoundEmail"))
+        if(error.error.message == "Not Found") this.showError(this.translateService.instant("payment.addNotFound"))
+        else if(error.error.message == "Invalid data") this.showError(this.translateService.instant("payment.addInvalidData"))
         this.onAddBillFail.emit();
       } 
     });
@@ -164,6 +166,11 @@ export class AddBill extends BaseComponent implements OnInit {
 
     if(!this.validateForm.get('description')?.value) {
       this.showError(this.translateService.instant("payment.descriptionError"));
+      return false;
+    }
+
+    if(!this.validateForm.get('content')?.value) {
+      this.showError(this.translateService.instant("payment.contentError"));
       return false;
     }
     return true;

@@ -99,6 +99,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
   oldImages: any = [];
   currentIndex: number = 0;
   renterList: any = [];
+  oldRenterList: any = [];
   latLng = {
     lat: 21.0278,
     lng: 105.8342
@@ -237,6 +238,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
             next: (data) => {
               this.isLoading = false;
               this.renterList.push(data.data);
+              this.oldRenterList.push(data.data);
             },
             error: (error) => {
               this.isLoading = false;
@@ -419,6 +421,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
     formData['images'] = [ ...this.motelData.images,  ...this.imageData];
     formData['coordinate'] = this.latLng;
     formData['renters'] = this.renterList;
+    formData['oldRenters'] = this.oldRenterList;
     
     this.updateMotel(formData);
   }
@@ -747,6 +750,23 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
 
     let formData = { renters : this.renterList }
     this.updateMotel(formData);
+
+    index = this.accountData.rentedMotelList.findIndex((item: any) => item === this.motelData._id);
+    if(index >= 0) this.accountData.rentedMotelList.splice(index, 1);
+    let dataMotel = { rentedMotelList: this.accountData.rentedMotelList, name: this.accountData.name }
+    this.isLoading = true;
+    this.userService.updateUserProfile(this.accountData._id, dataMotel).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.getUser('renter');
+        //this.showSuccess(this.translateService.instant("user.updateSuccess"));
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if(error.error.message == "Invalid data") this.showError(this.translateService.instant("user.invalidData"))
+        else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
+      }
+    });
   }
 
   updateMotel(formData: any) {
@@ -755,8 +775,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       next: (data) => {
         this.isLoading = false;
         this.showSuccess(this.translateService.instant("detail.updateMotelSuccess"));
-        this.getProduct(this.route.snapshot.params["id"]);
-        this.viewMode = true;
+        window.location.reload();
       },
       error: (error) => {
         this.isLoading = false;

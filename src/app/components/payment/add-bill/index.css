@@ -93,7 +93,7 @@
 }
 
 .payment-list {
-  max-height: 120px;
+  max-height: 80px; 
   overflow: auto;
   margin-bottom: 8px;
   width: 100%;
