@@ -55,6 +55,7 @@ export class ContactComponent extends BaseComponent implements OnInit {
   }
 
   getUser() {
+    this.isLoading = true;
     this.userService.getUser().subscribe({
       next: (data) => {
         this.isLoading = false;
@@ -87,6 +88,7 @@ export class ContactComponent extends BaseComponent implements OnInit {
       formData['userName'] = this.accountData.name;
       formData['userEmail'] = this.accountData.email;
       formData['userPhone'] = this.accountData.phoneNumber;
+      this.isLoading = true;
       this.feedbackService.postAFeedback(formData).subscribe({
         next: (data) => {
           this.isLoading = false;

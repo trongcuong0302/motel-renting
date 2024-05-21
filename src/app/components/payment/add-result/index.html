@@ -1,3 +1,38 @@
 <div class="header">
-  <span>{{'list.title' | translate}}</span>
+  <span *ngIf="code == '00'">{{'payment.paymentSuccess' | translate}}</span>
+  <span *ngIf="code != '00'">{{'payment.paymentFail' | translate}}</span>
+</div>
+<div class="seperator"></div>
+<div class="content">
+  <div class="container">
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.name' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" style="padding-left: 8px;">{{billData.content}}</span>
+      </div>
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.roomName' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" style="padding-left: 8px;">{{motelData.roomName}}</span>
+      </div>
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.ownerName' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" style="padding-left: 8px;">{{userData.name}}</span>
+      </div>
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.expiredDate' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" style="padding-left: 8px;">{{getFormValue('expiryDate')}}</span>
+      </div>
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.total' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" style="padding-left: 8px;">{{getFormValue('amount')}}</span>
+      </div>
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.payDate' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" style="padding-left: 8px;">{{getFormValue('payDate')}}</span>
+      </div>
+      <div class="item" nz-row>
+        <span nz-col nzXs="12" nzSm="12" class="label">{{'payment.status' | translate}}: </span>
+        <span nz-col nzXs="12" nzSm="12" [ngClass]="{'paid': billData.status == 'paid', 'unpaid': billData.status == 'unpaid'}"
+          style="padding-left: 8px;">{{getFormValue('status')}}</span>
+      </div>
+  </div>
 </div>

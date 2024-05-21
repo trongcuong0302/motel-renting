@@ -107,6 +107,7 @@ export class UserDetail extends BaseComponent implements OnInit {
     this.isLoading = true;
     this.userService.getUser().subscribe({
       next: (data) => {
+        this.isLoading = false;
         this.accountData = data.data;
       },
       error: (error) => {
@@ -121,6 +122,7 @@ export class UserDetail extends BaseComponent implements OnInit {
     this.isLoading = true;
     this.provinceService.getAllProvince([{}]).subscribe({
       next: (data) => {
+        this.isLoading = false;
         this.provinceList = data.data;
         this.processProvinceList();
       },
@@ -528,6 +530,7 @@ export class UserDetail extends BaseComponent implements OnInit {
   updateRoleUser(role: any) {
     let dataUpdate = this.userData;
     dataUpdate['role'] = role;
+    this.isLoading = true;
     this.userService.updateUserProfile(this.userData._id, dataUpdate)
       .subscribe({
         next: (data) => {

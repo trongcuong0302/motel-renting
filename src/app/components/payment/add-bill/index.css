@@ -123,6 +123,6 @@
   color: #ff4d4f;
 }
 
-::ng-deep .ant-form-item {
+.ant-form-item {
   margin: 0 !important;
 }

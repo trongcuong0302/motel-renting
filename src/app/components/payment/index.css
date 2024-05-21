@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 600;
     height: 48px;
     padding: 0 24px;
@@ -64,4 +64,14 @@
 
 .btn-pay {
     font-weight: 500;
+    width: 104px;
+}
+
+.btn-edit{
+    margin-bottom: 8px;
+    width: 96px;
+}
+
+.btn-delete{
+    width: 96px;
 }

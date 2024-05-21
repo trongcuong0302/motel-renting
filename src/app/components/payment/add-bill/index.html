@@ -3,7 +3,7 @@
     <div class="text-bold label">{{'payment.roomName' | translate}}</div>
     <nz-form-item class="form-item">
       <nz-form-control>
-        <nz-select [(ngModel)]="motelName" [nzOptions]="motelNameList" style="width:100%;"
+        <nz-select [(ngModel)]="motelName" [nzOptions]="motelNameList" style="width:100%;" (ngModelChange)="onChange($event)"
           [nzPlaceHolder]="'payment.roomName' | translate"></nz-select>
       </nz-form-control>
     </nz-form-item>

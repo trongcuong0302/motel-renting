@@ -49,6 +49,8 @@ export class AddBill extends BaseComponent implements OnInit {
     // Can not select days before today
     differenceInCalendarDays(current, this.today) < 0;
 
+  @Input() formBill: any;
+  @Input() isEditBill: boolean = false;
   @Output() onAddBill: EventEmitter<any> = new EventEmitter();
   @Output() onAddBillFail: EventEmitter<any> = new EventEmitter();
 
@@ -74,6 +76,9 @@ export class AddBill extends BaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
     this.getUser();
+    if(this.formBill && this.isEditBill) {
+      this.bindFormBill();
+    }
   }
 
   getUser() {
@@ -90,6 +95,14 @@ export class AddBill extends BaseComponent implements OnInit {
         else if(error.error.message == "Not Found") this.showError(this.translateService.instant("user.notFoundAccount"))
       }
     });
+  }
+
+  bindFormBill() {
+    this.motelName = this.formBill.motelId;
+    this.expiredDate = new Date(this.formBill.expiryDate);
+    this.paymentList = this.formBill.paymentList;
+    this.validateForm.get('description')?.setValue(this.formBill.description);
+    this.validateForm.get('content')?.setValue(this.formBill.content);
   }
 
   filterMotel() {
@@ -120,13 +133,15 @@ export class AddBill extends BaseComponent implements OnInit {
 
   saveBill() {
     let formData = {
+      _id: this.formBill._id,
       motelId: this.motelName,
       userId: this.accountData._id,
       expiryDate: new Date(new Date(this.expiredDate).setHours(23, 59, 59, 999)),
       amount: this.getTotalAmount(),
       paymentList: this.paymentList,
       description: this.validateForm.get('description')?.value,
-      content: this.validateForm.get('content')?.value
+      content: this.validateForm.get('content')?.value,
+      isEdit: this.isEditBill
     }
     this.isLoading = true;
     this.ordersService.createAnOrder(formData).subscribe({
@@ -259,6 +274,10 @@ export class AddBill extends BaseComponent implements OnInit {
 
   formatDisplayMoney(amount: any) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  }
+
+  onChange(event: any) {
+    console.log(event)
   }
 
 }

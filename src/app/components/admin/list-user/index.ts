@@ -63,6 +63,7 @@ export class UserListComponent extends BaseComponent implements OnInit {
     this.isLoading = true;
     this.userService.getUser().subscribe({
       next: (data) => {
+        this.isLoading = false;
         this.userData = data?.data;
         if(this.userData.role == 1) {
           this.router.navigate(['/products']);
@@ -239,6 +240,7 @@ export class UserListComponent extends BaseComponent implements OnInit {
   }
 
   updateRoleUser(user: any, role: any) {
+    this.isLoading = true;
     let dataUpdate = user;
     dataUpdate['role'] = role;
     this.userService.updateUserProfile(user._id, dataUpdate)

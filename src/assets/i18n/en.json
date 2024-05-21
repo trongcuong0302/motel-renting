@@ -364,6 +364,15 @@
     "payment.paidStatus": "Paid",
     "payment.unpaidStatus": "Unpaid",
     "payment.status": "Status",
-    "payment.pay": "Pay"
+    "payment.pay": "Pay",
+    "payment.noPayments": "Bills are not found",
+    "payment.noPaymentsContent": "No bills of your motels found now",
+    "payment.deleteSuccess": "Delete bill successfully!",
+    "payment.deleteConfirm": "Are you sure you want to delete this bill ?",
+    "payment.payDate": "Pay date",
+    "payment.paymentSuccess": "Pay bill successfully",
+    "payment.paymentFail": "Pay bill unsuccessfully",
+    "payment.paySuccess": "Pay bill successfully!",
+    "payment.payFail": "Pay bill unsuccessfully!"
 
 }

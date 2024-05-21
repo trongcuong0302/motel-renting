@@ -103,6 +103,7 @@ export class UserProfile extends BaseComponent implements OnInit {
     this.isLoading = true;
     this.provinceService.getAllProvince([{}]).subscribe({
       next: (data) => {
+        this.isLoading = false;
         this.provinceList = data.data;
         this.processProvinceList();
       },

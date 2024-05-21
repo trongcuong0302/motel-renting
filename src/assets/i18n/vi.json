@@ -334,7 +334,7 @@
     "feedback.deleteError": "Không tìm thấy phản hồi!",
 
     "payment.title": "Thanh toán hóa đơn",
-    "payment.bill": "Hóa đơn",
+    "payment.bill": "hóa đơn",
     "payment.all": "Tất cả hóa đơn",
     "payment.paid": "Đã thanh toán",
     "payment.notPaid": "Chưa thanh toán",
@@ -364,6 +364,15 @@
     "payment.paidStatus": "Đã thanh toán",
     "payment.unpaidStatus": "Chưa thanh toán",
     "payment.status": "Trạng thái",
-    "payment.pay": "Thanh toán"
+    "payment.pay": "Thanh toán",
+    "payment.noPayments": "Không tìm thấy hóa đơn",
+    "payment.noPaymentsContent": "Hiện tại đang không có hóa đơn nào ứng với nhà trọ của bạn",
+    "payment.deleteSuccess": "Xóa hóa đơn thành công!",
+    "payment.deleteConfirm": "Bạn có muốn xóa hóa đơn này không ?",
+    "payment.payDate": "Ngày thanh toán",
+    "payment.paymentSuccess": "Thanh toán hóa đơn thành công",
+    "payment.paymentFail": "Thanh toán hóa đơn thất bại",
+    "payment.paySuccess": "Thanh toán hóa đơn thành công!",
+    "payment.payFail": "Thanh toán hóa đơn thất bại!"
 
 }

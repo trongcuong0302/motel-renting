@@ -5,13 +5,13 @@
 <div class="seperator"></div>
 
 <div class="content">
-    <nz-tabset nzCentered [nzSelectedIndex]="tabIndex" (nzSelectedIndexChange)="onTabIndexChange($event)">
+    <nz-tabset nzCentered [nzSelectedIndex]="tabIndex" (nzSelectedIndexChange)="onTabIndexChange($event)" style="padding: 0 24px;">
         <nz-tab class="title" [nzTitle]="'payment.all' | translate"></nz-tab>
         <nz-tab class="title" [nzTitle]="'payment.paid' | translate"></nz-tab>
         <nz-tab class="title" [nzTitle]="'payment.notPaid' | translate"></nz-tab>
     </nz-tabset>
-    <div *ngIf="tabIndex == 0" class="list-bill">
-        <div class="bill-container" *ngFor="let bill of billData">
+    <div class="list-bill">
+        <div class="bill-container" *ngFor="let bill of billData; let i = index">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 24 }" style="width:100%;">
                 <div class="bill-info" nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="8">
                     <div><span class="label">{{'payment.name' | translate}}: </span>{{bill.content}}</div>
@@ -29,7 +29,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="bill-info" nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="8">
+                <div class="bill-info" nz-col nzXs="16" nzSm="12" nzLg="5">
                     <div style="margin-bottom: 8px;">
                         <span class="label">{{'payment.status' | translate}}: </span>
                         <span [ngClass]="{'paid': bill.status == 'paid', 'unpaid': bill.status == 'unpaid'}">{{getFormValue('status', bill)}}</span>
@@ -38,7 +38,22 @@
                         {{'payment.pay' | translate}}
                     </button>
                 </div>
+                <div class="bill-info" nz-col nzXs="8" nzSm="12" nzLg="3" style="display: flex; flex-direction: column;">
+                    <button *ngIf="isOwner(bill) && bill.status == 'unpaid'" nz-button nzType="primary" class="btn-edit" (click)="confirmUpdate(i)">
+                        <span nz-icon nzType="edit" nzTheme="outline" style="margin-right: 8px;"></span>
+                        {{'detail.edit' | translate}}
+                    </button>
+                    <button *ngIf="isOwner(bill) || isAdmin" nz-button nzDanger nzType="primary" class="btn-delete" (click)="confirmDelete(bill)">
+                        <span nz-icon nzType="delete" nzTheme="outline" style="margin-right: 8px;"></span>
+                        {{'detail.delete' | translate}}
+                    </button>
+                </div>
             </div>
+        </div>
+        <div *ngIf="!billData.length" style="display: flex; justify-content: center; width: 100%;">
+            <nz-result nzStatus="404" [nzTitle]="'payment.noPayments' | translate" 
+            [nzSubTitle]="'payment.noPaymentsContent' | translate">
+            </nz-result>
         </div>
         <div *ngIf="isLoading" class="nodata"><nz-spin nzSimple [nzSize]="'large'"></nz-spin></div>
         <div class="pagination" *ngIf="billData.length">
@@ -61,6 +76,7 @@
     (nzOnCancel)="handleCancel()"
 >
     <ng-container *nzModalContent>
-        <div add-bill [confirm]="isConfirmAddBill" (onAddBill)="onAddBill()" (onAddBillFail)="onAddBillFail()"></div>
+        <div add-bill [confirm]="isConfirmAddBill" [formBill]="formBill" [isEditBill]="isEditBill"
+        (onAddBill)="onAddBill()" (onAddBillFail)="onAddBillFail()"></div>
     </ng-container>
 </nz-modal>

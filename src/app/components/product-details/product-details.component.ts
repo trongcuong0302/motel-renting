@@ -253,6 +253,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         else {
           let score = 0;
           this.listComments.forEach((item: any) => {
+            this.isLoading = true;
             this.userService.getUserProfile(item.userId).subscribe({
               next: (data) => {
                 this.isLoading = false;
@@ -289,6 +290,7 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
       });
     }
     if(type == 'renter') {
+      this.isLoading = true;
       this.userService.getUser().subscribe({
         next: (data) => {
           this.isLoading = false;
