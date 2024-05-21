@@ -188,11 +188,11 @@
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'detail.priceMonth' | translate}}: </span><span>{{motelData.price}} {{motelData.currencyUnit}}</span>
+                            <span class="bold">{{'detail.priceMonth' | translate}}: </span><span>{{formatDisplayMoney(motelData.price)}}</span>
                         </div>
                         <div class="item-detail">
                             <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>
-                            <span class="bold">{{'add.deposit' | translate}}: </span><span>{{motelData.deposit}} {{motelData.currencyUnit}}</span>
+                            <span class="bold">{{'add.deposit' | translate}}: </span><span>{{formatDisplayMoney(motelData.deposit)}}</span>
                         </div >
                         <div class="item-detail">
                             <span nz-icon nzType="dollar" style="margin-right: 8px;"></span>

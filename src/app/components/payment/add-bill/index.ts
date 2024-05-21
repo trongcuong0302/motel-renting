@@ -276,8 +276,4 @@ export class AddBill extends BaseComponent implements OnInit {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   }
 
-  onChange(event: any) {
-    console.log(event)
-  }
-
 }

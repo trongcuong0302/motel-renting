@@ -703,13 +703,17 @@ export class ProductDetailsComponent extends BaseComponent implements OnInit {
         return findItem?.label;
       case "electricPrice":
         if(!this.motelData[key]) return this.translateService.instant("detail.standardPrice");
-        return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
+        return this.formatDisplayMoney(this.motelData[key])
       case "waterPrice":
         if(!this.motelData[key]) return this.translateService.instant("detail.standardPrice");
-        return `${this.motelData[key]} ${this.motelData?.currencyUnit}`;
+        return this.formatDisplayMoney(this.motelData[key])
       default:
         return;
     }
+  }
+
+  formatDisplayMoney(amount: any) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   }
 
   onBtnCopy(value: string) {
