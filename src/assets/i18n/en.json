@@ -205,7 +205,7 @@
     "detail.edit": "Edit",
     "detail.save": "Save",
     "detail.cancel": "Cancel",
-    "detail.quit": "Quit",
+    "detail.quit": "Move out",
     "detail.delete": "Delete",
     "detail.setting": "Setting",
     "detail.phoneNumber": "Phone number",
@@ -230,7 +230,7 @@
     "detail.standardPrice": "Standard price",
     "detail.copySuccess": "Copied to clipboard successfully!",
     "detail.copyLabel": "Copy",
-    "detail.quitMotelConfirm": "Are you sure you want to leave this motel?",
+    "detail.quitMotelConfirm": "Are you sure you want to move out this motel?",
     "detail.deleteCommnentConfirm": "Do you want to delete your comment?",
 
     "list.search": "Search",
