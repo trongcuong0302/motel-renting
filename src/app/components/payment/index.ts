@@ -19,7 +19,7 @@ export class PaymentComponent extends BaseComponent implements OnInit {
   isEditBill: boolean = false;
   formBill: any = {};
   userData: any = {};
-  billData: any = {};
+  billData: any = [];
   pageSize = 10;
   pageIndex = 1;
   total = 1;
@@ -74,6 +74,7 @@ export class PaymentComponent extends BaseComponent implements OnInit {
     this.orderService.getAllOrder(filter).subscribe({
       next: (data) => {
         this.billData = data?.data;
+        this.billData = this.billData.filter((bill: any) => bill?.user?.name)
         this.total = data?.total;
         this.isLoading = false;
       },
