@@ -118,7 +118,9 @@ export class TopnavComponent extends BaseComponent implements OnInit {
         else this.avatarUrl = '../../../assets/img/default-avatar.jpg';
         this.isLoggedIn = true;
         this.onGetUserDone.emit();
-        if(this.router.url == '/add') this.onSelectMenuItem(1);
+        if(this.router.url == '/payment') this.onSelectMenuItem(1);
+        if(this.router.url == '/contact-us') this.onSelectMenuItem(2);
+        if(this.router.url == '/add') this.onSelectMenuItem(0);
         else if(this.router.url=='/login' || this.router.url.includes('/reset')) {
           this.onSelectMenuItem(0);
           this.router.navigate(['/products']);
